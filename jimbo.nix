@@ -1,14 +1,54 @@
 { config, pkgs, options, ... }:
 let
   # Define colors used by almost all programs
-  primecol = ''8800FF''; #8800FF
-  accentcol = ''3b2460''; #3b2460
-  altcol = ''680082''; #680082
-  splitcol = ''69507f''; #69507f
-  actsplitcol = ''cd97fc''; #cd97fc
-  darkcol = ''202020''; #202020
+  colorVar = ''purple'';
+  colorVals =
+    if colorVar == ''purple'' then {
+      primecol = ''8800FF''; #8800FF
+      accentcol = ''3b2460''; #3b2460
+      splitcol = ''69507f''; #69507f
+      actsplitcol = ''cd97fc''; #cd97fc
+      darkcol = ''202020''; #202020
+      midcol = ''282828''; #282828
+      foldercol = ''violet'';
+      themetweak = ''dracula'';
+      theme = ''Colloid-Purple-Dark-Dracula'';
+      wallpaper1 = ''https://i.imgur.com/xu3a237.png'';
+      wallpaper2 = ''https://i.imgur.com/coAKg4r.png'';
+      wallpaper3 = ''https://i.imgur.com/xu3a237.png'';
+    }
+    else {
+      primecol = ''3823c4''; #3823c4
+      accentcol = ''1b1f59''; #1b1f59
+      splitcol = ''555b9e''; #555b9e
+      actsplitcol = ''5980b7''; #5980b7
+      darkcol = ''101419''; #101419
+      midcol = ''171c23''; #171c23
+      foldercol = ''indigo'';
+      themetweak = ''black'';
+      theme = ''Colloid-Purple-Dark'';
+      wallpaper1 = ''https://i.imgur.com/Wy3eIjS.png'';
+      wallpaper2 = ''https://i.imgur.com/6MdUKCW.png'';
+      wallpaper3 = ''https://i.imgur.com/6dCHfXP.png'';
+    };
+  primecol = colorVals.primecol;
+  accentcol = colorVals.accentcol;
+  splitcol = colorVals.splitcol;
+  actsplitcol = colorVals.actsplitcol;
+  darkcol = colorVals.darkcol;
+  midcol = colorVals.midcol;
+  foldercol = colorVals.foldercol;
+  themetweak = colorVals.themetweak;
+  theme = colorVals.theme;
   urgentcol = ''9e3c3c''; #9e3c3c
   textcolor = ''C7D3E3''; #C7D3E3
+
+  # Theme stuff
+  draculacheck = str:
+    if str == "dracula" then
+      "-Dracula"
+    else
+      "";
 
   # Define paths used by different programs
   swaycfg = ''~/.config/sway'';
@@ -61,8 +101,8 @@ let
     pkill -f alarms.sh; ${alarmfolder}/alarms.sh &
     wl-paste -t text --watch clipman store &
     wl-copy &
-    blueman-applet &
     mako &
+    blueman-applet &
     sunshine &
     
     # Start polkit agent
@@ -71,7 +111,7 @@ let
     # Start foreground apps
     ${waybarcfg}/start.sh &
     librewolf -P Variety --name=Variety &
-    kitty --class=serverdash kitten ssh 192.168.1.17 -t "tmux attach -t control" &
+    kittydash &
     
     # Change to workspace 1
     swaymsg workspace 1:1
@@ -80,7 +120,7 @@ let
   # Define how Sway treats monitors and mice
   swayhardware = ''
     # Define wallpaper folder for ultrawide
-    set $wide Deerwide
+    set $wide Downloaded
     
     # Define displays
     output ${monitor1} {
@@ -1300,14 +1340,14 @@ let
     }
     #workspaces button.visible {
       border-bottom: 3px solid #${primecol};
-      background: #282828;
+      background: #${midcol};
     }
     #workspaces button.urgent {
       border-bottom: 3px solid #900000;
     }
     #workspaces button:hover {
       box-shadow: none;
-      background: #3f3f3f;
+      background: #${splitcol};
     }
     #custom-clock-long {
       border-bottom: 3px solid #0a6cf5;
@@ -2061,6 +2101,16 @@ let
           w.scroll_to_mark()
   '';
 
+  # Dashboard for my Debian server
+  kittydash = pkgs.writeTextFile {
+    name = "kittydash";
+    destination = "/bin/kittydash";
+    executable = true;
+    text = ''
+      kitty --class=serverdash kitten ssh 192.168.1.17 -t "tmux attach -t control"
+    '';
+  };
+
   # Additional IMV mode
   imvshot = ''
     [options]
@@ -2363,34 +2413,6 @@ let
         ]
       }
     }
-  '';
-
-  # Mako is used for my notifications, this is the config file for it
-  makoconfig = ''
-    sort=+time
-
-    [mode=default]
-    font=Ubuntu 12
-    background-color=#${darkcol}CC
-    border-size=3
-    border-color=#${accentcol}
-    anchor=bottom-right
-    layer=overlay
-    icons=1
-    padding=8
-    progress-color=over #${primecol}
-    default-timeout=6000
-    output=${monitor1}
-    max-visible=50
-    max-icon-size=40
-    margin=0
-    outer-margin=10
-    width=300
-    height=110
-    on-button-right=dismiss-all
-    
-    [mode=do-not-disturb]
-    invisible=1
   '';
 
   # Mangohud acts like rivatuner on Windows, config file
@@ -3627,11 +3649,11 @@ in
       home.packages = with pkgs; [
         # Sway/Desktop
         swayfx swaybg swayidle swaylock-effects wlroots_0_16 wdisplays wl-clipboard 
-	clipman bemenu waybar xwayland mako libnotify swappy bc grim slurp 
+	clipman bemenu waybar xwayland libnotify swappy bc grim slurp 
 	jq imagemagick libsForQt5.qtstyleplugins lm_sensors
 
         # Useful programs
-        home-manager ffmpegthumbnailer imv kitty rofi-wayland bemoji dua p7zip
+        home-manager ffmpegthumbnailer imv kitty kittydash rofi-wayland bemoji dua p7zip
 	qbittorrent neofetch libreoffice-fresh easyeffects pavucontrol gotop man pciutils
 
         # File manager
@@ -3666,13 +3688,13 @@ in
 	    themeVariants = [ "purple" ];
 	    colorVariants = [ "dark" ];
 	    sizeVariants = [ "standard" ];
-	    tweaks = [ "dracula" "rimless" "normal" ];
+	    tweaks = [ "${themetweak}" "rimless" "normal" ];
 	  };
-	  name = "Colloid-Purple-Dark-Dracula";
+	  name = "${theme}";
         };
         iconTheme = {
 	  package = pkgs.papirus-icon-theme.override {
-	    color = "violet";
+	    color = "${foldercol}";
           };
 	  name = "Papirus-Dark";
 	};
@@ -3706,20 +3728,6 @@ in
             border-bottom-right-radius:0;
           }
         '';
-      };
-
-      # Dconf settings
-      dconf.settings = {
-	"org/gnome/desktop/interface" = {
-	  font-name = "Ubuntu 11";
-	  color-scheme = "prefer-dark";
-	  clock-format = "12h";
-	  cursor-theme = "Simp1e-Dark";
-	};
-        "org/virt-manager/virt-manager/connections" = {
-          autoconnect = ["qemu:///system"];
-          uris = ["qemu:///system"];
-        };
       };
 
       # Install LibreWolf with settings
@@ -3769,6 +3777,23 @@ in
         ];
       };
 
+      # Mako as a service
+      services.mako = {
+        enable = true;
+	borderColor = "#${accentcol}";
+	backgroundColor = "#${darkcol}CC";
+	output = "${monitor1}";
+	layer = "overlay";
+	borderSize = 3;
+	padding = "8";
+	margin = "0";
+	maxIconSize = 40;
+	defaultTimeout = 6000;
+	font = "Ubuntu 12";
+	anchor = "bottom-right";
+	extraConfig = "outer-margin=10\n[mode=do-not-disturb]\ninvisible=1";
+      };
+
       # Start defining arbitrary files
       home.file = {
         # Base home directory
@@ -3796,22 +3821,22 @@ in
 	".config/sway/scripts/tools/ytopus.sh" = { text = ytopus; executable = true; };
 
 	# Desktop wallpaper, split in 3 for 3 monitors
-	"deer1" = {
-	  target = "Pictures/Wallpapers/Split/Deerwide/1.png";
+	"wallpaper1" = {
+	  target = "Pictures/Wallpapers/Split/Downloaded/1.png";
 	  source = (builtins.fetchurl {
-	    url = "https://i.imgur.com/xu3a237.png";
+	    url = "${colorVals.wallpaper1}";
 	  });
 	};
-	"deer2" = {
-	  target = "Pictures/Wallpapers/Split/Deerwide/2.png";
+	"wallpaper2" = {
+	  target = "Pictures/Wallpapers/Split/Downloaded/2.png";
 	  source = (builtins.fetchurl {
-	    url = "https://i.imgur.com/coAKg4r.png";
+	    url = "${colorVals.wallpaper2}";
 	  });
 	};
-	"deer3" = {
-	  target = "Pictures/Wallpapers/Split/Deerwide/3.png";
+	"wallpaper3" = {
+	  target = "Pictures/Wallpapers/Split/Downloaded/3.png";
 	  source = (builtins.fetchurl {
-	    url = "https://i.imgur.com/avrs5nc.png";
+	    url = "${colorVals.wallpaper3}";
 	  });
 	};
 	
@@ -3871,9 +3896,6 @@ in
 
 	# Easyeffects profile
 	".config/easyeffects/output/JimProfile.json".text = easyprofile;
-
-	# Mako config
-	".config/mako/config".text = makoconfig;
 
 	# Mangohud config
 	".config/MangoHud/MangoHud.conf".text = mangoconfig;
