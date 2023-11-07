@@ -2,4 +2,4 @@
 
 Made with love <3
 
-![The desktop](.attachments.4336194/image.png)
+![image](https://github.com/JimmJam/NixFiles/assets/34753734/cdde699f-1338-419a-9330-260783cdce5c)
