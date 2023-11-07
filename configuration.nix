@@ -67,7 +67,7 @@ in
     modesetting.enable = true;
     open = false;
     nvidiaSettings = false;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    package = config.boot.kernelPackages.nvidiaPackages.beta;
   };
 
   # Use the GRUB as the bootloader
@@ -299,11 +299,6 @@ in
           ./patches/nvidia.patch ./patches/dmabuf-capture-example.patch
         ];
       });
-    })
-    (self: super: {
-      mpv = super.mpv.override {
-        scripts = [ self.mpvScripts.mpris ];
-      };
     })
   ];
 

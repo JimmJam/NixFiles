@@ -53,7 +53,6 @@ let
   # Define paths used by different programs
   swaycfg = ''~/.config/sway'';
   swayscripts = ''${swaycfg}/scripts'';
-  alarmfolder = ''${swaycfg}/scripts/alarms'';
   waybarcfg = ''${swaycfg}/waybar'';
 
   # Define the primary monitor
@@ -98,7 +97,7 @@ let
     easyeffects &
     
     # Start daemons and tray apps
-    pkill -f alarms.sh; ${alarmfolder}/alarms.sh &
+    pkill -f alarms.sh; ${swayscripts}/alarms.sh --alarms &
     wl-paste -t text --watch clipman store &
     wl-copy &
     mako &
@@ -553,31 +552,30 @@ let
   bescripts = ''
     #!/usr/bin/env bash
     
-    # Configs function
+    # configs function
     handle_configs() {
-      CONFIGS=$(echo -e "Sway\nHotkeys\nRules\nTheming\nHardware\nWorkspaces\nStart\nPrograms\nWaybar\nWaybar-Style\nRanger\nAlarms\nResolution\nScreenshots\nKitty\nRofi\nFull-Update\nCleanup\nFolder\nZshrc\nBeScripts" | ${bmen} Configs)
-      case $CONFIGS in
-        Sway) kitty -o font_size=14 nvim ${swaycfg}/config ;;
-        Hotkeys) kitty -o font_size=14 nvim ${swaycfg}/hotkeys ;;
-        Rules) kitty -o font_size=14 nvim ${swaycfg}/rules ;;
-        Theming) kitty -o font_size=14 nvim ${swaycfg}/theme ;;
-        Hardware) kitty -o font_size=14 nvim ${swaycfg}/hardware ;;
-        Workspaces) kitty -o font_size=14 nvim ${swaycfg}/workspace ;;
-        Start) kitty -o font_size=14 nvim ${swaycfg}/start.sh ;;
-        Programs) kitty -o font_size=14 nvim ${swaycfg}/programs ;;
-        Waybar) kitty -o font_size=14 nvim ${swaycfg}/waybar/config ;;
-        Waybar-Style) kitty -o font_size=14 nvim ${swaycfg}/waybar/style.css ;;
-        Ranger) kitty -o font_size=14 nvim ~/.config/ranger/rifle.conf ;;
-        Alarms) kitty -o font_size=14 ranger ${swayscripts}/alarms/ ;;
-        Resolution) kitty -o font_size=14 nvim ${swayscripts}/bemenu/resolution.sh ;;
-        Screenshots) kitty -o font_size=14 nvim ${swayscripts}/screenshots.sh ;;
-        Kitty) kitty -o font_size=14 nvim ~/.config/kitty/kitty.conf ;;
-        Rofi) kitty -o font_size=14 nvim ~/.config/rofi/purple.rasi ;;
-        Full-Update) kitty -o font_size=14 nvim ${swayscripts}/tools/full-update.sh ;;
-        Cleanup) kitty -o font_size=14 nvim ${swayscripts}/tools/cleanup.sh ;;
-        Folder) kitty -o font_size=14 ranger ${swaycfg}/ ;;
-        Zshrc) kitty -o font_size=14 nvim ~/.zshrc ;;
-        BeScripts)  kitty -o font_size=14 nvim ${swayscripts}/bescripts.sh ;;
+      configs=$(echo -e "sway\nhotkeys\nrules\ntheming\nhardware\nworkspaces\nstart\nprograms\nwaybar\nwaybar-style\nranger\nalarms\nscreenshots\nkitty\nrofi\nfull-update\ncleanup\nfolder\nzshrc\nbescripts" | ${bmen} configs)
+      case $configs in
+        sway) kitty -o font_size=14 nvim ${swaycfg}/config ;;
+        hotkeys) kitty -o font_size=14 nvim ${swaycfg}/hotkeys ;;
+        rules) kitty -o font_size=14 nvim ${swaycfg}/rules ;;
+        theming) kitty -o font_size=14 nvim ${swaycfg}/theme ;;
+        hardware) kitty -o font_size=14 nvim ${swaycfg}/hardware ;;
+        workspaces) kitty -o font_size=14 nvim ${swaycfg}/workspace ;;
+        start) kitty -o font_size=14 nvim ${swaycfg}/start.sh ;;
+        programs) kitty -o font_size=14 nvim ${swaycfg}/programs ;;
+        waybar) kitty -o font_size=14 nvim ${swaycfg}/waybar/config ;;
+        waybar-style) kitty -o font_size=14 nvim ${swaycfg}/waybar/style.css ;;
+        ranger) kitty -o font_size=14 nvim ~/.config/ranger/rifle.conf ;;
+        alarms) kitty -o font_size=14 nvim ${swayscripts}/alarms.sh ;;
+        screenshots) kitty -o font_size=14 nvim ${swayscripts}/screenshots.sh ;;
+        kitty) kitty -o font_size=14 nvim ~/.config/kitty/kitty.conf ;;
+        rofi) kitty -o font_size=14 nvim ~/.config/rofi/purple.rasi ;;
+        full-update) kitty -o font_size=14 nvim ${swayscripts}/tools/full-update.sh ;;
+        cleanup) kitty -o font_size=14 nvim ${swayscripts}/tools/cleanup.sh ;;
+        folder) kitty -o font_size=14 ranger ${swaycfg}/ ;;
+        zshrc) kitty -o font_size=14 nvim ~/.zshrc ;;
+        bescripts)  kitty -o font_size=14 nvim ${swayscripts}/bescripts.sh ;;
       esac
     }
     
@@ -941,9 +939,6 @@ let
     
     # Terminate all Wine and Proton processes
     pkill -f '.*(\.|/)(wine|proton).*' --signal 9
-    
-    # Terminate any remaining Wine-related processes
-    pkill -f '.*(\.|/)(wine|proton).*' --signal 9
   '';
 
   # Download YouTube videos in Opus format (rather than mp3)
@@ -956,11 +951,8 @@ let
       exit 1
     fi
     
-    # Store the URL argument
-    url=$1
-    
     # Use yt-dlp to download the URL
-    yt-dlp "$url"
+    yt-dlp "$1"
     
     # Take the downloaded video as a variable
     video=$(ls --color=never *.webm)
@@ -976,67 +968,79 @@ let
     rm "$video"
   '';
 
-  # Script to kill the alarm
-  killalarm = ''
+  # Handle all my alarms
+  alarms = ''
     #!/usr/bin/env bash
-    pkill -f 'mpv.*alarm'
-    pkill swaynag
-  '';
 
-  # Define the alarm script
-  alarm = ''
-    #!/usr/bin/env bash
-    name="$(basename "$0" | sed 's/_/ /g; s/\..*//')"
-    mpv --volume=90 ${alarmfolder}/Alarm.mp3 &
-    swaynag \
-    --message "$name" \
-    --button "Stop Alarm" ${alarmfolder}/kill.sh \
-    --font Ubuntu 12 --background ${darkcol} \
-    --border ${primecol} \
-    --button-border-size 3 \
-    --button-background ${darkcol} \
-    --border-bottom ${primecol} \
-    --text ${textcolor} \
-    --button-text ${textcolor}
-  '';
-
-  # Define when the alarms go off
-  alarmtimes = ''
-    #!/usr/bin/env bash
+    # The alarm script itself
+    alarm() {
+      mpv --volume=90 ${swayscripts}/alarm.mp3 &
+      swaynag \
+      --message "$name" \
+      --button "Stop Alarm" ${swayscripts}/alarmtest.sh \
+      --font Ubuntu 12 --background ${darkcol} \
+      --border ${primecol} \
+      --button-border-size 3 \
+      --button-background ${darkcol} \
+      --border-bottom ${primecol} \
+      --text ${textcolor} \
+      --button-text ${textcolor}
+    }
     
-    while true; do
-      # Check the current day and time
-      current_day=$(date +"%A")
-      current_time=$(date +'%l:%M%p' | sed 's/^ //')
-      
-      # Monday alarms
-      if [ "$current_day" == "Monday" ] && [ "$current_time" == "11:39AM" ]; then
-          ${alarmfolder}/monday/OPS-345_Online.sh
-      fi
-      if [ "$current_day" == "Monday" ] && [ "$current_time" == "1:25PM" ]; then
-          ${alarmfolder}/monday/MST-200_Online.sh
-      fi
-      if [ "$current_day" == "Monday" ] && [ "$current_time" == "3:15PM" ]; then
-          ${alarmfolder}/monday/DAT-330_Online.sh
-      fi
-      
-      # Tuesday alarms
-      if [ "$current_day" == "Tuesday" ] && [ "$current_time" == "10:40AM" ]; then
-          ${alarmfolder}/tuesday/CUL-200_Check.sh
-      fi
-      
-      # Thursday alarms
-      if [ "$current_day" == "Thursday" ] && [ "$current_time" == "11:20AM" ]; then
-          ${alarmfolder}/thursday/MST-200_Physical.sh
-      fi
-      
-      # Run the script at 8 AM on Friday
-      if [ "$current_day" == "Friday" ] && [ "$current_time" == "08:00AM" ]; then
-          ${alarmfolder}/friday/OPS-345_Physical.sh
-      fi
-      
-      sleep 60
-    done
+    # Handle alarm times
+    handle_alarms() {
+
+      # Make the script loop when ran by Sway
+      while true; do
+        # Check the current day and time
+        current_day=$(date +"%A")
+        current_time=$(date +'%l:%M%p' | sed 's/^ //')
+        
+        # Monday alarms
+        if [ "$current_day" == "Monday" ] && [ "$current_time" == "11:39AM" ]; then
+          name="OPS-345 Online"; alarm
+        fi
+        if [ "$current_day" == "Monday" ] && [ "$current_time" == "1:25PM" ]; then
+          name="MST-200 Online"; alarm
+        fi
+        if [ "$current_day" == "Monday" ] && [ "$current_time" == "3:15PM" ]; then
+          name="DAT-330_Online"; alarm
+        fi
+        
+        # Tuesday alarms
+        if [ "$current_day" == "Tuesday" ] && [ "$current_time" == "10:40AM" ]; then
+          name="CUL-200 Check for In Person"; alarm
+        fi
+    
+        # Wednesday alarms
+        
+        # Thursday alarms
+        if [ "$current_day" == "Thursday" ] && [ "$current_time" == "11:20AM" ]; then
+          name="MST-200 In Person"; alarm
+        fi
+        
+        # Friday alarms
+        if [ "$current_day" == "Friday" ] && [ "$current_time" == "08:00AM" ]; then
+          name="OPS-345 In Person"; alarm
+        fi
+        
+        # Wait a minute between checks
+        sleep 60
+      done
+    }
+    
+    # Handle the killing of the alarm
+    kill_alarm() {
+      pkill -f 'mpv.*alarm'
+      pkill swaynag
+    }
+    
+    # Check which mode the script is ran in
+    if [ "$1" == "--alarms" ]; then
+      handle_alarms
+    else
+      kill_alarm
+    fi
   '';
 
   # Define Waybar config
@@ -1530,80 +1534,6 @@ let
     
     # Display weather emoji and temperature
     echo {\"text\":\"$emoji $formatted_temperature°C\",\"tooltip\":\"Weather in Maple: $weather_condition\"}
-  '';
-
-  # Config for Neovim
-  vimconfig = ''
-    lua <<EOF
-    -- Set up nvim-cmp.
-    local cmp = require'cmp'
-    
-    cmp.setup({
-      snippet = {
-        -- REQUIRED - you must specify a snippet engine
-        expand = function(args)
-          vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-        end,
-      },
-      mapping = cmp.mapping.preset.insert({
-        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-f>'] = cmp.mapping.scroll_docs(4),
-        ['<C-Space>'] = cmp.mapping.complete(),
-        ['<C-e>'] = cmp.mapping.abort(),
-        ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-      }),
-      sources = cmp.config.sources({
-        { name = 'nvim_lsp' },
-        { name = 'vsnip' }
-      }, {
-        { name = 'buffer' },
-      })
-    })
-    
-    -- Set configuration for specific filetype.
-    cmp.setup.filetype('gitcommit', {
-      sources = cmp.config.sources({
-        { name = 'git' }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
-      }, {
-        { name = 'buffer' },
-      })
-    })
-    
-    -- Use buffer source for `/` and `?`.
-    cmp.setup.cmdline({ '/', '?' }, {
-      mapping = cmp.mapping.preset.cmdline(),
-      sources = {
-        { name = 'buffer' }
-      }
-    })
-    
-    -- Use cmdline & path source for ':'.
-    cmp.setup.cmdline(':', {
-      mapping = cmp.mapping.preset.cmdline(),
-      sources = cmp.config.sources({
-        { name = 'path' }
-      }, {
-        { name = 'cmdline' }
-      })
-    })
-    EOF
-    
-    nmap <C-a> :NERDTreeToggle<CR>
-    
-    colorscheme monokai_pro
-    let g:airline_theme='onedark'
-    let g:airline#extensions#tabline#enabled = 1
-    highlight Normal guibg=#${darkcol} ctermbg=235
-    highlight Visual guibg=#151515 ctermbg=238
-    highlight Pmenu guibg=#151515 ctermbg=238
-    highlight EndOfBuffer guibg=#${darkcol} ctermbg=235
-    highlight LineNr guibg=NONE ctermbg=NONE
-    lua require'colorizer'.setup()
-    
-    set nu rnu
-    set termguicolors
-    set runtimepath+=/usr/share/vim/vimfiles
-    set mouse=a
   '';
 
   # File manager config
@@ -2417,7 +2347,7 @@ let
 
   # Mangohud acts like rivatuner on Windows, config file
   mangoconfig = ''
-    #!/bin/bash
+    #!/usr/bin/env bash
     table_columns=2
     frametime=0
     legacy_layout=0
@@ -2436,14 +2366,7 @@ let
     cpu_load_change
     gpu_stats
     gpu_load_change
-    gamepad_battery
     frame_timing
-  '';
-
-  # Simple video player settings
-  mpvconfig = ''
-    volume=70
-    loop-playlist=inf
   '';
 
   # Neofetch main config
@@ -3660,7 +3583,7 @@ in
         lxqt.pcmanfm-qt gnome.file-roller ranger poppler_utils
 
         # Audio/Video tools
-        yt-dlp ytfzf ani-cli playerctl mpv ffmpeg
+        yt-dlp ytfzf ani-cli playerctl ffmpeg
 
         # Production tools
         krita libsForQt5.kdenlive audacity
@@ -3705,6 +3628,7 @@ in
 
 	# GTK app bookmarks
 	gtk3.bookmarks = [
+	  "file:///home/jimbo/JimboSMB/JimboOS"
 	  "file:///home/jimbo/Downloads"
           "file:///home/jimbo/JimboSMB/Downloads"
           "file:///home/jimbo/JimboSMB/Documents"
@@ -3766,6 +3690,89 @@ in
           nvim-colorizer-lua
 	  vim-monokai-pro
         ];
+        extraConfig = ''
+          lua <<EOF
+          -- Set up nvim-cmp.
+          local cmp = require'cmp'
+          
+          cmp.setup({
+            snippet = {
+              -- REQUIRED - you must specify a snippet engine
+              expand = function(args)
+                vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+              end,
+            },
+            mapping = cmp.mapping.preset.insert({
+              ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+              ['<C-f>'] = cmp.mapping.scroll_docs(4),
+              ['<C-Space>'] = cmp.mapping.complete(),
+              ['<C-e>'] = cmp.mapping.abort(),
+              ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+            }),
+            sources = cmp.config.sources({
+              { name = 'nvim_lsp' },
+              { name = 'vsnip' }
+            }, {
+              { name = 'buffer' },
+            })
+          })
+          
+          -- Set configuration for specific filetype.
+          cmp.setup.filetype('gitcommit', {
+            sources = cmp.config.sources({
+              { name = 'git' }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
+            }, {
+              { name = 'buffer' },
+            })
+          })
+          
+          -- Use buffer source for `/` and `?`.
+          cmp.setup.cmdline({ '/', '?' }, {
+            mapping = cmp.mapping.preset.cmdline(),
+            sources = {
+              { name = 'buffer' }
+            }
+          })
+          
+          -- Use cmdline & path source for ':'.
+          cmp.setup.cmdline(':', {
+            mapping = cmp.mapping.preset.cmdline(),
+            sources = cmp.config.sources({
+              { name = 'path' }
+            }, {
+              { name = 'cmdline' }
+            })
+          })
+          EOF
+          
+          nmap <C-a> :NERDTreeToggle<CR>
+          
+          colorscheme monokai_pro
+          let g:airline_theme='onedark'
+          let g:airline#extensions#tabline#enabled = 1
+          highlight Normal guibg=#${darkcol} ctermbg=235
+          highlight Visual guibg=#151515 ctermbg=238
+          highlight Pmenu guibg=#151515 ctermbg=238
+          highlight EndOfBuffer guibg=#${darkcol} ctermbg=235
+          highlight LineNr guibg=NONE ctermbg=NONE
+          lua require'colorizer'.setup()
+          
+          set nu rnu
+          set termguicolors
+          set runtimepath+=/usr/share/vim/vimfiles
+          set mouse=a
+        '';
+      };
+
+      # MPV and plugins
+      programs.mpv = {
+        enable = true;
+	scripts = [ pkgs.mpvScripts.mpris ];
+	config = {
+	  volume = 70;
+	  loop-playlist = "inf";
+	  ytdl-format = "bestvideo+bestaudio";
+	};
       };
 
       # Install OBS with plugins
@@ -3783,15 +3790,17 @@ in
 	borderColor = "#${accentcol}";
 	backgroundColor = "#${darkcol}CC";
 	output = "${monitor1}";
+	sort = "+time";
 	layer = "overlay";
-	borderSize = 3;
 	padding = "8";
 	margin = "0";
+	height = 110;
+	borderSize = 3;
 	maxIconSize = 40;
 	defaultTimeout = 6000;
 	font = "Ubuntu 12";
 	anchor = "bottom-right";
-	extraConfig = "outer-margin=10\n[mode=do-not-disturb]\ninvisible=1";
+	extraConfig = "on-button-right=dismiss-all\nouter-margin=10\n[mode=do-not-disturb]\ninvisible=1";
       };
 
       # Start defining arbitrary files
@@ -3819,6 +3828,7 @@ in
 	".config/sway/scripts/tools/disk-cleanup.sh" = { text = disk-cleanup; executable = true; };
 	".config/sway/scripts/tools/kill-proton.sh" = { text = kill-proton; executable = true; };
 	".config/sway/scripts/tools/ytopus.sh" = { text = ytopus; executable = true; };
+	".config/sway/scripts/alarms.sh" = { text = alarms; executable = true; };
 
 	# Desktop wallpaper, split in 3 for 3 monitors
 	"wallpaper1" = {
@@ -3843,34 +3853,6 @@ in
 	# Swappy's config
 	".config/swappy/config".text = swappyconfig;
 	
-	# Alarm scripts
-	".config/sway/scripts/alarms/kill.sh" = { text = killalarm; executable = true; };
-	".config/sway/scripts/alarms/alarms.sh" = { text = alarmtimes; executable = true; };
-	".config/sway/scripts/alarms/monday/DAT-330_Online.sh" = {
-	  text = alarm;
-	  executable = true;
-	};
-	".config/sway/scripts/alarms/monday/MST-200_Online.sh" = {
-	  text = alarm;
-	  executable = true;
-	};
-	".config/sway/scripts/alarms/monday/OPS-345_Online.sh" = {
-	  text = alarm;
-	  executable = true;
-	};
-	".config/sway/scripts/alarms/tuesday/CUL-200_Check.sh" = {
-	  text = alarm;
-	  executable = true;
-	};
-	".config/sway/scripts/alarms/thursday/MST-200_Physical.sh" = {
-	  text = alarm;
-	  executable = true;
-	};
-	".config/sway/scripts/alarms/friday/OPS-345_Physical.sh" = {
-	  text = alarm;
-	  executable = true;
-	};
-
 	# Waybar config
 	".config/sway/waybar/config".text = waybarconfig;
 	".config/sway/waybar/style.css".text = waybarstyle;
@@ -3882,9 +3864,6 @@ in
 	".config/sway/waybar/scripts/notif-status.sh" = { text = notifstatus; executable = true; };
 	".config/sway/waybar/scripts/vram.sh" = { text = vram; executable = true; };
 	".config/sway/waybar/scripts/weather.sh" = { text = weather; executable = true;	};
-
-	# Neovim config
-	".config/nvim/init.vim".text = vimconfig;
 
 	# Kitty config files
 	".config/kitty/kitty.conf".text = kittyconfig;
@@ -3899,9 +3878,6 @@ in
 
 	# Mangohud config
 	".config/MangoHud/MangoHud.conf".text = mangoconfig;
-
-	# MPV config
-	".config/mpv/mpv.conf".text = mpvconfig;
 
 	# Neofetch config
 	".config/neofetch/config.conf".text = neoconfig;
@@ -3952,10 +3928,9 @@ in
 
       # Define session variables
       home.sessionVariables = {
-        EDITOR = "nvim";
-	LIBVIRT_DEFAULT_URI = "qemu:///system";
 	DISTRO = "nixos";
 	SMB = "~/JimboSMB";
+	LIBVIRT_DEFAULT_URI = "qemu:///system";
       };
 
       # Shell aliases
@@ -3973,7 +3948,7 @@ in
           controlserver = "ssh server -t 'tmux attach -t control'";
           birth = "date -d @$(stat -c %W /) '+%a %b %d %r %Z %Y'";
 	  nixcfg = "nvim /etc/nixos/{configuration.nix,jimbo.nix,hardware-configuration.nix}";
-	  alarms = "cat ${alarmfolder}/alarms.sh";
+	  alarms = "cat ${swayscripts}/alarms.sh";
 
           # SSH Commands
           kssh="kitten ssh";
