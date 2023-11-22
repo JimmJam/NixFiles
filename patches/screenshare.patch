@@ -1,0 +1,24 @@
+--- a/types/output/render.c
++++ b/types/output/render.c
+@@ -284,20 +284,5 @@ struct wlr_drm_format *output_pick_format(struct wlr_output *output,
+ }
+ 
+ uint32_t wlr_output_preferred_read_format(struct wlr_output *output) {
+-	struct wlr_renderer *renderer = output->renderer;
+-	assert(renderer != NULL);
+-
+-	if (!renderer->impl->preferred_read_format || !renderer->impl->read_pixels) {
+-		return DRM_FORMAT_INVALID;
+-	}
+-
+-	if (!output_attach_back_buffer(output, NULL)) {
+-		return false;
+-	}
+-
+-	uint32_t fmt = renderer->impl->preferred_read_format(renderer);
+-
+-	output_clear_back_buffer(output);
+-
+-	return fmt;
++    return DRM_FORMAT_XRGB8888;
+ }
