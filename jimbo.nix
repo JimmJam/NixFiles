@@ -1,520 +1,134 @@
 { config, pkgs, options, ... }:
 let
-  # Define colors used by almost all programs
-  colorVar = ''purple'';
-  colorVals =
-    if colorVar == ''purple'' then {
-      primecol = ''8800FF''; #8800FF
-      accentcol = ''3b2460''; #3b2460
-      splitcol = ''69507f''; #69507f
-      actsplitcol = ''cd97fc''; #cd97fc
-      darkcol = ''202020''; #202020
-      midcol = ''282828''; #282828
-      foldercol = ''violet'';
-      themetweak = ''dracula'';
-      theme = ''Colloid-Purple-Dark-Dracula'';
-      wallpaper1 = ''https://i.imgur.com/xu3a237.png'';
-      wallpaper2 = ''https://i.imgur.com/coAKg4r.png'';
-      wallpaper3 = ''https://i.imgur.com/xu3a237.png'';
-    }
-    else {
-      primecol = ''3823c4''; #3823c4
-      accentcol = ''1b1f59''; #1b1f59
-      splitcol = ''555b9e''; #555b9e
-      actsplitcol = ''5980b7''; #5980b7
-      darkcol = ''101419''; #101419
-      midcol = ''171c23''; #171c23
-      foldercol = ''indigo'';
-      themetweak = ''black'';
-      theme = ''Colloid-Purple-Dark'';
-      wallpaper1 = ''https://i.imgur.com/Wy3eIjS.png'';
-      wallpaper2 = ''https://i.imgur.com/6MdUKCW.png'';
-      wallpaper3 = ''https://i.imgur.com/6dCHfXP.png'';
-    };
-  primecol = colorVals.primecol;
-  accentcol = colorVals.accentcol;
-  splitcol = colorVals.splitcol;
-  actsplitcol = colorVals.actsplitcol;
-  darkcol = colorVals.darkcol;
-  midcol = colorVals.midcol;
-  foldercol = colorVals.foldercol;
-  themetweak = colorVals.themetweak;
-  theme = colorVals.theme;
-  urgentcol = ''9e3c3c''; #9e3c3c
-  textcolor = ''C7D3E3''; #C7D3E3
+  ## Global color palette
+  #primeCol = ''8800FF''; #8800FF
+  #accentCol = ''3b2460''; #3b2460
+  #splitCol = ''69507f''; #69507f
+  #actSplitCol = ''cd97fc''; #cd97fc
+  #darkCol = ''202020''; #202020
+  #midCol = ''282828''; #282828
+  #lightCol = ''3F3F3F''; #3F3F3F
+  #urgentCol = ''9E3C3C''; #9E3C3C
+  #textCol = ''C7D3E3''; #C7D3E3
 
-  # Theme stuff
-  draculacheck = str:
-    if str == "dracula" then
-      "-Dracula"
-    else
-      "";
+  ## Papirus icon theme color
+  #folderCol = ''violet'';
+
+  ## Gtk theme
+  #themeSettings = {
+  #  name = "Colloid-Purple-Dark-Dracula";
+  #  package = pkgs.colloid-gtk-theme.override {
+  #    themeVariants = [ "purple" ];
+  #    colorVariants = [ "dark" ];
+  #    sizeVariants = [ "standard" ];
+  #    tweaks = [ "dracula" "rimless" "normal" ];
+  #  };
+  #};
+
+  ## Wallpapers
+  #wallpaper1 = builtins.fetchurl { 
+  #  url = "https://i.imgur.com/xu3a237.png";
+  #  sha256 = "1dkadvzrqbzgcwjbiflww1zwf0v6gwfb9x71ldv7g75z9nhlng7f";
+  #};
+  #wallpaper2 = builtins.fetchurl { 
+  #  url = "https://i.imgur.com/coAKg4r.png";
+  #  sha256 = "08n9kfwwg89mbhhhizk6nqm40wn4djyyfzjmalmyayyip293y02x";
+  #};
+  #wallpaper3 = builtins.fetchurl { 
+  #  url = "https://i.imgur.com/xu3a237.png";
+  #  sha256 = "1dkadvzrqbzgcwjbiflww1zwf0v6gwfb9x71ldv7g75z9nhlng7f";
+  #};
+  #lockpaper = builtins.fetchurl { 
+  #  url = "https://i.imgur.com/6Js6nNA.png";
+  #  sha256 = "1mqvp4bic46gc994fawkraqj76hxd11wdd43qakligchzd20xjd5";
+  #};
+
+  # Global color palette
+  primeCol = ''3823C4''; #3823C4
+  accentCol = ''1B1F59''; #1B1F59
+  splitCol = ''555B9E''; #555B9E
+  actSplitCol = ''5980B7''; #5980B7
+  darkCol = ''101419''; #101419
+  midCol = ''171C23''; #171C23
+  lightCol = ''272b33''; #272b33
+  urgentCol = ''9E3C3C''; #9E3C3C
+  textCol = ''C7D3E3''; #C7D3E3
+  
+  # Papirus icon theme color
+  folderCol = ''indigo'';
+
+  # Gtk theme
+  themeSettings = {
+    name = "Colloid-Dark";
+    package = pkgs.colloid-gtk-theme.override {
+      themeVariants = [ "default" ];
+      colorVariants = [ "dark" ];
+      sizeVariants = [ "standard" ];
+      tweaks = [ "black" "rimless" "normal" ];
+    };
+  };
+
+  # Wallpapers
+  wallpaper1 = pkgs.fetchurl { 
+    url = "https://i.imgur.com/Wy3eIjS.png";
+    sha256 = "1zxb0p0fjsmccy4xv8yk3c4kc313k3lc3xhqmiv452f7sjqqbp25";
+  };
+  wallpaper2 = pkgs.fetchurl { 
+    url = "https://i.imgur.com/6MdUKCW.png";
+    sha256 = "13jcllrs05d26iz2isvh1f8fqf20m23sps32kw7qz5iav8nhvsx7";
+  };
+  wallpaper3 = pkgs.fetchurl { 
+    url = "https://i.imgur.com/6dCHfXP.png";
+    sha256 = "16r65qnr7f0md4bbjnzq6av4dgmqr3avkilw72qdmyrmh3xj03yw";
+  };
+  lockpaper = pkgs.fetchurl { 
+    url = "https://i.imgur.com/6Js6nNA.png";
+    sha256 = "1mqvp4bic46gc994fawkraqj76hxd11wdd43qakligchzd20xjd5";
+  };
 
   # Define paths used by different programs
-  swaycfg = ''~/.config/sway'';
-  swayscripts = ''${swaycfg}/scripts'';
-  waybarcfg = ''${swaycfg}/waybar'';
+  swayScripts = ''~/.config/sway/scripts'';
+
+  # Define the workspace names
+  w0 = ''0:0''; w1 = ''1:1''; w2 = ''2:2''; w3 = ''3:3''; w4 = ''4:4''; 
+  w5 = ''5:5''; w6 = ''6:6''; w7 = ''7:7''; w8 = ''8:8''; w9 = ''9:9'';
+  w1a = ''11:I''; w2a = ''22:II''; w3a = ''33:III''; w4a = ''44:IV''; 
+  w5a = ''55:V''; w6a = ''66:VI''; w7a = ''77:VII''; w8a = ''88:VIII''; w9a = ''99:IX'';
 
   # Define the primary monitor
-  monitor1 = ''HDMI-A-1'';
-  monitor2 = ''DP-1'';
-  monitor3 = ''DP-2'';
+  display1 = ''DP-2'';
+  display2 = ''HDMI-A-1'';
+  display3 = ''DP-1'';
+  displayLap = ''eDP-1'';
 
-  # Define program arguments called repeatedly
-  bmen = ''bemenu --fn "Ubuntu 13" --nb "#${darkcol}" --ab "#${darkcol}" --tb "#${primecol}" --fb "#${darkcol}" --tf "#FFFFFF" --hf "#FFFFFF" --hb "#${primecol}" -f --ignorecase --hp 8 -p'';
+  # Define miscellaneous window manager properties
+  borderWeightInt = 3;
+  borderWeight = toString borderWeightInt;
 
-  # Main Sway config that just sources other files
-  swayconfig = ''
-    # Source other files for organization
+  # Set the font across all applications I can
+  mainFont = ''Ubuntu'';
+  nerdFont = ''UbuntuMono Nerd Font'';
 
-    # Autostart programs
-    exec ${swaycfg}/programs
-    
-    # Define monitors and mice
-    include ${swaycfg}/hardware
-    
-    # Assign workspaces to monitors
-    include ${swaycfg}/workspaces
-    
-    # Define theming rules
-    include ${swaycfg}/theme
-    
-    # Define all keybindings
-    include ${swaycfg}/hotkeys
-    
-    # Define all window rules
-    include ${swaycfg}/rules
+  # Set the default terminal emulator
+  terminal = ''${pkgs.kitty}/bin/kitty'';
+  terminalClass = ''${terminal} --class'';
+  ssh = ''kitten ssh'';
+  #terminal = ''${pkgs.foot}/bin/foot'';
+  #terminalClass = ''${terminal} -a'';
+  #ssh = ''ssh'';
+
+  # Terminal authenticator (just in case I go back to sudo)
+  auth = ''doas'';
+
+  # Restart services to make xdg desktop portals work on Sway
+  swayPipewireConf = pkgs.writeScriptBin "sway-pipewire" ''
+    dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+    systemctl --user stop pipewire wireplumber xdg-desktop-portal xdg-desktop-portal-wlr
+    systemctl --user start pipewire wireplumber xdg-desktop-portal xdg-desktop-portal-wlr
   '';
 
-  # Define which programs autostart with Sway
-  swayprograms = ''
-    #!/usr/bin/env bash
-
-    # Scratchpads
-    kitty --class=gotop -o font_size=14 gotop &
-    kitty --class=music -o font_size=14 ranger &
-    pavucontrol &
-    easyeffects &
-    
-    # Start daemons and tray apps
-    pkill -f alarms.sh; ${swayscripts}/alarms.sh --alarms &
-    wl-paste -t text --watch clipman store &
-    wl-copy &
-    mako &
-    blueman-applet &
-    sunshine &
-    
-    # Start polkit agent
-    ${pkgs.mate.mate-polkit}/libexec/polkit-mate-authentication-agent-1 &
-    
-    # Start foreground apps
-    ${waybarcfg}/start.sh &
-    librewolf -P Variety --name=Variety &
-    kittydash &
-    
-    # Change to workspace 1
-    swaymsg workspace 1:1
-  '';
-
-  # Define how Sway treats monitors and mice
-  swayhardware = ''
-    # Define wallpaper folder for ultrawide
-    set $wide Downloaded
-    
-    # Define displays
-    output ${monitor1} {
-      pos 1920 405 mode 1920x1080@119.982Hz
-      max_render_time 3
-      bg "$HOME/Pictures/Wallpapers/Split/$wide/1.png" fill
-      adaptive_sync on
-    }
-    
-    output ${monitor2} {
-      pos 0 405 mode 1920x1080@75.001Hz
-      max_render_time 3
-      bg "$HOME/Pictures/Wallpapers/Split/$wide/2.png" fill
-    }
-    
-    output ${monitor3} {
-      pos 3840 0 mode 1680x1050@59.883Hz transform 270
-      max_render_time 3
-      bg "$HOME/Pictures/Wallpapers/Split/$wide/3.png" fill
-    }
-    
-    # Define cursor rules
-    input 9610:4103:SINOWEALTH_Game_Mouse {
-      accel_profile "flat"
-      pointer_accel -0.4
-    }
-    
-    # Define cursor rules
-    input 9639:64097:Compx_2.4G_Receiver_Mouse {
-      accel_profile "flat"
-      pointer_accel -0.4
-    }
-  '';
-
-  # Define which monitors get which workspaces
-  swayworkspaces = ''
-    # Define workspace names as variables
-    set $ws0 0:0
-    set $ws1 1:1
-    set $ws2 2:2
-    set $ws3 3:3
-    set $ws1+ 11:I
-    set $ws2+ 22:II
-    set $ws3+ 33:III
-    
-    set $ws4 4:4
-    set $ws5 5:5
-    set $ws6 6:6
-    set $ws4+ 44:IV
-    set $ws5+ 55:V
-    set $ws6+ 66:VI
-    
-    set $ws7 7:7
-    set $ws8 8:8
-    set $ws9 9:9
-    set $ws7+ 77:VII
-    set $ws8+ 88:VIII
-    set $ws9+ 99:IX
-    
-    # Put the workspaces where they need to be
-    workspace $ws0 output ${monitor1}
-    workspace $ws1 output ${monitor1}
-    workspace $ws2 output ${monitor1}
-    workspace $ws3 output ${monitor1}
-    workspace $ws1+ output ${monitor1}
-    workspace $ws2+ output ${monitor1}
-    workspace $ws3+ output ${monitor1}
-    
-    workspace $ws4 output ${monitor2}
-    workspace $ws5 output ${monitor2}
-    workspace $ws6 output ${monitor2}
-    workspace $ws4+ output ${monitor2}
-    workspace $ws5+ output ${monitor2}
-    workspace $ws6+ output ${monitor2}
-    
-    workspace $ws7 output ${monitor3}
-    workspace $ws8 output ${monitor3}
-    workspace $ws9 output ${monitor3}
-    workspace $ws7+ output ${monitor3}
-    workspace $ws8+ output ${monitor3}
-    workspace $ws9+ output ${monitor3}
-  '';
-
-  # Define Sway's theming rules
-  swaytheme = ''
-    # Font for window titles.
-    font pango:Ubuntu 9
-    
-    # Borders, gaps, titlebars, behavior
-    default_border pixel 3
-    default_floating_border pixel 3
-    gaps inner 5
-    titlebar_padding 5 1
-    
-    # Smart things
-    smart_gaps on
-    hide_edge_borders --i3 smart
-    
-    # SwayFX eyecandy
-    blur enable
-    blur_passes 3
-    blur_radius 5
-    
-    # Set transparency rules
-    layer_effects 'rofi' blur enable
-    layer_effects 'notifications' blur enable; blur_ignore_transparent enable
-    
-    client.focused          #${primecol} #${primecol} #${textcolor} #${actsplitcol} #${primecol}
-    client.focused_inactive #${accentcol} #${accentcol} #${textcolor} #${splitcol} #${accentcol}
-    client.unfocused        #${darkcol} #${darkcol} #${textcolor} #${splitcol} #${splitcol}
-    client.urgent           #${urgentcol} #${urgentcol} #${textcolor} #${urgentcol} #${urgentcol}
-  '';
-
-  # Define all the hotkeys I use on Sway
-  swayhotkeys = ''
-    #################
-    # Launcher Keys #
-    #################
-    
-    # Firefox Personal/School
-    bindsym Mod4+F1 exec librewolf -P Jimbo --name=JimboBrowser --no-remote | notify-send "Librewolf Main" --expire-time=1500
-    bindsym Mod4+F2 exec librewolf -P School --name=SchoolBrowser --no-remote | notify-send "Librewolf School" --expire-time=1500
-    bindsym Mod4+F3 exec librewolf -P Variety --name=Variety --no-remote | notify-send "Librewolf Variety" --expire-time=1500
-    
-    # VM Looking Glass
-    bindsym Mod4+F4 exec looking-glass-client -p 5950 input:rawMouse=yes | notify-send "Looking Glass" --expire-time=1500
-    
-    # Game tools
-    bindsym Mod4+F5 exec steam | notify-send "Steam" --expire-time=1500
-    bindsym Mod4+F6 exec kitty --class=Hiddenlol heroic | notify-send "Heroic Games" --expire-time=1500
-    bindsym Mod4+F7 exec ${swayscripts}/bescripts.sh --games | notify-send "Games" --expire-time=1500
-    
-    # Production tools
-    bindsym Mod4+F9 exec ${swayscripts}/bescripts.sh --production | notify-send "Production" --expire-time=1500
-    
-    # Virt-Manager
-    bindsym Mod4+F10 exec virt-manager | notify-send "Virtual Machines" --expire-time=1500
-    
-    # Config Files and Scratchpads
-    bindsym Mod4+F12 exec ${swayscripts}/bescripts.sh --config | notify-send "Configs" --expire-time=1500
-    bindsym Mod4+Ctrl+F12 exec ${swayscripts}/bescripts.sh --scratchpads | notify-send "Scratchpads" --expire-time=1500
-    
-    # Alacritty, dmenu, clipmenu, media script, power menu, show/hide polybar
-    bindsym Mod4+Return exec kitty
-    bindsym Mod4+s exec bemenu-run --fn "Ubuntu 13" --nb "#${darkcol}" --ab "#${darkcol}" --tb "#${primecol}" --fb "#${darkcol}" --tf "#ffffff" --hf "#ffffff" --hb "#${primecol}" --hp 8 --ignorecase -p "Run:"
-    bindsym Mod4+c exec clipman pick -t rofi -T'-font "Ubuntu 13"'
-    bindsym Mod4+y exec ${swayscripts}/bescripts.sh --media
-    bindsym Mod4+x exec ${swayscripts}/bescripts.sh --power
-    bindsym Mod4+b exec pkill -USR1 waybar
-    bindsym Mod4+Escape exec ${swayscripts}/wtools.sh --kill
-    
-    # Restart Polybar, Thunar, Emoji Picker, Ranger, Rofi Launcher, Save Replay
-    bindsym Mod4+Shift+p exec notify-send "Restart Waybar" --expire-time=1500 && ${waybarcfg}/start.sh
-    bindsym Mod4+Shift+t exec pcmanfm-qt
-    bindsym Mod4+Shift+e exec BEMOJI_PICKER_CMD="eval rofi -font 'Ubuntu 13' -dmenu -p Emoji" bemoji -n -P 0
-    bindsym Mod4+Shift+Return exec kitty -o font_size=14 ranger
-    bindsym Mod4+Shift+s exec rofi -show drun -drun-display-format {name} -show-icons -modi drun -font "Ubuntu 14"
-    
-    # Rofi fuzzy finder, wprop, colorpicker
-    bindsym Mod4+Mod1+Ctrl+Return exec xdg-open $(locate / | rofi -threads 0 -width 100 -dmenu -i -font "Ubuntu 13" -p "locate")
-    bindsym Mod4+Ctrl+x exec ${swayscripts}/wtools.sh --prop
-    bindsym Mod4+Ctrl+c exec grim -g "$(slurp -b 00000000 -p; sleep 1)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | sed -n '2p' | awk '{print $3}' | wl-copy -n && notify-send "Color copied to clipboard" --expire-time=1500
-    
-    ##############
-    # Media Keys #
-    ##############
-    
-    # Raise/lower volume
-    bindsym XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
-    bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
-    
-    # Raise/Lower mpv volume
-    bindsym Mod1+XF86AudioRaiseVolume exec playerctl --player=mpv volume 0.05+
-    bindsym Mod1+XF86AudioLowerVolume exec playerctl --player=mpv volume 0.05-
-    
-    # Mute, Stop
-    bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
-    bindsym XF86AudioStop exec playerctl --player=mpv stop
-    
-    # Play MPV or Firefox
-    bindsym XF86AudioPlay exec playerctl --player=firefox play-pause
-    bindsym Mod1+XF86AudioPlay exec playerctl --player=mpv play-pause
-    
-    # Next/Previous
-    bindsym XF86AudioNext exec playerctl --player=firefox next
-    bindsym XF86AudioPrev exec playerctl --player=firefox previous
-    bindsym Mod1+XF86AudioNext exec playerctl --player=mpv next
-    bindsym Mod1+XF86AudioPrev exec playerctl --player=mpv previous
-    
-    #####################
-    # Notification keys #
-    #####################
-    
-    # Toggle dunst
-    bindsym Mod4+n exec ${swayscripts}/notif-toggle.sh
-    bindsym Mod4+Shift+n exec makoctl restore
-    bindsym Mod4+Ctrl+n exec makoctl dismiss -a
-    
-    ######################
-    # Miscellaneous keys #
-    ######################
-    
-    # Screenshot
-    bindsym Print exec ${swayscripts}/screenshots.sh --swappy
-    bindsym Mod4+Shift+f exec ${swayscripts}/screenshots.sh --swappy
-    bindsym Alt+Print exec ${swayscripts}/screenshots.sh --copy
-    bindsym Shift+Print exec ${swayscripts}/screenshots.sh --current
-    bindsym Ctrl+Print exec ${swayscripts}/screenshots.sh --all
-    
-    # Resolution stuff
-    bindsym Ctrl+Mod1+r exec wdisplays
-    bindsym Ctrl+Mod4+Mod1+r exec ${swayscripts}/bescripts.sh --resolutions
-    
-    # Server SSH
-    bindsym Mod4+Ctrl+Return exec kitty kitten ssh 192.168.1.17
-    
-    # Open clipboard video in mpv
-    bindsym Mod4+Ctrl+y exec mpv --loop-playlist=no --keep-open=yes $(wl-paste) | notify-send "Playing in MPV" --expire-time=1500
-    
-    # Display Brightness and Keyboard Brightness
-    bindsym XF86MonBrightnessUp exec ${pkgs.light}/bin/light -A 5
-    bindsym XF86MonBrightnessDown exec ${pkgs.light}/bin/light -U 5
-    bindsym XF86KbdBrightnessUp exec ${pkgs.light}/bin/light -s sysfs/leds/smc::kbd_backlight -A 5
-    bindsym XF86KbdBrightnessDown exec ${pkgs.light}/bin/light -s sysfs/leds/smc::kbd_backlight -U 5
-    
-    #############
-    # Sway keys #
-    #############
-    
-    # Allow for window moving
-    floating_modifier Mod4
-    
-    # Kill focused window, reload config
-    bindsym Mod4+q kill
-    bindsym Mod4+Shift+r reload
-    
-    # Switch to workspace
-    bindsym Mod4+grave workspace $ws0
-    bindsym Mod4+1 workspace $ws1
-    bindsym Mod4+2 workspace $ws2
-    bindsym Mod4+3 workspace $ws3
-    bindsym Mod4+4 workspace $ws4
-    bindsym Mod4+5 workspace $ws5
-    bindsym Mod4+6 workspace $ws6
-    bindsym Mod4+7 workspace $ws7
-    bindsym Mod4+8 workspace $ws8
-    bindsym Mod4+9 workspace $ws9
-    
-    # Switch to workspace+
-    bindsym Mod1+F1 workspace $ws1+
-    bindsym Mod1+F2 workspace $ws2+
-    bindsym Mod1+F3 workspace $ws3+
-    bindsym Mod1+F4 workspace $ws4+
-    bindsym Mod1+F5 workspace $ws5+
-    bindsym Mod1+F6 workspace $ws6+
-    bindsym Mod1+F7 workspace $ws7+
-    bindsym Mod1+F8 workspace $ws8+
-    bindsym Mod1+F9 workspace $ws9+
-    
-    # Move window to workspace, focus that workspace
-    bindsym Mod4+Shift+grave move container to workspace $ws0; workspace $ws0
-    bindsym Mod4+Shift+1 move container to workspace $ws1; workspace $ws1
-    bindsym Mod4+Shift+2 move container to workspace $ws2; workspace $ws2
-    bindsym Mod4+Shift+3 move container to workspace $ws3; workspace $ws3
-    bindsym Mod4+Shift+4 move container to workspace $ws4; workspace $ws4
-    bindsym Mod4+Shift+5 move container to workspace $ws5; workspace $ws5
-    bindsym Mod4+Shift+6 move container to workspace $ws6; workspace $ws6
-    bindsym Mod4+Shift+7 move container to workspace $ws7; workspace $ws7
-    bindsym Mod4+Shift+8 move container to workspace $ws8; workspace $ws8
-    bindsym Mod4+Shift+9 move container to workspace $ws9; workspace $ws9
-    
-    # Move window to workspace, focus that workspace+
-    bindsym Mod1+Shift+F1 move container to workspace $ws1+; workspace $ws1+
-    bindsym Mod1+Shift+F2 move container to workspace $ws2+; workspace $ws2+
-    bindsym Mod1+Shift+F3 move container to workspace $ws3+; workspace $ws3+
-    bindsym Mod1+Shift+F4 move container to workspace $ws4+; workspace $ws4+
-    bindsym Mod1+Shift+F5 move container to workspace $ws5+; workspace $ws5+
-    bindsym Mod1+Shift+F6 move container to workspace $ws6+; workspace $ws6+
-    bindsym Mod1+Shift+F7 move container to workspace $ws7+; workspace $ws7+
-    bindsym Mod1+Shift+F8 move container to workspace $ws8+; workspace $ws8+
-    bindsym Mod1+Shift+F9 move container to workspace $ws9+; workspace $ws9+
-    
-    # Change focus across windows
-    bindsym Mod4+Up focus up
-    bindsym Mod4+Down focus down
-    bindsym Mod4+Left focus left
-    bindsym Mod4+Right focus right
-    
-    # Change focus across monitors
-    bindsym Mod4+j focus output ${monitor2}
-    bindsym Mod4+k focus output ${monitor1}
-    bindsym Mod4+l focus output ${monitor3}
-    
-    # Move focused window
-    bindsym Mod4+Shift+Up move up
-    bindsym Mod4+Shift+Down move down
-    bindsym Mod4+Shift+Left move left
-    bindsym Mod4+Shift+Right move right
-    
-    # Move window across monitors
-    bindsym Mod4+Shift+j move output ${monitor2}; focus output ${monitor2}
-    bindsym Mod4+Shift+k move output ${monitor1}; focus output ${monitor1}
-    bindsym Mod4+Shift+l move output ${monitor3}; focus output ${monitor3}
-    
-    # Change focus between floating/tiled, toggle floating
-    bindsym Mod4+space focus mode_toggle
-    bindsym Mod4+Shift+space floating toggle
-    
-    # Allow a window to be visible on all workspaces, toggle border
-    bindsym Mod4+0 exec ${swayscripts}/pin-window.sh
-    
-    # Toggle fullscreen
-    bindsym Mod4+f fullscreen toggle
-    bindsym Mod4+Mod1+Ctrl+f fullscreen toggle global
-    
-    # Change container layout
-    bindsym Mod4+w layout toggle split
-    bindsym Mod4+e layout tabbed
-    
-    # Change split direction
-    bindsym Mod4+h split h
-    bindsym Mod4+v split v
-    
-    # Focus parent / child
-    bindsym Mod4+a focus parent
-    bindsym Mod4+d focus child
-    
-    # Resize windows
-    bindsym Mod4+Mod1+Up resize grow height 5 px or 5 ppt
-    bindsym Mod4+Mod1+Down resize shrink height 5 px or 5 ppt
-    bindsym Mod4+Mod1+Left resize shrink width 5 px or 5 ppt
-    bindsym Mod4+Mod1+Right resize grow width 5 px or 5 ppt
-    
-    # Adjust gap size
-    bindsym Mod4+Shift+equal gaps inner current set 5
-    bindsym Mod4+equal gaps inner current plus 5
-    bindsym Mod4+minus gaps inner current minus 5
-    
-    # Scratchpads
-    bindsym Ctrl+Shift+Escape [app_id="gotop"] scratchpad show, move position center
-    bindsym Mod4+Shift+m [app_id="music"] scratchpad show, move position center
-    bindsym Mod4+Mod1+Ctrl+End [app_id="replay"] scratchpad show, move position center
-    bindsym Mod4+Shift+v [app_id="pavucontrol"] scratchpad show, move position center
-    bindsym Mod4+Shift+Backslash [app_id="com.github.wwmm.easyeffects"] scratchpad show, move position center
-  '';
-
-  # Define how windows are treated and which workspace they go to
-  swayrules = ''
-    # Behavioral rules
-    title_align center
-    focus_on_window_activation focus
-    
-    # Scratchpads
-    for_window [app_id="gotop"] floating enable, sticky enable, move scratchpad, resize set 1200 900
-    for_window [app_id="music"] floating enable, sticky enable, move scratchpad, resize set 1000 650
-    for_window [app_id="replay"] floating enable, sticky enable, move scratchpad, resize set 1000 650
-    for_window [app_id="pavucontrol"] floating enable, sticky enable, move scratchpad, resize set 1000 800, opacity 0.9
-    for_window [app_id="com.github.wwmm.easyeffects"] floating enable, sticky enable, move scratchpad, resize set 1000 800, opacity 0.9
-    for_window [app_id="Hiddenlol"] move scratchpad
-    
-    # Give apps that don't have them borders
-    for_window [app_id="com.github.wwmm.easyeffects"] border pixel 3
-    for_window [class="steam"] border pixel 3
-    for_window [app_id="gnome-disks"] border pixel 3
-    for_window [app_id="swappy"] border pixel 3
-    for_window [app_id="virt-manager"] border pixel 3
-    for_window [window_role="pop-up"] border pixel 3
-    
-    # Disable auto-focus
-    no_focus [app_id="looking-glass-client"]
-    
-    # Neither boders nor scratchpads
-    for_window [app_id="smb"] floating enable
-    for_window [app_id="cmst"] floating enable
-    for_window [app_id="float"] floating enable
-    for_window [app_id="looking-glass-client"] fullscreen enable
-    for_window [title="^GlobalShot"] floating enable, fullscreen enable global
-    
-    # Assign apps to workspaces
-    assign [app_id="smb"] $ws1
-    assign [app_id="JimboBrowser"] $ws1
-    assign [app_id="SchoolBrowser"] $ws1+
-    assign [class="steam"] $ws2
-    assign [class="heroic"] $ws2
-    assign [app_id="looking-glass-client"] $ws2+
-    assign [app_id="com.obsproject.Studio"] $ws4+
-    assign [app_id="serverdash"] $ws4
-    assign [app_id="Variety"] $ws7
-    assign [class="zoom"] $ws6+
-  '';
-
-  # Sway's start script with necessary variables, used by greetd
-  swaystart = ''
-    #!/usr/bin/env bash
-
+  # Sway still needs a start script because the sessionconfig doesn't do anything
+  swayStart = ''
     # Use NVIDIA variables if drivers are in use
     if lspci -k | grep "Kernel driver in use: nvidia" &> /dev/null; then
       # NVIDIA/AMD variables
@@ -525,66 +139,40 @@ let
     else
       :
     fi
+
+    # Prepare for the tearing patch
+    export WLR_DRM_NO_ATOMIC=1
     
     # Sway/Wayland
     export XDG_CURRENT_DESKTOP=sway
     export XDG_SESSION_DESKTOP=sway
     export QT_QPA_PLATFORM=wayland
-    export QT_QPA_PLATFORMTHEME=gtk2
-    export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
     
     # OpenGL Variables
     export __GL_GSYNC_ALLOWED=0
     export __GL_VRR_ALLOWED=0
 
     # Start Sway
-    dbus-run-session sway --unsupported-gpu
+    sway --unsupported-gpu
   '';
 
   # Swappy config, for screenshot editing
-  swappyconfig = ''
+  swappyConfig = ''
     [Default]
     early_exit=true
     save_dir=$HOME/Pictures/Screenshots
   '';
 
   # All my bemenu scripts in one file
-  bescripts = ''
-    #!/usr/bin/env bash
-    
-    # configs function
-    handle_configs() {
-      configs=$(echo -e "sway\nhotkeys\nrules\ntheming\nhardware\nworkspaces\nstart\nprograms\nwaybar\nwaybar-style\nranger\nalarms\nscreenshots\nkitty\nrofi\nfull-update\ncleanup\nfolder\nzshrc\nbescripts" | ${bmen} configs)
-      case $configs in
-        sway) kitty -o font_size=14 nvim ${swaycfg}/config ;;
-        hotkeys) kitty -o font_size=14 nvim ${swaycfg}/hotkeys ;;
-        rules) kitty -o font_size=14 nvim ${swaycfg}/rules ;;
-        theming) kitty -o font_size=14 nvim ${swaycfg}/theme ;;
-        hardware) kitty -o font_size=14 nvim ${swaycfg}/hardware ;;
-        workspaces) kitty -o font_size=14 nvim ${swaycfg}/workspace ;;
-        start) kitty -o font_size=14 nvim ${swaycfg}/start.sh ;;
-        programs) kitty -o font_size=14 nvim ${swaycfg}/programs ;;
-        waybar) kitty -o font_size=14 nvim ${swaycfg}/waybar/config ;;
-        waybar-style) kitty -o font_size=14 nvim ${swaycfg}/waybar/style.css ;;
-        ranger) kitty -o font_size=14 nvim ~/.config/ranger/rifle.conf ;;
-        alarms) kitty -o font_size=14 nvim ${swayscripts}/alarms.sh ;;
-        screenshots) kitty -o font_size=14 nvim ${swayscripts}/screenshots.sh ;;
-        kitty) kitty -o font_size=14 nvim ~/.config/kitty/kitty.conf ;;
-        rofi) kitty -o font_size=14 nvim ~/.config/rofi/purple.rasi ;;
-        full-update) kitty -o font_size=14 nvim ${swayscripts}/tools/full-update.sh ;;
-        cleanup) kitty -o font_size=14 nvim ${swayscripts}/tools/cleanup.sh ;;
-        folder) kitty -o font_size=14 ranger ${swaycfg}/ ;;
-        zshrc) kitty -o font_size=14 nvim ~/.zshrc ;;
-        bescripts)  kitty -o font_size=14 nvim ${swayscripts}/bescripts.sh ;;
-      esac
-    }
-    
+  beScripts = let
+    beMenu = ''bemenu --fn "${mainFont} 13" --nb "#${darkCol}" --ab "#${darkCol}" --tb "#${primeCol}" --fb "#${darkCol}" --tf "#FFFFFF" --hf "#FFFFFF" --hb "#${primeCol}" -f --ignorecase --hp 8 -p'';
+  in pkgs.writeScriptBin "bescripts" ''
     # Scratchpad function
     handle_scratchpads() {
-      SCRATCHPADS=$(echo -e "Gotop\nMusic\nPavuControl\nEasyEffects" | ${bmen} Scratchpads)
+      SCRATCHPADS=$(echo -e "Gotop\nMusic\nPavuControl\nEasyEffects" | ${beMenu} "Scratchpads")
       case $SCRATCHPADS in
-        Gotop) kitty --class=gotop -o font_size=14 gotop ;;
-        Music) kitty --class=music -o font_size=14 ranger ;;
+        Gotop) ${terminalClass}=gotop gotop ;;
+        Music) ${terminalClass}=music ranger ;;
         PavuControl) pavucontrol ;;
         EasyEffects) easyeffects ;;
       esac
@@ -592,66 +180,42 @@ let
     
     # Lock menu
     handle_power() {
-      POWER=$(echo -e "Shutdown\nReboot\nSleep\nLock\nKill" | ${bmen} Power)
+      POWER=$(echo -e "Shutdown\nReboot\nSleep\nLock\nKill" | ${beMenu} "Power")
       case $POWER in
-        Shutdown) shutdown now ;;
+        Shutdown) poweroff ;;
         Reboot) reboot ;;
-        Sleep) ${swayscripts}/lock.sh --sleep & ;;
-        Lock) ${swayscripts}/lock.sh & ;;
+        Sleep) swaylock --sleep & ;;
+        Lock) swaylock & ;;
         Kill) pkill -9 sway ;;
-      esac
-    }
-    
-    # Games launcher
-    handle_games() {
-      GAMES=$(echo -e "Prism\nBedrock\nMineOnline\nMineTest\nVeloren\nRuneLite" | ${bmen} Games)
-      case $GAMES in
-        Prism) prismlauncher ;;
-        MineTest) minetest ;;
-        Veloren) airshipper run ;;
-        RuneLite) runelite
       esac
     }
     
     # Media launcher
     handle_media() {
-      RET=$(echo -e "YouTube\nMusic\nHistory\nAnime" | ${bmen} Media)
+      RET=$(echo -e "YouTube\nMusic\nHistory\nAnime" | ${beMenu} "Media")
       case $RET in
         YouTube) ytfzf -D ;;
-        Music ) ytfzf -D -m ;;
-        History) kitty ytfzf -H ;;
-        Anime) kitty ani-cli -q 720 ;;
-      esac
-    }
-    
-    # Production tools
-    handle_production() {
-      PRODUCTION=$(echo -e "OBS\nKrita\nKdenlive\nAudacity" | ${bmen} Production)
-      case $PRODUCTION in
-        OBS) obs ;;
-        Krita) krita;;
-        Kdenlive) kdenlive ;;
-        Audacity) audacity ;;
+        Music) ytfzf -D -m ;;
+        History) ytfzf -D -H ;;
+        Anime) ${terminal} ani-cli -q 720 ;;
       esac
     }
     
     # Resolutions
     handle_resolutions() {
-      RET=$(echo -e "Default\nWide\nGPU2" | ${bmen} Resolution)
+      RET=$(echo -e "Default\nWide\nGPU2" | ${beMenu} "Resolutions")
       case $RET in
         Default) swaymsg reload ;;
-        Wide) swaymsg "output HDMI-A-1 enable pos 1680 0 mode 1680x1050@59.954Hz
-        	output DP-3 enable pos 3360 0 transform 0
-        	output DP-2 enable pos 0 0 mode 1680x1050@59.954Hz" ;;
-        GPU2) swaymsg "output HDMI-A-1 enable pos 1680 110 mode 1920x1080@60Hz
-        	output DP-1 enable pos 0 0 transform 0" ;;
+        Wide) swaymsg "output ${display1} enable pos 1680 0 mode 1680x1050@59.954Hz
+          output ${display2} enable pos 3360 0 transform 0
+          output ${display3} enable pos 0 0 mode 1680x1050@59.954Hz" ;;
+        GPU2) swaymsg "output ${display1} enable pos 1680 0 mode 1920x1080@60Hz
+          output ${display2} enable pos 0 0 transform 0" ;;
       esac
     }
     
     # Check for command-line arguments
-    if [ "$1" == "--config" ]; then
-      handle_configs
-    elif [ "$1" == "--scratchpads" ]; then
+    if [ "$1" == "--scratchpads" ]; then
       handle_scratchpads
     elif [ "$1" == "--power" ]; then
       handle_power
@@ -659,8 +223,8 @@ let
       handle_games
     elif [ "$1" == "--media" ]; then
       handle_media
-    elif [ "$1" == "--production" ]; then
-      handle_production
+    elif [ "$1" == "--productivity" ]; then
+      handle_productivity
     elif [ "$1" == "--resolutions" ]; then
       handle_resolutions
     else
@@ -669,19 +233,17 @@ let
   '';
 
   # Swaylock's colors and background image
-  lockscript = ''
-    #!/usr/bin/env bash
-
+  swayLock = pkgs.writeScriptBin "swaylock" ''
     # Set the lock script
     lockscript() {
       BLANK='#00000000'
       CLEAR='#FFFFFF22'
-      DEFAULT='#${primecol}FF'
+      DEFAULT='#${primeCol}FF'
       TEXT='#FFFFFFFF'
-      WRONG='#680082FF'
-      VERIFYING='#${accentcol}FF'
+      WRONG='#${splitCol}FF'
+      VERIFYING='#${accentCol}FF'
       
-      swaylock -f -e \
+      ${pkgs.swaylock-effects}/bin/swaylock -f -e \
       --key-hl-color=$VERIFYING \
       --bs-hl-color=$WRONG \
       \
@@ -704,9 +266,9 @@ let
       \
       --indicator \
       --indicator-radius=80 \
-      --image=~/Pictures/Wallpapers/VMs\ Wallpaper.png \
+      --image=${lockpaper} \
       --clock \
-      --font=Ubuntu \
+      --font=${mainFont} \
       --font-size=30 \
       --timestr="%I:%M%p" \
       --datestr="%a %b %d %Y"
@@ -715,7 +277,7 @@ let
     # Handle whether to lock or sleep
     if [ "$1" == "--sleep" ]; then
       lockscript &
-      exec swayidle -w \
+      exec ${pkgs.swayidle}/bin/swayidle -w \
       timeout 1 'swaymsg "output * dpms off"' \
       resume 'swaymsg "output * dpms on"; pkill -9 swayidle'
     else
@@ -724,9 +286,7 @@ let
   '';
 
   # Toggle notifications using mako
-  notif-toggle = ''
-    #!/usr/bin/env bash
-
+  makoToggle = pkgs.writeScriptBin "makotoggle" ''
     # Run makoctl mode and store the output in a variable
     mode_output=$(makoctl mode)
     
@@ -745,34 +305,22 @@ let
     fi
   '';
 
-  # Pin a floating window to all workspaces on Sway
-  pin-window = ''
-    #!/usr/bin/env bash
-
-    # Get the current border style of the focused window
-    current_style=$(swaymsg -t get_tree | jq -r '.. | select(.focused?).border')
-    
-    # Toggle between "normal" (default) and "pixel 3" border styles
-    if [ "$current_style" == "none" ]; then
-      swaymsg "sticky disable, border pixel 3"
-    else
-      swaymsg "sticky enable, border none"
-    fi
-  '';
-
   # Use grim and slurp to take screenshots in multiple ways
-  screenshots = ''
-    #!/usr/bin/env bash
-    
+  screenShot = let 
+    imvShot = pkgs.writeText "imv.conf" ''
+      [options]
+      title_text = GlobalShot
+    '';
+  in pkgs.writeScriptBin "screenshot" ''
     # Swappy
     handle_swappy() {
       # Create an imv window to act as a static screen
-      grim -t ppm - | imv_config=~/.config/imv/screenshot.ini imv - &
+      grim -t ppm - | imv_config=${imvShot} imv - &
       imv_pid=$!
        
       # Capture the screenshot of the selected area and save to a temporary file
       selected_area=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"'\
-      | XCURSOR_SIZE=40 slurp -w 3 -c ${primecol} -B 00000066 -b 00000099)
+      | XCURSOR_SIZE=40 slurp -w ${borderWeight} -c ${primeCol} -B 00000066 -b 00000099)
       temp_file=$(mktemp -u).png
       grim -g "$selected_area" "$temp_file"
       
@@ -789,12 +337,12 @@ let
     # Copy
     handle_copy() {
       # Create an imv window to act as a static screen
-      grim -t ppm - | imv_config=~/.config/imv/screenshot.ini imv - &
+      grim -t ppm - | imv_config=${imvShot} imv - &
       imv_pid=$!
        
       # Capture the screenshot of the selected area and save to a temporary file
       selected_area=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"'\
-      | XCURSOR_SIZE=40 slurp -w 3 -c ${primecol} -B 00000066 -b 00000099)
+      | XCURSOR_SIZE=40 slurp -w ${borderWeight} -c ${primeCol} -B 00000066 -b 00000099)
       temp_file=$(mktemp -u).png
       grim -g "$selected_area" "$temp_file"
       
@@ -862,45 +410,12 @@ let
     elif [ "$1" == "--all" ]; then
       handle_all
     else
-      echo "Please use a valid argument."
-    fi
-  '';
-
-  # Kill a window or probe it for info
-  wtools = ''
-    #!/usr/bin/env bash
-
-    # List the app name and whether or not it uses wayland
-    wprop() {
-      selected_window=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | "\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)"' | slurp -r -c ${primecol} -B 00000066 -b 00000000)
-      if [ -n "$selected_window" ]; then
-	app_id=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | select("\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)" == "'"$selected_window"'") | .app_id')
-	system=$(sed 's/xdg_shell/Wayland/g; s/xwayland/Xorg/g' < <(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | select("\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)" == "'"$selected_window"'") | .shell'))
-	notify-send "$(echo -e "Window's app_id: $app_id\nWindow System: $system")"
-      fi
-    }
-    
-    # Kill a selected window
-    wkill() {
-      selected_window=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | "\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)"' | slurp -r -c ${primecol} -B 00000066 -b 00000000)
-      if [ -n "$selected_window" ]; then
-	pid=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | select("\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)" == "'"$selected_window"'") | .pid')
-	kill -9 "$pid"
-      fi
-    }
-    
-    # Handle which tool we use
-    if [ "$1" == "--prop" ]; then
-      wprop
-    elif [ "$1" == "--kill" ]; then
-      wkill
+      echo "Please use the arguments swappy, copy, current, or all."
     fi
   '';
 
   # Fix disks when they are corrupted by my VM setup
-  disk-cleanup = ''
-    #!/usr/bin/env bash
-
+  diskClean = pkgs.writeScriptBin "diskclean" ''
     # Define mount points and devices
     MOUNT1="/mnt/Linux1"
     MOUNT2="/mnt/Linux2"
@@ -910,41 +425,74 @@ let
     DEVICE_2=$(df -P "$MOUNT2" | awk 'NR==2 {print $1}')
     
     # Defrag both devices
-    sudo e4defrag -c $MOUNT1
-    sudo e4defrag -c $MOUNT2
+    ${auth} e4defrag -c $MOUNT1
+    ${auth} e4defrag -c $MOUNT2
     
     # Unmount both mount points
-    sudo umount "$MOUNT1"
-    sudo umount "$MOUNT2"
+    ${auth} umount "$MOUNT1"
+    ${auth} umount "$MOUNT2"
     
     # Run fsck on the devices
-    sudo fsck -f "$DEVICE_1"
-    sudo e2fsck -f $DEVICE_1
-    sudo fsck -f "$DEVICE_2"
-    sudo e2fsck -f $DEVICE_2
+    ${auth} fsck -f "$DEVICE_1"
+    ${auth} e2fsck -f $DEVICE_1
+    ${auth} fsck -f "$DEVICE_2"
+    ${auth} e2fsck -f $DEVICE_2
     
     # Remount the devices
-    sudo mount "$MOUNT1"
-    sudo mount "$MOUNT2"
+    ${auth} mount "$MOUNT1"
+    ${auth} mount "$MOUNT2"
     
     echo "Disks cleaned."
   '';
 
-  # Sometimes Wine and Proton hang in the background. This can kill those processes
-  kill-proton = ''
-    #!/usr/bin/env bash
-
-    # Terminate Wine and Proton processes with ".exe" or "C:\" in command line
-    pkill -f '(\.exe|C:\\)' --signal 9
+  makeLinuxDrive = pkgs.writeScriptBin "makelinuxdrive" ''
+    # List available drives and their sizesusing lsblk
+    lsblk -dno NAME,SIZE | awk '{print $1 " (" $2 ")"}'
     
-    # Terminate all Wine and Proton processes
-    pkill -f '.*(\.|/)(wine|proton).*' --signal 9
+    # Prompt user to select a drive
+    read -p "Please enter the name of the drive you want to select (e.g., sda, sdb, etc.): " drive_name
+    
+    # Check if the entered drive name exists in the lsblk output
+    if lsblk -o NAME -n | grep -q "^$drive_name$"; then
+    
+      # Format the entire disk as GPT
+      ${auth} parted /dev/$drive_name mklabel gpt
+    
+      # Write a 2GB FAT32 boot partition
+      ${auth} parted -a optimal /dev/$drive_name mkpart primary fat32 1MiB 2GiB
+    
+      # Write a 4GB partition for swap
+      ${auth} parted -a optimal /dev/$drive_name mkpart primary linux-swap 1GiB 5GiB
+    
+      # Write the rest of the drive as btrfs
+      ${auth} parted -a optimal /dev/$drive_name mkpart primary btrfs 5GiB 100%
+    
+      # Get a partition name variable to work with not sata drives
+      part_name=$(ls -l /dev/$(echo $drive_name)* | awk '{print $10}' | tail -1 | sed 's|/dev/||' | rev | cut -c 2- | rev)
+    
+      # Format the new partitions
+      ${auth} mkfs.btrfs /dev/$(echo $part_name)3
+      ${auth} mkswap /dev/$(echo $part_name)2
+      ${auth} mkfs.fat -F 32 /dev/$(echo $part_name)1
+    
+      # Mount the btrfs partition to /mnt
+      ${auth} mkdir -p /mnt/
+      ${auth} mount /dev/$(echo $part_name)3 /mnt
+      ${auth} mkdir -p /mnt/boot
+      ${auth} mount /dev/$(echo $part_name)1 /mnt/boot
+    
+      # Create fstab file (has to be brought in later)
+      ${auth} swapon /dev/$(echo $part_name)2
+    
+      echo "Drive partitioning/mounting is complete."
+      break
+    else
+      echo "Invalid drive name. Please try again."
+    fi
   '';
 
   # Download YouTube videos in Opus format (rather than mp3)
-  ytopus = ''
-    #!/usr/bin/env bash
-
+  ytOpus = pkgs.writeScriptBin "ytopus" ''
     # Check if an argument (URL) was provided
     if [ $# -eq 0 ]; then
       echo "No URL provided. Please provide a URL as an argument."
@@ -952,7 +500,7 @@ let
     fi
     
     # Use yt-dlp to download the URL
-    yt-dlp "$1"
+    yt-dlp "$1" --recode-video webm
     
     # Take the downloaded video as a variable
     video=$(ls --color=never *.webm)
@@ -968,28 +516,39 @@ let
     rm "$video"
   '';
 
-  # Handle all my alarms
-  alarms = ''
-    #!/usr/bin/env bash
+  # Download YouTube videos in Opus format
+  discordWayland = pkgs.writeScriptBin "discord" ''
+    ${pkgs.vesktop}/bin/vencorddesktop --enable-features=UseOzonePlatform --ozone-platform=wayland
+  '';
 
+  # Handle all my alarms
+  alarmScript = let
+    alarmSound = pkgs.fetchurl {
+      name = "alarmSound.mp3";
+      url = "https://archive.org/download/espionage_202105/Espionage.mp3";
+      sha256 = "xWzbF73+VMCKWvwbN4r7Z+Rc2QuYxg01yipnaRRMq3g=";
+    };
+  in pkgs.writeScriptBin "alarms" ''
+    #!/usr/bin/env bash
+    
     # The alarm script itself
     alarm() {
-      mpv --volume=90 ${swayscripts}/alarm.mp3 &
+      mpv --volume=40 --force-media-title="Alarm.mp3" ${alarmSound} &
       swaynag \
       --message "$name" \
-      --button "Stop Alarm" ${swayscripts}/alarmtest.sh \
-      --font Ubuntu 12 --background ${darkcol} \
-      --border ${primecol} \
-      --button-border-size 3 \
-      --button-background ${darkcol} \
-      --border-bottom ${primecol} \
-      --text ${textcolor} \
-      --button-text ${textcolor}
+      --button "Stop Alarm" alarms \
+      --font ${mainFont} 12 --background ${darkCol} \
+      --border ${primeCol} \
+      --button-border-size ${borderWeight} \
+      --button-background ${darkCol} \
+      --border-bottom ${primeCol} \
+      --text ${textCol} \
+      --button-text ${textCol}
     }
     
     # Handle alarm times
     handle_alarms() {
-
+    
       # Make the script loop when ran by Sway
       while true; do
         # Check the current day and time
@@ -997,31 +556,42 @@ let
         current_time=$(date +'%l:%M%p' | sed 's/^ //')
         
         # Monday alarms
-        if [ "$current_day" == "Monday" ] && [ "$current_time" == "11:39AM" ]; then
-          name="OPS-345 Online"; alarm
-        fi
-        if [ "$current_day" == "Monday" ] && [ "$current_time" == "1:25PM" ]; then
-          name="MST-200 Online"; alarm
-        fi
-        if [ "$current_day" == "Monday" ] && [ "$current_time" == "3:15PM" ]; then
-          name="DAT-330_Online"; alarm
+        if [ "$current_day" == "Monday" ]; then
+          if [ "$current_time" == "11:39AM" ]; then
+            name="OPS-345 Online"; alarm
+          fi
+          if [ "$current_time" == "1:25PM" ]; then
+            name="MST-200 Online"; alarm
+          fi
+          if [ "$current_time" == "3:15PM" ]; then
+            name="DAT-330 Online"; alarm
+          fi
         fi
         
         # Tuesday alarms
-        if [ "$current_day" == "Tuesday" ] && [ "$current_time" == "10:40AM" ]; then
-          name="CUL-200 Check for In Person"; alarm
+        if [ "$current_day" == "Tuesday" ]; then
+          if [ "$current_time" == "10:40AM" ]; then
+            name="CUL-502 Check for In Person"; alarm
+          fi
         fi
     
         # Wednesday alarms
+        if [ "$current_day" == "Wednesday" ]; then
+          :
+        fi
         
         # Thursday alarms
-        if [ "$current_day" == "Thursday" ] && [ "$current_time" == "11:20AM" ]; then
-          name="MST-200 In Person"; alarm
+        if [ "$current_day" == "Thursday" ]; then
+          if [ "$current_time" == "11:20AM" ]; then
+            name="MST-200 In Person"; alarm
+          fi
         fi
         
         # Friday alarms
-        if [ "$current_day" == "Friday" ] && [ "$current_time" == "08:00AM" ]; then
-          name="OPS-345 In Person"; alarm
+        if [ "$current_day" == "Friday" ]; then
+          if [ "$current_time" == "08:00AM" ]; then
+            name="OPS-345 In Person"; alarm
+          fi
         fi
         
         # Wait a minute between checks
@@ -1043,501 +613,8 @@ let
     fi
   '';
 
-  # Define Waybar config
-  waybarconfig = ''
-    [{
-      // Bar 1
-      "name": "bar1",
-      "position": "top",
-      "layer": "bottom",
-      "output": "${monitor1}",
-      "modules-left": ["sway/workspaces", "sway/window"],
-      "modules-right": ["pulseaudio", "cpu", "memory", "custom/vram", "custom/clock-long", "gamemode", "sway/scratchpad", "tray", "network"],
-    
-      "sway/workspaces": {
-        "format": "{name}",
-        "enable-bar-scroll": true,
-        "warp-on-scroll": false,
-        "disable-scroll-wraparound": true
-      },
-    
-      "sway/window": {
-        "icon": true,
-        "icon-size": 15,
-        "all-outputs": true,
-        "tooltip": false,
-        "rewrite": {
-          "(.*) — LibreWolf": "   $1",
-          "LibreWolf": "   LibreWolf",
-          "(.*) - YouTube — LibreWolf": "󰗃   $1"
-        }
-      },
-    
-      "pulseaudio": {
-        "format": "{icon}   {volume}%",
-        "format-bluetooth": "{icon}  {volume}%",
-        "format-muted": " muted",
-        "format-icons": {
-          "headphone": "",
-          "default": ["", ""]
-        },
-        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-        "on-click-middle": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 100%",
-        "on-click-right": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 60%",
-        "ignored-sinks": ["Easy Effects Sink","USB FS AUDIO Analog Stereo"]
-      },
-    
-      "cpu": {
-        "format": "  {usage}%",
-        "interval": 3
-      },
-    
-      "memory": {
-        "format": "  {used}G",
-        "tooltip": false
-      },
-    
-      "custom/vram": {
-        "exec": "${swaycfg}/waybar/scripts/vram.sh",
-        "format": "{}",
-        "return-type": "json",
-        "interval": 3
-      },
-    
-      "custom/clock-long": {
-        "exec": "${swaycfg}/waybar/scripts/clock-long.sh",
-        "on-click": "wl-copy $(date \"+%Y-%m-%d-%H%M%S\"); notify-send \"Date copied.\"",
-        "format": "{}",
-        "return-type": "json",
-        "interval": 1,
-        "tooltip": true
-      },
-    
-      "gamemode": {
-        "format": "{glyph}",
-        "glyph": "󰖺",
-        "hide-not-running": true,
-        "use-icon": true,
-        "icon-spacing": 3,
-        "icon-size": 19,
-        "tooltip": true,
-        "tooltip-format": "Gamemode: On"
-      },
-    
-      "sway/scratchpad": {
-        "format": "   {count}",
-        "show-empty": false,
-        "tooltip": true,
-        "tooltip-format": "{title}"
-      },
-    
-      "tray": {
-        "spacing": 5
-      },
-    
-      "network": {
-        "interface": "enp42s0",
-        //"interface": "enp15s0",
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "󰈀",
-        "format-disconnected": "󰖪",
-        "format-linked": "",
-        "tooltip-format-wifi": "{essid} ({signalStrength}%) \n{ifname}",
-        "tooltip-format-ethernet": "{ipaddr}\n{ifname} ",
-        "tooltip-format-disconnected": "Disconnected"
-      }
-    },{
-      // Bar 2
-      "name": "bar2",
-      "position": "top",
-      "layer": "bottom",
-      "output": "DP-1",
-      "modules-left": ["sway/workspaces", "sway/window"],
-      "modules-right": ["pulseaudio", "custom/media", "custom/notifs", "cpu", "memory", "custom/vram", "custom/clock-long"],
-    
-      "sway/workspaces": {
-        "format": "{name}",
-        "enable-bar-scroll": true,
-        "warp-on-scroll": false,
-        "disable-scroll-wraparound": true
-      },
-    
-      "sway/window": {
-        "icon": true,
-        "icon-size": 15,
-        "all-outputs": true,
-        "tooltip": false,
-        "rewrite": {
-          "(.*) — LibreWolf": "   $1",
-          "LibreWolf": "   LibreWolf",
-          "(.*) - YouTube — LibreWolf": "󰗃   $1"
-        }
-      },
-    
-      "pulseaudio": {
-        "format": "{icon}   {volume}%",
-        "format-bluetooth": "{icon}  {volume}%",
-        "format-muted": " muted",
-        "format-icons": {
-          "headphone": "",
-          "default": ["", ""]
-        },
-        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-        "on-click-middle": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 100%",
-        "on-click-right": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 60%",
-        "ignored-sinks": ["Easy Effects Sink","USB FS AUDIO Analog Stereo"]
-      },
-    
-      "custom/media": {
-        "exec-if": "playerctl --player=mpv status",
-        "exec": "${swaycfg}/waybar/scripts/mpv-metadata.sh",
-        "format": "{}",
-        "return-type": "json",
-        "interval": 2,
-        "max-length": 30,
-        "on-click": "playerctl --player=mpv play-pause",
-        "on-click-middle": "pkill -9 mpv"
-      },
-    
-      "custom/notifs": {
-        "exec": "${swaycfg}/waybar/scripts/notif-status.sh",
-        "format": "{}",
-        "return-type": "json",
-        "interval": 2,
-        "on-click": "${swayscripts}/desktop/notif-toggle.sh"
-      },
-    
-      "cpu": {
-        "format": "  {usage}%",
-        "interval": 3
-      },
-    
-      "memory": {
-        "format": "  {used}G",
-        "tooltip": false
-      },
-    
-      "custom/vram": {
-        "exec": "${swaycfg}/waybar/scripts/vram.sh",
-        "format": "{}",
-        "return-type": "json",
-        "interval": 3
-      },
-    
-      "custom/clock-long": {
-        "exec": "${swaycfg}/waybar/scripts/clock-long.sh",
-        "on-click": "wl-copy $(date \"+%Y-%m-%d-%H%M%S\"); notify-send \"Date copied.\"",
-        "format": "{}",
-        "return-type": "json",
-        "interval": 1,
-        "tooltip": true
-      }
-    },{
-      // Bar 3
-      "name": "bar3",
-      "position": "top",
-      "layer": "bottom",
-      "output": "DP-2",
-      "modules-left": ["sway/workspaces", "sway/window"],
-      "modules-right": [ "pulseaudio", "custom/weather", "cpu", "memory", "custom/vram", "custom/clock-short"],
-    
-      "sway/workspaces": {
-        "format": "{name}",
-        "enable-bar-scroll": true,
-        "warp-on-scroll": false,
-        "disable-scroll-wraparound": true
-      },
-    
-      "sway/window": {
-        "icon": true,
-        "icon-size": 15,
-        "all-outputs": true,
-        "tooltip": false,
-        "rewrite": {
-          "(.*) — LibreWolf": "   $1",
-          "LibreWolf": "   LibreWolf",
-          "(.*) - YouTube — LibreWolf": "󰗃   $1"
-        }
-      },
-    
-      "pulseaudio": {
-        "format": "{icon}   {volume}%",
-        "format-bluetooth": "{icon}  {volume}%",
-        "format-muted": " muted",
-        "format-icons": {
-          "headphone": "",
-          "default": ["", ""]
-        },
-        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-        "on-click-middle": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 100%",
-        "on-click-right": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 60%",
-        "ignored-sinks": ["Easy Effects Sink","USB FS AUDIO Analog Stereo"]
-      },
-    
-      "custom/weather": {
-        "exec": "${swaycfg}/waybar/scripts/weather.sh",
-        "format": "<span font_size='11pt'>{}</span>",
-        "return-type": "json",
-        "on-click": "librewolf https://openweathermap.org/city/6173577",
-        "interval": 150
-      },
-    
-      "cpu": {
-        "format": "  {usage}%",
-        "interval": 3
-      },
-    
-      "memory": {
-        "format": "  {used}G",
-        "tooltip": false
-      },
-    
-      "custom/vram": {
-        "exec": "${swaycfg}/waybar/scripts/vram.sh",
-        "format": "{}",
-        "return-type": "json",
-        "interval": 5
-      },
-    
-      "custom/clock-short": {
-        "exec": "echo '  '$(date +'%l:%M%p' | sed 's/^ //')",
-        "on-click": "wl-copy $(date \"+%Y-%m-%d-%H%M%S\"); notify-send \"Date copied.\"",
-        "interval": 60,
-        "tooltip": false
-      }
-    }]
-    // vi:syntax=json:
-  '';
-
-  # The theming of my waybar
-  waybarstyle = ''
-    * {
-      border: 0;
-      border-radius: 0;
-      min-height: 0;
-      font-family: Ubuntu, UbuntuMono Nerd Font;
-      color: #${textcolor};
-    }
-    .bar1,.bar2,.bar3 {
-      font-size: 15.5px;
-    }
-    #waybar {
-      background: #${darkcol};
-    }
-    #workspaces {
-      padding: 0 6px 0 0;
-    }
-    #tray {
-      padding: 0 4px 0 5px;
-    }
-    #network {
-      padding: 0 10px 0 2.1px;
-    }
-    #network.disconnected {
-      color: #424242;
-    }
-    #workspaces button {
-      padding: 0 3px;
-      color: white;
-      border-bottom: 3px solid transparent;
-      min-width: 20px;
-    }
-    #workspaces button.visible {
-      border-bottom: 3px solid #${primecol};
-      background: #${midcol};
-    }
-    #workspaces button.urgent {
-      border-bottom: 3px solid #900000;
-    }
-    #workspaces button:hover {
-      box-shadow: none;
-      background: #${splitcol};
-    }
-    #custom-clock-long {
-      border-bottom: 3px solid #0a6cf5;
-      margin-left: 2px;
-      margin-right: 5px;
-    }
-    #scratchpad {
-      margin-left: 2px;
-    }
-    #custom-clock-short {
-      border-bottom: 3px solid #0a6cf5;
-      margin-left: 2px;
-      margin-right: 3px;
-    }
-    #memory {
-      border-bottom: 3px solid #4bffdc;
-      margin-left: 2px;
-      margin-right: 5px;
-    }
-    #custom-vram {
-      border-bottom: 3px solid #33FF00;
-      margin-left: 2px;
-      margin-right: 5px;
-    }
-    #cpu {
-      border-bottom: 3px solid #f90000;
-      margin-left: 2px;
-      margin-right: 5px;
-    }
-    #custom-media {
-      border-bottom: 3px solid #ffb066;
-      margin-left: 2px;
-      margin-right: 5px;
-    }
-    #custom-media.paused {
-      color: #888;
-    }
-    #custom-weather {
-      border-bottom: 3px solid #${primecol};
-      margin-left: 2px;
-      margin-right: 5px;
-    }
-    #custom-notifs {
-      border-bottom: 3px solid #${primecol};
-      margin-left: 2px;
-      margin-right: 5px;
-    }
-    #custom-notifs.disabled {
-      color: #888;
-    }
-    #pulseaudio {
-      margin-right: 5px;
-    }
-    #pulseaudio.muted {
-      color: #424242;
-    }
-  '';
-
-  # Waybar's start script (used for hotkeys)
-  waybarstart = ''
-    #!/usr/bin/env bash
-    pkill waybar; waybar -c ${waybarcfg}/config -s ${waybarcfg}/style.css
-  '';
-
-  # Waybar's clock-long script
-  clocklong = ''
-    #!/usr/bin/env bash
-
-    # Long clock format, with a numeric date and military time tooltip
-    time=$(date +'%a %b %d %l:%M:%S%p' | tr -s ' ')
-    date=$(date "+%Y-%m-%d")
-    echo "{\"text\":\"  $time\",\"tooltip\":\"$date\"}"
-  '';
-
-  # Waybar's MPV Playerctl Module
-  mpvmeta = ''
-    #!/usr/bin/env bash
-    
-    get_metadata() {
-      playerctl --player=mpv metadata 2>/dev/null |
-        awk '/title/{gsub(/\.(mp3|mp4|m4a|mov|flac|opus|oga)$/,""); for (i=3; i<NF; i++) printf $i " "; printf $NF "\n"}'
-    }
-    
-    truncate_string() {
-      local str="$1"
-      local max_length=30
-      if [ $(expr length "$str") -gt $max_length ]; then
-	str=$(expr substr "$str" 1 $max_length)...
-      fi
-      echo "$str"
-    }
-    
-    if playerctl --player=mpv status 2>/dev/null | grep -q Playing; then
-      song_name=$(get_metadata | awk -F ' - ' '{print $2}')
-      if [ -z "$song_name" ]; then
-        song_name=$(get_metadata)
-      fi
-      echo "{\"text\":\"$(truncate_string "  $song_name")\",\"tooltip\":\"$(get_metadata)\"}"
-    elif playerctl --player=mpv status 2>/dev/null | grep -q Paused; then
-      artist_name=$(get_metadata | awk -F ' - ' '{print $1}')
-      if [ -z "$artist_name" ]; then
-        artist_name=$(get_metadata)
-      fi
-      echo "{\"text\":\"$(truncate_string "  $artist_name")\",\"tooltip\":\"$(get_metadata)\",\"class\":\"paused\"}"
-    fi
-  '';
-
-  # Notification status for Waybar
-  notifstatus = ''
-    #!/usr/bin/env bash
-    
-    # Run makoctl mode and store the output in a variable
-    mode_output=$(makoctl mode)
-    
-    # Extract the second line after "default"
-    mode_line=$(echo "$mode_output" | sed -n '/default/{n;p}')
-    
-    # Print the notification status with the tooltip
-    if [[ "$mode_line" == "do-not-disturb" ]]; then
-      printf '{"text":"󱆥  Off","class":"disabled","tooltip":"Notifications Disabled."}'
-    else
-      printf '{"text":"  On","tooltip":"Notifications Enabled."}';
-    fi
-  '';
-
-  # Waybar vram monitor
-  vram = ''
-    #!/usr/bin/env bash
-
-    # Run the nvidia-smi command and capture the VRAM usage and GPU utilization output
-    if lspci -k | grep "Kernel driver in use: nvidia" &> /dev/null; then
-      vram_usage_mb=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits)
-      temperature=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits)
-    elif lspci -k | grep "Kernel driver in use: amdgpu" &> /dev/null; then
-      vram_usage_mb=$(echo "$(cat /sys/class/drm/card0/device/mem_info_vram_used || cat /sys/class/drm/card1/device/mem_info_vram_used) / 1024 / 1024" | bc)
-      temperature=$(sensors | grep 'edge' | awk '{print $2}' | sed 's/[^0-9.-]//g')
-    fi
-    
-    # Check if VRAM usage is under 1GB
-    if [ $vram_usage_mb -lt 1024 ]; then
-      vram_usage_display="$(echo $vram_usage_mb)M"
-    else
-      # Convert MB to GiB
-      vram_usage_gib=$(bc <<< "scale=2; $vram_usage_mb / 1024")
-      vram_usage_display="$(echo $vram_usage_gib)G"
-    fi
-    
-    # Print the VRAM usage in MB or GiB, and include GPU utilization and temperature
-    echo "{\"text\":\"󰢮  $(echo $vram_usage_display)\",\"tooltip\":\"$(echo $temperature)°C\"}"
-  '';
-
-  # Weather script for Waybar
-  weather = ''
-    #!/usr/bin/env bash
-
-    # Define variables
-    CITY="Maple"
-    API_KEY="18be8db3528f08c33ed9f95698335ea7"
-    
-    # Fetch weather data
-    weather_data=$(curl -s "http://api.openweathermap.org/data/2.5/weather?q=$CITY&appid=$API_KEY")
-    weather_condition=$(echo $weather_data | jq -r '.weather[0].main')
-    
-    # Map weather conditions to emojis
-    case "$weather_condition" in
-      "Clear") emoji="☀️";;
-      "Clouds") emoji="☁️";;
-      "Rain") emoji="🌧️";;
-      "Drizzle") emoji="🌦️";;
-      "Thunderstorm") emoji="⛈️";;
-      "Snow") emoji="❄️";;
-      "Mist"|"Fog"|"Haze") emoji="🌫️";;
-      *) emoji="🌍";; # Default emoji for unknown conditions
-    esac
-    
-    # Extract and format temperature in Celsius
-    temperature_kelvin=$(echo $weather_data | jq -r '.main.temp')
-    temperature_celsius=$(echo "$temperature_kelvin - 273.15" | bc)
-    formatted_temperature=$(printf "%.0f" $temperature_celsius)
-    
-    # Display weather emoji and temperature
-    echo {\"text\":\"$emoji $formatted_temperature°C\",\"tooltip\":\"Weather in Maple: $weather_condition\"}
-  '';
-
   # File manager config
-  pcmanconf = ''
+  pcmanConf = ''
     [Behavior]
     BookmarkOpenMethod=current_tab
     ConfirmDelete=true
@@ -1571,23 +648,17 @@ let
     ThumbnailIconSize=128
     
     [Places]
-    HiddenPlaces=menu://applications/
+    HiddenPlaces=menu://applications/, network:///, computer:///, /home/jimbo/Desktop
     
     [System]
     Archiver=file-roller
-    Terminal=kitty
+    Terminal=${terminal}
     
     [Thumbnail]
     MaxExternalThumbnailFileSize=-1
     MaxThumbnailFileSize=4096
     ShowThumbnails=true
     ThumbnailLocalFilesOnly=true
-    
-    [Volume]
-    AutoRun=true
-    CloseOnUnmount=true
-    MountOnStartup=true
-    MountRemovable=true
     
     [Window]
     AlwaysShowTabs=false
@@ -1599,21 +670,21 @@ let
   '';
 
   # Kitty config
-  kittyconfig = ''
+  kittyConfig = ''
     # kitty.conf
 
     # Scrolling
     scrollback_lines 50000
     
     # Font
-    font_family UbuntuMono Nerd Font
-    bold_font UbuntuMono Nerd Font
-    italic_font UbuntuMono Nerd Font
-    bold_italic_font UbuntuMono Nerd Font
-    font_size 15
+    font_family ${nerdFont}
+    bold_font ${nerdFont}
+    italic_font ${nerdFont}
+    bold_italic_font ${nerdFont}
+    font_size 14.5
     
     # Colors
-    background #${darkcol}
+    background #${darkCol}
     foreground #F9F9F9
     
     color0   #3f3f3f
@@ -1674,381 +745,14 @@ let
     map ctrl+f launch --location=hsplit --allow-remote-control kitty +kitten search.py @active-kitty-window-id
   '';
 
-  # Kitty scrollback search script written in python
-  kittysearch = ''
-    import json
-    import re
-    import subprocess
-    from gettext import gettext as _
-    from pathlib import Path
-    from subprocess import PIPE, run
-    
-    from kittens.tui.handler import Handler
-    from kittens.tui.line_edit import LineEdit
-    from kittens.tui.loop import Loop
-    from kittens.tui.operations import (
-      clear_screen,
-      cursor,
-      set_line_wrapping,
-      set_window_title,
-      styled,
-    )
-    from kitty.config import cached_values_for
-    from kitty.key_encoding import EventType
-    from kitty.typing import KeyEventType, ScreenSize
-    
-    NON_SPACE_PATTERN = re.compile(r"\S+")
-    SPACE_PATTERN = re.compile(r"\s+")
-    SPACE_PATTERN_END = re.compile(r"\s+$")
-    SPACE_PATTERN_START = re.compile(r"^\s+")
-    
-    NON_ALPHANUM_PATTERN = re.compile(r"[^\w\d]+")
-    NON_ALPHANUM_PATTERN_END = re.compile(r"[^\w\d]+$")
-    NON_ALPHANUM_PATTERN_START = re.compile(r"^[^\w\d]+")
-    ALPHANUM_PATTERN = re.compile(r"[\w\d]+")
-    
-    def call_remote_control(args: list[str]) -> None:
-        subprocess.run(["kitty", "@", *args], capture_output=True)
-    
-    def reindex(
-      text: str, pattern: re.Pattern[str], right: bool = False
-    ) -> tuple[int, int]:
-      if not right:
-        m = pattern.search(text)
-      else:
-        matches = [x for x in pattern.finditer(text) if x]
-        if not matches:
-          raise ValueError
-          m = matches[-1]
-    
-        if not m:
-          raise ValueError
-        return m.span()
-    
-    SCROLLMARK_FILE = Path(__file__).parent.absolute() / "scroll_mark.py"
-    
-    class Search(Handler):
-      def __init__(
-        self, cached_values: dict[str, str], window_ids: list[int], error: str = ""
-      ) -> None:
-        self.cached_values = cached_values
-        self.window_ids = window_ids
-        self.error = error
-        self.line_edit = LineEdit()
-        last_search = cached_values.get("last_search", "")
-        self.line_edit.add_text(last_search)
-        self.text_marked = bool(last_search)
-        self.mode = cached_values.get("mode", "text")
-        self.update_prompt()
-        self.mark()
-    
-      def update_prompt(self) -> None:
-        self.prompt = "~> " if self.mode == "regex" else "=> "
-    
-      def init_terminal_state(self) -> None:
-        self.write(set_line_wrapping(False))
-        self.write(set_window_title(_("Search")))
-    
-      def initialize(self) -> None:
-        self.init_terminal_state()
-        self.draw_screen()
-    
-      def draw_screen(self) -> None:
-        self.write(clear_screen())
-        if self.window_ids:
-          input_text = self.line_edit.current_input
-          if self.text_marked:
-            self.line_edit.current_input = styled(input_text, reverse=True)
-          self.line_edit.write(self.write, self.prompt)
-          self.line_edit.current_input = input_text
-        if self.error:
-          with cursor(self.write):
-            self.print("")
-            for l in self.error.split("\n"):
-              self.print(l)
-    
-      def refresh(self) -> None:
-        self.draw_screen()
-        self.mark()
-    
-      def switch_mode(self) -> None:
-        if self.mode == "regex":
-          self.mode = "text"
-        else:
-          self.mode = "regex"
-        self.cached_values["mode"] = self.mode
-        self.update_prompt()
-    
-      def on_text(self, text: str, in_bracketed_paste: bool = False) -> None:
-        if self.text_marked:
-          self.text_marked = False
-          self.line_edit.clear()
-        self.line_edit.on_text(text, in_bracketed_paste)
-        self.refresh()
-    
-      def on_key(self, key_event: KeyEventType) -> None:
-        if (
-          self.text_marked
-          and key_event.type == EventType.PRESS
-          and key_event.key
-          not in [
-            "TAB",
-            "LEFT_CONTROL",
-            "RIGHT_CONTROL",
-            "LEFT_ALT",
-            "RIGHT_ALT",
-            "LEFT_SHIFT",
-            "RIGHT_SHIFT",
-            "LEFT_SUPER",
-            "RIGHT_SUPER",
-          ]
-        ):
-            self.text_marked = False
-            self.refresh()
-    
-        if self.line_edit.on_key(key_event):
-          self.refresh()
-          return
-    
-        if key_event.matches("ctrl+u"):
-          self.line_edit.clear()
-          self.refresh()
-        elif key_event.matches("ctrl+a"):
-          self.line_edit.home()
-          self.refresh()
-        elif key_event.matches("ctrl+e"):
-          self.line_edit.end()
-          self.refresh()
-        elif key_event.matches("ctrl+backspace") or key_event.matches("ctrl+w"):
-          before, _ = self.line_edit.split_at_cursor()
-    
-          try:
-            start, _ = reindex(before, SPACE_PATTERN_END, right=True)
-          except ValueError:
-            start = -1
-    
-          try:
-            space = before[:start].rindex(" ")
-          except ValueError:
-            space = 0
-          self.line_edit.backspace(len(before) - space)
-          self.refresh()
-        elif key_event.matches("ctrl+left") or key_event.matches("ctrl+b"):
-          before, _ = self.line_edit.split_at_cursor()
-          try:
-            start, _ = reindex(before, SPACE_PATTERN_END, right=True)
-          except ValueError:
-            start = -1
-    
-          try:
-            space = before[:start].rindex(" ")
-          except ValueError:
-            space = 0
-          self.line_edit.left(len(before) - space)
-          self.refresh()
-        elif key_event.matches("ctrl+right") or key_event.matches("ctrl+f"):
-          _, after = self.line_edit.split_at_cursor()
-          try:
-            _, end = reindex(after, SPACE_PATTERN_START)
-          except ValueError:
-            end = 0
-    
-          try:
-            space = after[end:].index(" ") + 1
-          except ValueError:
-            space = len(after)
-          self.line_edit.right(space)
-          self.refresh()
-        elif key_event.matches("alt+backspace") or key_event.matches("alt+w"):
-          before, _ = self.line_edit.split_at_cursor()
-    
-          try:
-            start, _ = reindex(before, NON_ALPHANUM_PATTERN_END, right=True)
-          except ValueError:
-            start = -1
-          else:
-            self.line_edit.backspace(len(before) - start)
-            self.refresh()
-            return
-    
-          try:
-            start, _ = reindex(before, NON_ALPHANUM_PATTERN, right=True)
-          except ValueError:
-            self.line_edit.backspace(len(before))
-            self.refresh()
-            return
-    
-          self.line_edit.backspace(len(before) - (start + 1))
-          self.refresh()
-        elif key_event.matches("alt+left") or key_event.matches("alt+b"):
-          before, _ = self.line_edit.split_at_cursor()
-    
-          try:
-            start, _ = reindex(before, NON_ALPHANUM_PATTERN_END, right=True)
-          except ValueError:
-            start = -1
-          else:
-            self.line_edit.left(len(before) - start)
-            self.refresh()
-            return
-    
-          try:
-            start, _ = reindex(before, NON_ALPHANUM_PATTERN, right=True)
-          except ValueError:
-            self.line_edit.left(len(before))
-            self.refresh()
-            return
-    
-          self.line_edit.left(len(before) - (start + 1))
-          self.refresh()
-        elif key_event.matches("alt+right") or key_event.matches("alt+f"):
-          _, after = self.line_edit.split_at_cursor()
-    
-          try:
-            _, end = reindex(after, NON_ALPHANUM_PATTERN_START)
-          except ValueError:
-            end = 0
-          else:
-            self.line_edit.right(end)
-            self.refresh()
-            return
-    
-          try:
-            _, end = reindex(after, NON_ALPHANUM_PATTERN)
-          except ValueError:
-            self.line_edit.right(len(after))
-            self.refresh()
-            return
-    
-          self.line_edit.right(end - 1)
-          self.refresh()
-        elif key_event.matches("tab"):
-          self.switch_mode()
-          self.refresh()
-        elif key_event.matches("up"):
-          for match_arg in self.match_args():
-            call_remote_control(["kitten", match_arg, str(SCROLLMARK_FILE)])
-        elif key_event.matches("down"):
-          for match_arg in self.match_args():
-            call_remote_control(["kitten", match_arg, str(SCROLLMARK_FILE), "next"])
-        elif key_event.matches("enter"):
-          self.quit(0)
-        elif key_event.matches("esc"):
-          self.quit(1)
-    
-      def on_interrupt(self) -> None:
-        self.quit(1)
-    
-      def on_eot(self) -> None:
-        self.quit(1)
-    
-      def on_resize(self, screen_size: ScreenSize) -> None:
-        self.refresh()
-    
-      def match_args(self) -> list[str]:
-        return [f"--match=id:{window_id}" for window_id in self.window_ids]
-    
-      def mark(self) -> None:
-        if not self.window_ids:
-          return
-        text = self.line_edit.current_input
-        if text:
-          match_case = "i" if text.islower() else ""
-          match_type = match_case + self.mode
-          for match_arg in self.match_args():
-            try:
-              call_remote_control(
-                ["create-marker", match_arg, match_type, "1", text]
-              )
-            except SystemExit:
-              self.remove_mark()
-        else:
-          self.remove_mark()
-    
-      def remove_mark(self) -> None:
-        for match_arg in self.match_args():
-          call_remote_control(["remove-marker", match_arg])
-    
-      def quit(self, return_code: int) -> None:
-        self.cached_values["last_search"] = self.line_edit.current_input
-        self.remove_mark()
-        if return_code:
-          for match_arg in self.match_args():
-            call_remote_control(["scroll-window", match_arg, "end"])
-        self.quit_loop(return_code)
-    
-    
-    def main(args: list[str]) -> None:
-      call_remote_control(
-        ["resize-window", "--self", "--axis=vertical", "--increment", "-100"]
-      )
-    
-      error = ""
-      if len(args) < 2 or not args[1].isdigit():
-        error = "Error: Window id must be provided as the first argument."
-    
-      window_id = int(args[1])
-      window_ids = [window_id]
-      if len(args) > 2 and args[2] == "--all-windows":
-        ls_output = run(["kitty", "@", "ls"], stdout=PIPE)
-        ls_json = json.loads(ls_output.stdout.decode())
-        current_tab = None
-        for os_window in ls_json:
-          for tab in os_window["tabs"]:
-            for kitty_window in tab["windows"]:
-              if kitty_window["id"] == window_id:
-                current_tab = tab
-        if current_tab:
-          window_ids = [
-            w["id"] for w in current_tab["windows"] if not w["is_focused"]
-          ]
-        else:
-          error = "Error: Could not find the window id provided."
-    
-      loop = Loop()
-      with cached_values_for("search") as cached_values:
-        handler = Search(cached_values, window_ids, error)
-        loop.loop(handler)
-  '';
-
-  # The search keys don't work without this additional script
-  kittysearchkeys = ''
-    from kittens.tui.handler import result_handler
-    from kitty.boss import Boss
-    
-    def main(args: list[str]) -> None:
-      pass
-    
-    @result_handler(no_ui=True)
-    def handle_result(
-      args: list[str], answer: str, target_window_id: int, boss: Boss
-    ) -> None:
-      w = boss.window_id_map.get(target_window_id)
-      if w is not None:
-        if len(args) > 1 and args[1] != "prev":
-          w.scroll_to_mark(prev=False)
-        else:
-          w.scroll_to_mark()
-  '';
-
   # Dashboard for my Debian server
-  kittydash = pkgs.writeTextFile {
-    name = "kittydash";
-    destination = "/bin/kittydash";
-    executable = true;
-    text = ''
-      kitty --class=serverdash kitten ssh 192.168.1.17 -t "tmux attach -t control"
-    '';
-  };
-
-  # Additional IMV mode
-  imvshot = ''
-    [options]
-    title_text = GlobalShot
+  serverDash = pkgs.writeScriptBin "serverdash" ''
+    ${terminalClass}=serverdash ${ssh} jimbo@server -t \
+    "tmux new-session -d -s control; tmux attach -t control"
   '';
 
   # An Easyeffects equalizer profile that sounds good to me
-  easyprofile = ''
+  easyEffectsProfile = ''
     {
       "output": {
         "blocklist": [],
@@ -2346,8 +1050,7 @@ let
   '';
 
   # Mangohud acts like rivatuner on Windows, config file
-  mangoconfig = ''
-    #!/usr/bin/env bash
+  mangoConf = ''
     table_columns=2
     frametime=0
     legacy_layout=0
@@ -2357,7 +1060,7 @@ let
     #position=top-right
     
     # Set the loads and such
-    exec=echo "$(echo $XDG_CURRENT_DESKTOP | sed 's/./\U&/')" on $(cat /etc/os-release | grep PRETTY_NAME | cut -d '"' -f 2)
+    exec=echo $(echo $XDG_CURRENT_DESKTOP | sed 's/./\U&/') on $(cat /etc/os-release | grep PRETTY_NAME | cut -d '"' -f 2)
     fps
     fps_color_change
     ram
@@ -2370,7 +1073,7 @@ let
   '';
 
   # Neofetch main config
-  neoconfig = ''
+  neoConf = ''
     # Show different info types
     print_info() {
       prin ""
@@ -2440,7 +1143,7 @@ let
     cyan="\033[1;36m"
     reset="\033[0m"
   '';
-  smallconfig = ''
+  smallConf = ''
     # Show different info types
     print_info() {
       info title
@@ -2464,8 +1167,10 @@ let
     memory_unit="gib"
   '';
 
+  pFetch = ''neofetch --config $(readlink -f ~/.config/neofetch/small.conf) --ascii_distro nixos_small'';
+
   # Rofi (terminal file browser) config
-  rangerconf = ''
+  rangerConf = ''
     # Ranger settings
     set colorscheme default
     set preview_script ~/.config/ranger/scope.sh
@@ -2478,10 +1183,11 @@ let
     set wrap_scroll true
     set column_ratios 2,2,4
     set hidden_filter ^\.|\.(?:pyc|pyo|bak|swp)$|^lost\+found$|^__(py)?cache__$
+    default_linemode devicons
   '';
 
-  # Choose how rofi opens stuff
-  rifleconf = ''
+  # Choose which programs ranger uses
+  rifleConf = ''
     # vim: ft=cfg
 
     # Define the "editor" for text files as first action
@@ -2526,7 +1232,6 @@ let
     ext pptx?|od[dfgpst]|docx?|sxc|xlsx?|xlt|xlw|gnm|gnumeric, has libreoffice, X, flag f = libreoffice "$@"
     
     # Images
-    mime ^image/gif, has mpv, X, flag f = mpv -- "$@"
     mime ^image, has imv, X, flag f = imv -- "$@"
     
     # Archives
@@ -2542,7 +1247,7 @@ let
     mime ^font, has fontforge, X, flag f = fontforge "$@"
     
     # Flag fallback terminals
-    mime ^ranger/x-terminal-emulator, has kitty = kitty -- "$@"
+    mime ^ranger/x-terminal-emulator, has ${terminal} = ${terminal} -- "$@"
     
     # Generic file openers
     label open, has xdg-open = xdg-open -- "$@"
@@ -2557,7 +1262,7 @@ let
   '';
 
   # Ranger's preview
-  scopesh = ''
+  rangerScope = ''
     #!/usr/bin/env bash
     set -o noclobber -o noglob -o nounset -o pipefail
     IFS=$'\n'
@@ -2602,11 +1307,6 @@ let
         odt|ods|odp|sxw)
           odt2txt "$FILE_PATH" && exit 5
           exit 1;;
-        # HTML
-        htm|html|xhtml)
-          w3m -dump "$FILE_PATH" && exit 5
-          lynx -dump -- "$FILE_PATH" && exit 5
-          ;; # Continue with next handler on failure
       esac
     }
     
@@ -2670,530 +1370,161 @@ let
     exit 1
   '';
 
-  # Rofi icons initialization
-  iconinit = ''
-    import ranger.api
-    from ranger.core.linemode import LinemodeBase
-    from .devicons import *
-    
-    @ranger.api.register_linemode
-    class DevIconsLinemode(LinemodeBase):
-      name = "devicons"
-    
-      uses_metadata = False
-    
-      def filetitle(self, file, metadata):
-        return devicon(file) + ' ' + file.relative_path
-    
-    @ranger.api.register_linemode
-    class DevIconsLinemodeFile(LinemodeBase):
-      name = "filename"
-    
-      def filetitle(self, file, metadata):
-        return devicon(file) + ' ' + file.relative_path
-  '';
-
-  # The actual icons. I don't like how long this file is
-  rangericons = ''
-    #!/usr/bin/python
-    # https://github.com/ryanoasis/vim-devicons
-    import re, os;
-    
-    # Glyphs will show up as corrupted squares if not using a patched nerd-font.
-    file_node_extensions = {
-      '7z'       : '',
-      'a'        : '',
-      'ai'       : '',
-      'apk'      : '',
-      'asm'      : '',
-      'asp'      : '',
-      'aup'      : '',
-      'avi'      : '',
-      'awk'      : '',
-      'bash'     : '',
-      'bat'      : '',
-      'bmp'      : '',
-      'bz2'      : '',
-      'c'        : '',
-      'c++'      : '',
-      'cab'      : '',
-      'cbr'      : '',
-      'cbz'      : '',
-      'cc'       : '',
-      'class'    : '',
-      'clj'      : '',
-      'cljc'     : '',
-      'cljs'     : '',
-      'cmake'    : '',
-      'coffee'   : '',
-      'conf'     : '',
-      'cp'       : '',
-      'cpio'     : '',
-      'cpp'      : '',
-      'cs'       : '',
-      'csh'      : '',
-      'css'      : '',
-      'cue'      : '',
-      'cvs'      : '',
-      'cxx'      : '',
-      'd'        : '',
-      'dart'     : '',
-      'db'       : '',
-      'deb'      : '',
-      'diff'     : '',
-      'dll'      : '',
-      'doc'      : '',
-      'docx'     : '',
-      'dump'     : '',
-      'edn'      : '',
-      'eex'      : '',
-      'efi'      : '',
-      'ejs'      : '',
-      'elf'      : '',
-      'elm'      : '',
-      'epub'     : '',
-      'erl'      : '',
-      'ex'       : '',
-      'exe'      : '',
-      'exs'      : '',
-      'f#'       : '',
-      'fifo'     : '|',
-      'fish'     : '',
-      'flac'     : '',
-      'flv'      : '',
-      'fs'       : '',
-      'fsi'      : '',
-      'fsscript' : '',
-      'fsx'      : '',
-      'gem'      : '',
-      'gemspec'  : '',
-      'gif'      : '',
-      'go'       : '',
-      'gz'       : '',
-      'gzip'     : '',
-      'h'        : '',
-      'haml'     : '',
-      'hbs'      : '',
-      'hh'       : '',
-      'hpp'      : '',
-      'hrl'      : '',
-      'hs'       : '',
-      'htaccess' : '',
-      'htm'      : '',
-      'html'     : '',
-      'htpasswd' : '',
-      'hxx'      : '',
-      'ico'      : '',
-      'img'      : '',
-      'ini'      : '',
-      'iso'      : '',
-      'jar'      : '',
-      'java'     : '',
-      'jl'       : '',
-      'jpeg'     : '',
-      'jpg'      : '',
-      'js'       : '',
-      'json'     : '',
-      'jsx'      : '',
-      'key'      : '',
-      'ksh'      : '',
-      'leex'     : '',
-      'less'     : '',
-      'lha'      : '',
-      'lhs'      : '',
-      'log'      : '',
-      'lua'      : '',
-      'lzh'      : '',
-      'lzma'     : '',
-      'm4a'      : '',
-      'm4v'      : '',
-      'markdown' : '',
-      'md'       : '',
-      'mdx'      : '',
-      'mjs'      : '',
-      'mkv'      : '',
-      'ml'       : 'λ',
-      'mli'      : 'λ',
-      'mov'      : '',
-      'mp3'      : '',
-      'mp4'      : '',
-      'mpeg'     : '',
-      'mpg'      : '',
-      'msi'      : '',
-      'mustache' : '',
-      'nix'      : '',
-      'o'        : '',
-      'ogg'      : '',
-      'pdf'      : '',
-      'php'      : '',
-      'pl'       : '',
-      'pm'       : '',
-      'png'      : '',
-      'pp'       : '',
-      'ppt'      : '',
-      'pptx'     : '',
-      'ps1'      : '',
-      'psb'      : '',
-      'psd'      : '',
-      'pub'      : '',
-      'py'       : '',
-      'pyc'      : '',
-      'pyd'      : '',
-      'pyo'      : '',
-      'r'        : 'ﳒ',
-      'rake'     : '',
-      'rar'      : '',
-      'rb'       : '',
-      'rc'       : '',
-      'rlib'     : '',
-      'rmd'      : '',
-      'rom'      : '',
-      'rpm'      : '',
-      'rs'       : '',
-      'rss'      : '',
-      'rtf'      : '',
-      's'        : '',
-      'sass'     : '',
-      'scala'    : '',
-      'scss'     : '',
-      'sh'       : '',
-      'slim'     : '',
-      'sln'      : '',
-      'so'       : '',
-      'sql'      : '',
-      'styl'     : '',
-      'suo'      : '',
-      'swift'    : '',
-      't'        : '',
-      'tar'      : '',
-      'tex'      : 'ﭨ',
-      'tgz'      : '',
-      'toml'     : '',
-      'ts'       : '',
-      'tsx'      : '',
-      'twig'     : '',
-      'vim'      : '',
-      'vimrc'    : '',
-      'wav'      : '',
-      'webm'     : '',
-      'webmanifest' : '',
-      'webp'     : '',
-      'xbps'     : '',
-      'xhtml'    : '',
-      'xls'      : '',
-      'xlsx'     : '',
-      'xml'      : '',
-      'xul'      : '',
-      'xz'       : '',
-      'yaml'     : '',
-      'yml'      : '',
-      'zip'      : '',
-      'zsh'      : '',
-    }
-    
-    dir_node_exact_matches = {
-    # English
-      '.git'             : '',
-      'Desktop'          : '',
-      'Documents'        : '',
-      'Downloads'        : '',
-      'Dotfiles'         : '',
-      'Dropbox'          : '',
-      'Music'            : '',
-      'Pictures'         : '',
-      'Public'           : '',
-      'Templates'        : '',
-      'Videos'           : '',
-    # Spanish
-      'Escritorio'       : '',
-      'Documentos'       : '',
-      'Descargas'        : '',
-      'Música'           : '',
-      'Imágenes'         : '',
-      'Público'          : '',
-      'Plantillas'       : '',
-      'Vídeos'           : '',
-    # French
-      'Bureau'           : '',
-      'Documents'        : '',
-      'Images'           : '',
-      'Musique'          : '',
-      'Publique'         : '',
-      'Téléchargements'  : '',
-      'Vidéos'           : '',
-    # Italian
-      'Documenti'        : '',
-      'Immagini'         : '',
-      'Modelli'          : '',
-      'Musica'           : '',
-      'Pubblici'         : '',
-      'Scaricati'        : '',
-      'Scrivania'        : '',
-      'Video'            : '',
-    # German
-      'Bilder'           : '',
-      'Dokumente'        : '',
-      'Musik'            : '',
-      'Schreibtisch'     : '',
-      'Vorlagen'         : '',
-      'Öffentlich'       : '',
-    }
-    
-    file_node_exact_matches = {
-      '.bash_aliases'                    : '',
-      '.bash_history'                    : '',
-      '.bash_logout'                     : '',
-      '.bash_profile'                    : '',
-      '.bashprofile'                     : '',
-      '.bashrc'                          : '',
-      '.dmrc'                            : '',
-      '.DS_Store'                        : '',
-      '.fasd'                            : '',
-      '.fehbg'                           : '',
-      '.gitattributes'                   : '',
-      '.gitconfig'                       : '',
-      '.gitignore'                       : '',
-      '.gitlab-ci.yml'                   : '',
-      '.gvimrc'                          : '',
-      '.inputrc'                         : '',
-      '.jack-settings'                   : '',
-      '.mime.types'                      : '',
-      '.ncmpcpp'                         : '',
-      '.nvidia-settings-rc'              : '',
-      '.pam_environment'                 : '',
-      '.profile'                         : '',
-      '.recently-used'                   : '',
-      '.selected_editor'                 : '',
-      '.vim'                             : '',
-      '.viminfo'                         : '',
-      '.vimrc'                           : '',
-      '.Xauthority'                      : '',
-      '.Xdefaults'                       : '',
-      '.xinitrc'                         : '',
-      '.xinputrc'                        : '',
-      '.Xresources'                      : '',
-      '.zshrc'                           : '',
-      '_gvimrc'                          : '',
-      '_vimrc'                           : '',
-      'a.out'                            : '',
-      'authorized_keys'                  : '',
-      'bspwmrc'                          : '',
-      'cmakelists.txt'                   : '',
-      'config'                           : '',
-      'config.ac'                        : '',
-      'config.m4'                        : '',
-      'config.mk'                        : '',
-      'config.ru'                        : '',
-      'configure'                        : '',
-      'docker-compose.yml'               : '',
-      'dockerfile'                       : '',
-      'Dockerfile'                       : '',
-      'dropbox'                          : '',
-      'exact-match-case-sensitive-1.txt' : 'X1',
-      'exact-match-case-sensitive-2'     : 'X2',
-      'favicon.ico'                      : '',
-      'gemfile'                          : '',
-      'gruntfile.coffee'                 : '',
-      'gruntfile.js'                     : '',
-      'gruntfile.ls'                     : '',
-      'gulpfile.coffee'                  : '',
-      'gulpfile.js'                      : '',
-      'gulpfile.ls'                      : '',
-      'ini'                              : '',
-      'known_hosts'                      : '',
-      'ledger'                           : '',
-      'license'                          : '',
-      'LICENSE'                          : '',
-      'LICENSE.md'                       : '',
-      'LICENSE.txt'                      : '',
-      'Makefile'                         : '',
-      'makefile'                         : '',
-      'Makefile.ac'                      : '',
-      'Makefile.in'                      : '',
-      'mimeapps.list'                    : '',
-      'mix.lock'                         : '',
-      'node_modules'                     : '',
-      'package-lock.json'                : '',
-      'package.json'                     : '',
-      'playlists'                        : '',
-      'procfile'                         : '',
-      'Rakefile'                         : '',
-      'rakefile'                         : '',
-      'react.jsx'                        : '',
-      'README'                           : '',
-      'README.markdown'                  : '',
-      'README.md'                        : '',
-      'README.rst'                       : '',
-      'README.txt'                       : '',
-      'sxhkdrc'                          : '',
-      'user-dirs.dirs'                   : '',
-      'webpack.config.js'                : '',
-    }
-    
-    def devicon(file):
-      if file.is_directory: return dir_node_exact_matches.get(file.relative_path, '')
-      return file_node_exact_matches.get(os.path.basename(file.relative_path), file_node_extensions.get(file.extension, ''))
-  '';
-
   # Rofi launcher main config
-  roficonf = ''
-    @theme "~/.config/rofi/purple.rasi"
-  '';
-
-  # Rofi's theme
-  rofitheme = ''
-    * {
-      selected-normal-foreground:  #FFFFFF;
-      foreground:                  #${textcolor};
-      normal-foreground:           #${textcolor};
-      alternate-normal-foreground: #${textcolor};
-      normal-background:           #${darkcol}1A;
-      alternate-normal-background: #${darkcol}1A;
-      blue:                        #268BD2;
-      red:                         #DC322F;
-      selected-urgent-foreground:  #${urgentcol};
-      urgent-foreground:           #${urgentcol};
-      alternate-urgent-foreground: @urgent-foreground;
-      alternate-urgent-background: #${accentcol}80;
-      alternate-active-background: #${accentcol}80;
-      active-foreground:           #${splitcol};
-      lightbg:                     #EEE8D5;
-      selected-active-foreground:  #${primecol};
-      background:                  #${darkcol}B3;
-      bordercolor:                 #${primecol};
-      lightfg:                     #586875;
-      selected-normal-background:  #${primecol}80;
-      border-color:                #${primecol};
-      spacing:                     2;
-      urgent-background:           #${accentcol}26;
-      selected-urgent-background:  #${splitcol}54;
-      background-color:            #00000000;
-      separatorcolor:              #00000000;
-      alternate-active-foreground: @active-foreground;
-      active-background:           #${accentcol}26;
-      selected-active-background:  #${splitcol}54;
-    }
-    window {
-      background-color: @background;
-      width: 500px;
-      transparency:     "real";
-      border:           2;
-      padding:          5;
-    }
-    mainbox {
-      border:  0;
-      padding: 0;
-    }
-    message {
-      border:       1px dash 0px 0px ;
-      border-color: @separatorcolor;
-      padding:      1px ;
-    }
-    textbox {
-      text-color: @foreground;
-    }
-    listview {
-      fixed-height: 0;
-      border-color: @separatorcolor;
-      scrollbar:    false;
-      padding:      2px 0px 0px ;
-      columns: 2;
-    }
-    element {
-      border:  0;
-      padding: 1px ;
-    }
-    element-text {
-      background-color: inherit;
-      text-color:       inherit;
-    }
-    element.normal.normal {
-      text-color:       @normal-foreground;
-    }
-    element.normal.urgent {
-      text-color:       @urgent-foreground;
-    }
-    element.normal.active {
-      background-color: @active-background;
-      text-color:       @active-foreground;
-    }
-    element.selected.normal {
-      background-color: @selected-normal-background;
-      text-color:       @selected-normal-foreground;
-    }
-    element.selected.urgent {
-      background-color: @selected-urgent-background;
-      text-color:       @selected-urgent-foreground;
-    }
-    element.selected.active {
-      background-color: @selected-active-background;
-      text-color:       @selected-active-foreground;
-    }
-    element.alternate.normal {
-      text-color:       @alternate-normal-foreground;
-    }
-    element.alternate.urgent {
-      text-color:       @alternate-urgent-foreground;
-    }
-    element.alternate.active {
-      background-color: @alternate-active-background;
-      text-color:       @alternate-active-foreground;
-    }
-    mode-switcher {
-      border:       2px dash 0px 0px ;
-      border-color: @separatorcolor;
-    }
-    button.selected {
-      background-color: @selected-normal-background;
-      text-color:       @selected-normal-foreground;
-    }
-    inputbar {
-      spacing:    0;
-      text-color: @normal-foreground;
-      padding:    1px ;
-    }
-    case-indicator {
-      spacing:    0;
-      text-color: @normal-foreground;
-    }
-    entry {
-      spacing:    0;
-      text-color: @normal-foreground;
-    }
-    prompt {
-      spacing:    0;
-      text-color: @normal-foreground;
-    }
-    inputbar {
-      children:   [ prompt,textbox-prompt-colon,entry,case-indicator ];
-    }
-    textbox-prompt-colon {
-      expand:     false;
-      str:        ":";
-      margin:     0px 0.3em 0em 0em ;
-      text-color: @normal-foreground;
-    }
-  '';
+  rofiConf = let
+    # Rofi's theme
+    rofiTheme = pkgs.writeText "purple.rasi" ''
+      * {
+        selected-normal-foreground:  #FFFFFF;
+        foreground:                  #${textCol};
+        normal-foreground:           #${textCol};
+        alternate-normal-foreground: #${textCol};
+        normal-background:           #${darkCol}1A;
+        alternate-normal-background: #${darkCol}1A;
+        blue:                        #268BD2;
+        red:                         #DC322F;
+        selected-urgent-foreground:  #${urgentCol};
+        urgent-foreground:           #${urgentCol};
+        alternate-urgent-foreground: @urgent-foreground;
+        alternate-urgent-background: #${accentCol}80;
+        alternate-active-background: #${accentCol}80;
+        active-foreground:           #${splitCol};
+        lightbg:                     #EEE8D5;
+        selected-active-foreground:  #${primeCol};
+        background:                  #${darkCol}B3;
+        bordercolor:                 #${primeCol};
+        lightfg:                     #586875;
+        selected-normal-background:  #${primeCol}80;
+        border-color:                #${primeCol};
+        spacing:                     2;
+        urgent-background:           #${accentCol}26;
+        selected-urgent-background:  #${splitCol}54;
+        background-color:            #00000000;
+        separatorcolor:              #00000000;
+        alternate-active-foreground: @active-foreground;
+        active-background:           #${accentCol}26;
+        selected-active-background:  #${splitCol}54;
+      }
+      window {
+        background-color: @background;
+        width: 500px;
+        transparency:     "real";
+        border:           ${borderWeight};
+        padding:          5;
+      }
+      mainbox {
+        border:  0;
+        padding: 0;
+      }
+      message {
+        border:       1px dash 0px 0px ;
+        border-color: @separatorcolor;
+        padding:      1px ;
+      }
+      textbox {
+        text-color: @foreground;
+      }
+      listview {
+        fixed-height: 0;
+        border-color: @separatorcolor;
+        scrollbar:    false;
+        padding:      2px 0px 0px ;
+        columns: 2;
+      }
+      element {
+        border:  0;
+        padding: 1px ;
+      }
+      element-text {
+        background-color: inherit;
+        text-color:       inherit;
+      }
+      element.normal.normal {
+        text-color:       @normal-foreground;
+      }
+      element.normal.urgent {
+        text-color:       @urgent-foreground;
+      }
+      element.normal.active {
+        background-color: @active-background;
+        text-color:       @active-foreground;
+      }
+      element.selected.normal {
+        background-color: @selected-normal-background;
+        text-color:       @selected-normal-foreground;
+      }
+      element.selected.urgent {
+        background-color: @selected-urgent-background;
+        text-color:       @selected-urgent-foreground;
+      }
+      element.selected.active {
+        background-color: @selected-active-background;
+        text-color:       @selected-active-foreground;
+      }
+      element.alternate.normal {
+        text-color:       @alternate-normal-foreground;
+      }
+      element.alternate.urgent {
+        text-color:       @alternate-urgent-foreground;
+      }
+      element.alternate.active {
+        background-color: @alternate-active-background;
+        text-color:       @alternate-active-foreground;
+      }
+      mode-switcher {
+        border:       2px dash 0px 0px ;
+        border-color: @separatorcolor;
+      }
+      button.selected {
+        background-color: @selected-normal-background;
+        text-color:       @selected-normal-foreground;
+      }
+      inputbar {
+        spacing:    0;
+        text-color: @normal-foreground;
+        padding:    1px ;
+      }
+      case-indicator {
+        spacing:    0;
+        text-color: @normal-foreground;
+      }
+      entry {
+        spacing:    0;
+        text-color: @normal-foreground;
+      }
+      prompt {
+        spacing:    0;
+        text-color: @normal-foreground;
+      }
+      inputbar {
+        children:   [ prompt,textbox-prompt-colon,entry,case-indicator ];
+      }
+      textbox-prompt-colon {
+        expand:     false;
+        str:        ":";
+        margin:     0px 0.3em 0em 0em ;
+        text-color: @normal-foreground;
+      }
+    '';
+  in ''@theme "${rofiTheme}"'';
 
   # Sunshine apps config
-  sunshineapps = ''
+  sunshineApps = ''
     {
       "env": {
         "PATH": "$(PATH):$(HOME)\/.local\/bin"
       },
-      "apps": [
-        {
-          "name": "Desktop",
-          "image-path": "desktop.png"
-        }
-      ]
+      "apps": [{
+        "name": "Desktop",
+        "image-path": "desktop.png"
+      }]
     }
   '';
 
   # ytfzf config
-  ytfzfconf = ''
+  ytfzfConf = ''
     external_menu () {
-      bemenu --fn "Ubuntu 13" --nb "#${darkcol}" --ab "#${darkcol}" --tb "#${primecol}" --fb "#${darkcol}" --tf "#ffffff" --hf "#ffffff" --hb "#${primecol}" -l 30 -s -p "Search:"
+      bemenu --fn "${mainFont} 13" --nb "#${darkCol}" --ab "#${darkCol}" --tb "#${primeCol}" --fb "#${darkCol}" --tf "#ffffff" --hf "#ffffff" --hb "#${primeCol}" -l 30 -s -p "Search:"
     }
     
     video_player () {
@@ -3202,341 +1533,299 @@ let
   '';
 
   # Some sound settings use alsoft, which needs to be configured to use pipewire
-  alsoftrc = ''
+  alsoftConf = ''
     drivers=pulse
   '';
 
   # FireFox/LibreWolf colors
-  personalcolors = ''
-    /* SimpleFox by Miguel Avila */
-
-    /* Main config */
+  foxJimCol = ''
     :root {
-      /* Colors */
-      --window-colour:               #${darkcol};
-      --secondary-colour:            #${primecol};
-      --inverted-colour:             #FAFAFC;
-    }
+      --tab-active-bg-color: #${primeCol};
+      --tab-hover-bg-color: #${accentCol};
+      --tab-inactive-bg-color: #${darkCol};
+      --tab-active-fg-fallback-color: #FFFFFF;
+      --tab-inactive-fg-fallback-color: #${textCol};
+      --urlbar-focused-bg-color: #${darkCol};
+      --urlbar-not-focused-bg-color: #${darkCol};
+      --toolbar-bgcolor: #${darkCol} !important;
   '';
-  workcolors = ''
-    /* SimpleFox by Miguel Avila */
-
-    /* Main config */
+  foxWorkCol = ''
     :root {
-      /* Colors */
-      --window-colour:               #${primecol};
-      --secondary-colour:            #${darkcol};
-      --inverted-colour:             #FAFAFC;
-    }
+      --tab-active-bg-color: #${darkCol};
+      --tab-hover-bg-color: #${accentCol};
+      --tab-inactive-bg-color: #${primeCol};
+      --tab-active-fg-fallback-color: #${textCol};
+      --tab-inactive-fg-fallback-color: #FFFFFF;
+      --urlbar-focused-bg-color: #${primeCol};
+      --urlbar-not-focused-bg-color: #${primeCol};
+      --toolbar-bgcolor: #${primeCol} !important;
   '';
-  simplefox = ''
-    :root {
-      /* Containter Tab Colours */
-      --uc-identity-color-blue:      #7ED6DF;
-      --uc-identity-color-turquoise: #55E6C1;
-      --uc-identity-color-green:     #B8E994;
-      --uc-identity-color-yellow:    #F7D794;
-      --uc-identity-color-orange:    #F19066;
-      --uc-identity-color-red:       #FC5C65;
-      --uc-identity-color-pink:      #F78FB3;
-      --uc-identity-color-purple:    #786FA6;
+  quteFoxCSS = ''
+      --tab-font: '${mainFont}';
+      --urlbar-font: '${mainFont}';
       
-      /* URL colour in URL bar suggestions */
-      --urlbar-popup-url-color: var(--window-colour) !important;
-       
-      /* Visuals */
+      /* try increasing if you encounter problems */
+      --urlbar-height-setting: 24px;
+      --tab-min-height: 20px !important;
       
-      /* global border radius */
-      --uc-border-radius: 0;
-       
-      /* dynamic url bar width settings */
-      --uc-urlbar-width: clamp(200px, 40vw, 500px);
-    
-      /* dynamic tab width settings */
-      --uc-active-tab-width:   clamp(100px, 20vw, 300px);
-      --uc-inactive-tab-width: clamp( 50px, 15vw, 200px);
-    
-      /* if active always shows the tab close button */
-      --show-tab-close-button: none; /* DEFAULT: -moz-inline-box; */ 
-    
-      /* if active only shows the tab close button on hover*/
-      --show-tab-close-button-hover: none; /* DEFAULT: -moz-inline-box; */
-       
-      /* adds left and right margin to the container-tabs indicator */
-      --container-tabs-indicator-margin: 10px;
+      /* I don't recommend you touch */
+      --arrowpanel-menuitem-padding: 2px !important;
+      --arrowpanel-border-radius: 0px !important;
+      --arrowpanel-menuitem-border-radius: 0px !important;
+      --toolbarbutton-border-radius: 0px !important;
+      --toolbarbutton-inner-padding: 0px 2px !important;
+      --toolbar-field-focus-background-color: var(--urlbar-focused-bg-color) !important;
+      --toolbar-field-background-color: var(--urlbar-not-focused-bg-color) !important;
+      --toolbar-field-focus-border-color: transparent !important;
     }
     
-    /* Buttons */
+    /* --- GENERAL DEBLOAT ---------------------------------- */
     
-    #back-button,
-    #forward-button { display: none !important; }
+    /* Bottom left page loading status or url preview */
+    #statuspanel { display: none !important; }
     
-    /* bookmark icon */
-    #star-button{ display: none !important; }
+    /* remove radius from right-click popup */
+    menupopup, panel { --panel-border-radius: 0px !important; }
+    menu, menuitem, menucaption { border-radius: 0px !important; }
     
-    /* zoom indicator */
-    #urlbar-zoom-button { display: none !important; }
+    /* no stupid large buttons in right-click menu */
+    menupopup > #context-navigation { display: none !important; }
+    menupopup > #context-sep-navigation { display: none !important; }
     
-    /* hides context burger menu BUT causes popups to be buggy at times */
-    #PanelUI-button { display: none !important; }
+    /* --- DEBLOAT NAVBAR ----------------------------------- */
     
-    #reader-mode-button{ display: none !important; }
+    #back-button { display: none; }
+    #forward-button { display: none; }
+    #reload-button { display: none; }
+    #stop-button { display: none; }
+    #home-button { display: none; }
+    #library-button { display: none; }
+    #fxa-toolbar-menu-button { display: none; }
+    /* empty space before and after the url bar */
+    #customizableui-special-spring1, #customizableui-special-spring2 { display: none; }
     
-    /* tracking protection shield icon */
+    /* --- STYLE NAVBAR ------------------------------------ */
+    
+    /* remove padding between toolbar buttons */
+    toolbar .toolbarbutton-1 { padding: 0 0 !important; }
+    
+    #urlbar-container {
+      --urlbar-container-height: var(--urlbar-height-setting) !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      font-family: var(--urlbar-font, 'monospace');
+      font-size: 14px;
+    }
+    
+    #urlbar {
+      --urlbar-height: var(--urlbar-height-setting) !important;
+      --urlbar-toolbar-height: var(--urlbar-height-setting) !important;
+      min-height: var(--urlbar-height-setting) !important;
+      border-color: var(--lwt-toolbar-field-border-color, hsla(240,5%,5%,.25)) !important;
+    }
+    
+    #urlbar-input {
+      margin-left: 0.8em !important;
+      margin-right: 0.4em !important;
+    }
+    
+    #navigator-toolbox {
+      border: none !important;
+    }
+    
+    /* keep pop-up menus from overlapping with navbar */
+    #widget-overflow { margin: 0 !important; }
+    #appMenu-popup { margin: 0 !important; }
+    #customizationui-widget-panel { margin: 0 !important; }
+    #unified-extensions-panel { margin: 0 !important; }
+    
+    /* --- UNIFIED EXTENSIONS BUTTON ------------------------ */
+    
+    /* make extension icons smaller */
+    #unified-extensions-view {
+      --uei-icon-size: 18px;
+    }
+    
+    /* hide bloat */
+    .unified-extensions-item-message-deck,
+    #unified-extensions-view > .panel-header,
+    #unified-extensions-view > toolbarseparator,
+    #unified-extensions-manage-extensions {
+      display: none !important;
+    }
+    
+    /* add 3px padding on the top and the bottom of the box */
+    .panel-subview-body {
+      padding: 3px 0px !important;
+    }
+    
+    #unified-extensions-view .unified-extensions-item-menu-button {
+      margin-inline-end: 0 !important;
+    }
+    
+    #unified-extensions-view .toolbarbutton-icon {
+      padding: 0 !important;
+    }
+    
+    .unified-extensions-item-contents {
+      line-height: 1 !important;
+      white-space: nowrap !important;
+    }
+    
+    /* --- DEBLOAT URLBAR ----------------------------------- */
+    
+    #identity-box { display: none; }
+    #pageActionButton { display: none; }
+    #pocket-button { display: none; }
+    #urlbar-zoom-button { display: none; }
     #tracking-protection-icon-container { display: none !important; }
+    #reader-mode-button{ display: none !important; }
+    #star-button { display: none; }
+    #star-button-box:hover { background: inherit !important; }
     
-    /* #identity-box { display: none !important } /* hides encryption AND permission items */
-    #identity-permission-box { display: none !important; } /* only hodes permission items */
+    /* Go to arrow button at the end of the urlbar when searching */
+    #urlbar-go-button { display: none; }
     
-    /* e.g. playing indicator (secondary - not icon) */
-    .tab-secondary-label { display: none !important; }
+    /* remove container indicator from urlbar */
+    #userContext-label, #userContext-indicator { display: none !important;}
     
-    #pageActionButton { display: none !important; }
-    #page-action-buttons { display: none !important; }
+    /* --- STYLE TAB TOOLBAR -------------------------------- */
     
-    /* Layout */
-    :root {
-      --uc-theme-colour:                          var(--window-colour);
-      --uc-hover-colour:                          var(--secondary-colour);
-      --uc-inverted-colour:                       var(--inverted-colour);
-      
-      --button-bgcolor:                           var(--uc-theme-colour)    !important;
-      --button-hover-bgcolor:                     var(--uc-hover-colour)    !important;
-      --button-active-bgcolor:                    var(--uc-hover-colour)    !important;
-      
-      --toolbar-bgcolor:                          var(--uc-theme-colour)    !important;
-      --toolbarbutton-hover-background:           var(--uc-hover-colour)    !important;
-      --toolbarbutton-active-background:          var(--uc-hover-colour)    !important;
-      --toolbarbutton-border-radius:              var(--uc-border-radius)   !important;
-      --lwt-toolbar-field-focus:                  var(--uc-theme-colour)    !important;
-      --toolbarbutton-icon-fill:                  var(--uc-inverted-colour) !important;
-      --toolbar-field-focus-background-color:     var(--uc-inverted-colour)   !important;
-      --toolbar-field-color:                      var(--uc-inverted-colour) !important;
-      --toolbar-field-focus-color:                var(--uc-inverted-colour) !important;
-      
-      --tabs-border-color:                        var(--uc-theme-colour)    !important;
-      --tab-border-radius:                        var(--uc-border-radius)   !important;
-      --lwt-text-color:                           var(--uc-inverted-colour) !important;
-      --lwt-tab-text:                             var(--uc-inverted-colour) !important;
-    
-      --lwt-sidebar-background-color:             var(--uc-hover-colour)    !important;
-      --lwt-sidebar-text-color:                   var(--uc-inverted-colour) !important;
-    
-      --arrowpanel-border-color:                  var(--uc-theme-colour)    !important;
-      --arrowpanel-border-radius:                 var(--uc-border-radius)   !important;
-      --arrowpanel-background:                    var(--uc-theme-colour)    !important;
-      --arrowpanel-color:                         var(--inverted-colour)    !important;
-    
-      --autocomplete-popup-highlight-background:  var(--uc-inverted-colour) !important;
-      --autocomplete-popup-highlight-color:       var(--uc-inverted-colour) !important;
-      --autocomplete-popup-hover-background:      var(--uc-inverted-colour) !important;
-      
+    #titlebar {
+      --proton-tab-block-margin: 0px !important;
       --tab-block-margin: 0px !important;
     }
     
-    window,
-    #main-window,
-    #toolbar-menubar,
-    #TabsToolbar,
-    #PersonalToolbar,
-    #navigator-toolbox,
-    #sidebar-box,
-    #nav-bar {
-      -moz-appearance: none !important;
-      border: none !important;
-      box-shadow: none !important;
-      background: var(--uc-theme-colour) !important;
+    #TabsToolbar, .tabbrowser-tab {
+      max-height: var(--tab-min-height) !important;
+      font-size: 14px !important;
     }
     
-    /* grey out icons inside the toolbar to align with the Black & White colour look */
-    #PersonalToolbar toolbarbutton:not(:hover),
-    #bookmarks-toolbar-button:not(:hover) { filter: grayscale(1) !important; }
+    /* Change color of normal tabs */
+    tab:not([selected="true"]) {
+      background-color: var(--tab-inactive-bg-color) !important;
+      color: var(--identity-icon-color, var(--tab-inactive-fg-fallback-color)) !important;
+    }
     
-    /* remove window control buttons */
-    .titlebar-buttonbox-container { display: none !important; }
+    tab {
+      font-family: var(--tab-font, monospace);
+      border: none !important;
+    }
     
-    /* remove "padding" left and right from tabs */
+    /* safari style tab width */
+    .tabbrowser-tab[fadein] {
+      max-width: 100vw !important;
+      border: none
+    }
+    
+    /* Hide close button on tabs */
+    #tabbrowser-tabs .tabbrowser-tab .tab-close-button { display: none !important; }
+    
+    .tabbrowser-tab {
+      /* remove border between tabs */
+      padding-inline: 0px !important;
+      /* reduce fade effect of tab text */
+      --tab-label-mask-size: 1em !important;
+      /* fix pinned tab behaviour on overflow */
+      overflow-clip-margin: 0px !important;
+    }
+    
+    /* Tab: selected colors */
+    #tabbrowser-tabs .tabbrowser-tab[selected] .tab-content {
+      background: var(--tab-active-bg-color) !important;
+      color: var(--identity-icon-color, var(--tab-active-fg-fallback-color)) !important;
+    }
+    
+    /* Tab: hovered colors */
+    #tabbrowser-tabs .tabbrowser-tab:hover:not([selected]) .tab-content {
+      background: var(--tab-hover-bg-color) !important;
+    }
+    
+    /* hide window controls */
+    .titlebar-buttonbox-container { display: none; }
+    
+    /* remove titlebar spacers */
     .titlebar-spacer { display: none !important; }
     
-    /* remove gap after pinned tabs */
-    #tabbrowser-tabs[haspinnedtabs]:not([positionpinnedtabs])
-      > #tabbrowser-arrowscrollbox
-      > .tabbrowser-tab[first-visible-unpinned-tab] { margin-inline-start: 0 !important; }
-    
-    /* remove tab shadow */
-    .tabbrowser-tab
-      >.tab-stack
-      > .tab-background { box-shadow: none !important;  }
-    
-    /* tab background */
-    .tabbrowser-tab
-      > .tab-stack
-      > .tab-background { background: var(--uc-theme-colour) !important; }
-    
-    /* active tab background */
-    .tabbrowser-tab[selected]
-      > .tab-stack
-      > .tab-background { background: var(--uc-hover-colour) !important; }
-    
-    /* tab close button options */
-    .tabbrowser-tab:not([pinned]) .tab-close-button { display: var(--show-tab-close-button) !important; }
-    .tabbrowser-tab:not([pinned]):hover .tab-close-button { display: var(--show-tab-close-button-hover) !important }
-    
-    /* adaptive tab width */
-    .tabbrowser-tab[selected][fadein]:not([pinned]) { max-width: var(--uc-active-tab-width) !important; }
-    .tabbrowser-tab[fadein]:not([selected]):not([pinned]) { max-width: var(--uc-inactive-tab-width) !important; }
-    
-    /* container tabs indicator */
-    .tabbrowser-tab[usercontextid]
-      > .tab-stack
-      > .tab-background
-      > .tab-context-line {
-        margin: -1px var(--container-tabs-indicator-margin) 0 var(--container-tabs-indicator-margin) !important;
-        border-radius: var(--tab-border-radius) !important;
-      }
-    
-    /* show favicon when media is playing but tab is hovered */
-    .tab-icon-image:not([pinned]) { opacity: 1 !important; }
-    
-    /* Makes the speaker icon to always appear if the tab is playing (not only on hover) */
-    .tab-icon-overlay:not([crashed]),
-    .tab-icon-overlay[pinned][crashed][selected] {
-      top: 5px !important;
-      z-index: 1 !important;
-      padding: 1.5px !important;
-      inset-inline-end: -8px !important;
-      width: 16px !important; height: 16px !important;
-      border-radius: 10px !important;
+    /* disable tab shadow */
+    #tabbrowser-tabs:not([noshadowfortests]) .tab-background:is([selected], [multiselected]) {
+      box-shadow: none !important;
     }
     
-    /* style and position speaker icon */
-    .tab-icon-overlay:not([sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) {
-      stroke: transparent !important;
-      background: transparent !important;
-      opacity: 1 !important; fill-opacity: 0.8 !important;
-      color: currentColor !important;
-      stroke: var(--uc-theme-colour) !important;
-      background-color: var(--uc-theme-colour) !important;
+    /* remove dark space between pinned tab and first non-pinned tab */
+    #tabbrowser-tabs[haspinnedtabs]:not([positionpinnedtabs]) >
+    #tabbrowser-arrowscrollbox >
+    .tabbrowser-tab:nth-child(1 of :not([pinned], [hidden])) {
+      margin-inline-start: 0px !important;
     }
     
-    /* change the colours of the speaker icon on active tab to match tab colours */
-    .tabbrowser-tab[selected] .tab-icon-overlay:not([sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) {
-      stroke: var(--uc-hover-colour) !important;
-      background-color: var(--uc-hover-colour) !important;
+    /* remove dropdown menu button which displays all tabs on overflow */
+    #alltabs-button { display: none !important }
+    
+    /* fix displaying of pinned tabs on overflow */
+    #tabbrowser-tabs:not([secondarytext-unsupported]) .tab-label-container {
+      height: var(--tab-min-height) !important;
     }
     
-    .tab-icon-overlay:not([pinned], [sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) { margin-inline-end: 9.5px !important; }
-    .tabbrowser-tab:not([image]) .tab-icon-overlay:not([pinned], [sharing], [crashed]) {
-      top: 0 !important;
-      padding: 0 !important;
-      margin-inline-end: 5.5px !important; 
-      inset-inline-end: 0 !important;
+    /* remove overflow scroll buttons */
+    #scrollbutton-up, #scrollbutton-down { display: none !important; }
+    
+    /* remove new tab button */
+    #tabs-newtab-button {
+      display: none !important;
     }
     
-    .tab-icon-overlay:not([crashed])[soundplaying]:hover,
-    .tab-icon-overlay:not([crashed])[muted]:hover,
-    .tab-icon-overlay:not([crashed])[activemedia-blocked]:hover {
-      color: currentColor !important;
-      stroke: var(--uc-inverted-colour) !important;
-      background-color: var(--uc-inverted-colour) !important;
-      fill-opacity: 0.95 !important;
-    }
+    /* --- AUTOHIDE NAVBAR ---------------------------------- */
     
-    .tabbrowser-tab[selected] .tab-icon-overlay:not([crashed])[soundplaying]:hover,
-    .tabbrowser-tab[selected] .tab-icon-overlay:not([crashed])[muted]:hover,
-    .tabbrowser-tab[selected] .tab-icon-overlay:not([crashed])[activemedia-blocked]:hover {
-      color: currentColor !important;
-      stroke: var(--uc-inverted-colour) !important;
-      background-color: var(--uc-inverted-colour) !important;
-      fill-opacity: 0.95 !important;
-    }
-    
-    /* speaker icon colour fix */
-    #TabsToolbar .tab-icon-overlay:not([crashed])[soundplaying],
-    #TabsToolbar .tab-icon-overlay:not([crashed])[muted],
-    #TabsToolbar .tab-icon-overlay:not([crashed])[activemedia-blocked] { color: var(--uc-inverted-colour) !important; }
-    
-    /* speaker icon colour fix on hover */
-    #TabsToolbar .tab-icon-overlay:not([crashed])[soundplaying]:hover,
-    #TabsToolbar .tab-icon-overlay:not([crashed])[muted]:hover,
-    #TabsToolbar .tab-icon-overlay:not([crashed])[activemedia-blocked]:hover { color: var(--uc-theme-colour) !important; }
-    
+    /* hide navbar unless focused */
     #nav-bar {
-      border:     none !important;
-      box-shadow: none !important;
-      background: transparent !important;
+      min-height: 0 !important;
+      max-height: 0 !important;
+      height: 0 !important;
+      --moz-transform: scaleY(0) !important;
+      transform: scaleY(0) !important;
     }
     
-    /* remove border below whole nav */
-    #navigator-toolbox { border-bottom: none !important; }
-    #urlbar,
-    #urlbar * {
-      outline: none !important;
-      box-shadow: none !important;
+    /* show on focus */
+    #nav-bar:focus-within {
+      --moz-transform: scale(1) !important;
+      transform: scale(1) !important;
+      max-height: var(--urlbar-height-setting) !important;
+      height: var(--urlbar-height-setting) !important;
+      min-height: var(--urlbar-height-setting) !important;
     }
     
-    #urlbar-background { border: var(--uc-hover-colour) !important; }
+    #navigator-toolbox:focus-within > .browser-toolbar {
+      transform: translateY(0);
+      opacity: 1;
+    }
     
-    #urlbar[focused="true"]
-        > #urlbar-background,
-    #urlbar:not([open])
-        > #urlbar-background { background: transparent !important; }
-    
-    #urlbar[open]
-        > #urlbar-background { background: var(--uc-theme-colour) !important; }
-    
-    .urlbarView-row:hover
-        > .urlbarView-row-inner,
-    .urlbarView-row[selected]
-        > .urlbarView-row-inner { background: var(--uc-hover-colour) !important; }
-    
-    /* transition to oneline */
-    @media (min-width: 1000px) { 
-      /* move tabs bar over */
-      #TabsToolbar { margin-left: var(--uc-urlbar-width) !important; }
-    
-      /* move entire nav bar  */
-      #nav-bar { margin: calc((var(--urlbar-min-height) * -1) - 8px) calc(100vw - var(--uc-urlbar-width)) 0 0 !important; }
-    } /* end media query */
-    
-    /* Container Tabs */
-    .identity-color-blue      { --identity-tab-color: var(--uc-identity-color-blue)      !important; --identity-icon-color: var(--uc-identity-color-blue)      !important; }
-    .identity-color-turquoise { --identity-tab-color: var(--uc-identity-color-turquoise) !important; --identity-icon-color: var(--uc-identity-color-turquoise) !important; }
-    .identity-color-green     { --identity-tab-color: var(--uc-identity-color-green)     !important; --identity-icon-color: var(--uc-identity-color-green)     !important; }
-    .identity-color-yellow    { --identity-tab-color: var(--uc-identity-color-yellow)    !important; --identity-icon-color: var(--uc-identity-color-yellow)    !important; }
-    .identity-color-orange    { --identity-tab-color: var(--uc-identity-color-orange)    !important; --identity-icon-color: var(--uc-identity-color-orange)    !important; }
-    .identity-color-red       { --identity-tab-color: var(--uc-identity-color-red)       !important; --identity-icon-color: var(--uc-identity-color-red)       !important; }
-    .identity-color-pink      { --identity-tab-color: var(--uc-identity-color-pink)      !important; --identity-icon-color: var(--uc-identity-color-pink)      !important; }
-    .identity-color-purple    { --identity-tab-color: var(--uc-identity-color-purple)    !important; --identity-icon-color: var(--uc-identity-color-purple)    !important; }
-    .tab-label-container{ height: unset !important; }
-  '';
-  simplefoxcontent = ''
-    /* SimpleFox by Miguel Avila */
+    /* --- HIDE TAB BAR ON SINGLE TAB ----------------------- */
 
-    :root {
-      scrollbar-width: none !important;
+    #tabbrowser-tabs .tabbrowser-tab:only-of-type,
+    #tabbrowser-tabs .tabbrowser-tab:only-of-type + #tabbrowser-arrowscrollbox-periphery{
+      display:none !important;
     }
-    
-    @-moz-document url(about:privatebrowsing) {
-      :root {
-        scrollbar-width: none !important;
-      }
+    #tabbrowser-tabs, #tabbrowser-arrowscrollbox {min-height:0!important;}
+    #alltabs-button {display:none !important;}
+
+    /* --- PREVENT TAB FOLDING ------------------------------ */
+
+    .tabbrowser-tab {
+      min-width: initial !important;
+    }
+    .tab-content {
+      overflow: hidden !important;
     }
   '';
-  foxinstalls = ''
+  foxInstalls = ''
     [4F96D1932A9F858E]
     Default=Jimbo
     Locked=1
-    
-    [C783E445CF9CA815]
-    Default=Jimbo
-    Locked=1
-    
-    [6C1CE26D3274EA5B]
-    Default=Jimbo
-    Locked=1
   '';
-  foxprofiles = ''
+  foxProfiles = ''
     [Profile0]
     Name=Jimbo
     IsRelative=1
@@ -3557,7 +1846,7 @@ let
     StartWithLastProfile=1
     Version=2
   '';
-  foxuserjs = ''
+  foxUserJS = ''
     // Enable Compact Mode
     user_pref("browser.uidensity", 1);
   '';
@@ -3567,58 +1856,949 @@ in
   # Define home manager programs and configs
   home-manager = {
     useGlobalPkgs = true;
+    useUserPackages = true;
     users.jimbo = { config, pkgs, ... }: {
       # Install user programs
-      home.packages = with pkgs; [
-        # Sway/Desktop
-        swayfx swaybg swayidle swaylock-effects wlroots_0_16 wdisplays wl-clipboard 
-	clipman bemenu waybar xwayland libnotify swappy bc grim slurp 
-	jq imagemagick libsForQt5.qtstyleplugins lm_sensors
-
+      home.packages = (with pkgs; [
         # Useful programs
-        home-manager ffmpegthumbnailer imv kitty kittydash rofi-wayland bemoji dua p7zip
-	qbittorrent neofetch libreoffice-fresh easyeffects pavucontrol gotop man pciutils
+        ffmpegthumbnailer imv rofi-wayland dua p7zip qbittorrent
+	neofetch libreoffice-fresh easyeffects pavucontrol gotop pciutils
+
+        # Production tools
+        krita kdenlive audacity
+
+	# Scripts as global programs
+	serverDash diskClean ytOpus makeLinuxDrive discordWayland
+	beScripts makoToggle swayLock screenShot alarmScript
 
         # File manager
         lxqt.pcmanfm-qt gnome.file-roller ranger poppler_utils
-
-        # Audio/Video tools
-        yt-dlp ytfzf ani-cli playerctl ffmpeg
-
-        # Production tools
-        krita libsForQt5.kdenlive audacity
-
-        # Unlimited games
-        steam heroic mangohud sunshine winePackages.wayland
-	runelite minetest prismlauncher 
 
         # Emulators
         dolphin-emu duckstation pcsx2 rpcs3
 
         # School tools
         remmina freerdp libvncserver globalprotect-openconnect zoom-us
-      ];
 
-      # Start defining GTK theme settings
+        # Audio/Video tools
+        yt-dlp ytfzf ani-cli playerctl ffmpeg
+
+        # Unlimited games
+        steam heroic mangohud ironwail openarena xonotic
+	minetest prismlauncher wine-staging
+      ]) ++ (with pkgs.unstable; [
+        # Window manager apps
+        swaybg wdisplays wl-clipboard wlroots_0_16
+        clipman bemenu libnotify swappy
+	bc grim slurp jq libsForQt5.qtstyleplugins lm_sensors
+      ]) ++ (with pkgs.superstable; [
+	# Remote desktop
+	sunshine #moonlight-qt
+      ]);
+
+      # Enable Sway and write some scripts
+      wayland.windowManager.sway = let
+	# Define certain variables Sway will use
+        primeMod = "Mod4";
+        altMod = "Mod1";
+        menuCommand = ''bemenu-run --fn "${mainFont} 13" --nb "#${darkCol}" --ab "#${darkCol}" --tb "#${primeCol}" --fb "#${darkCol}" --tf "#ffffff" --hf "#ffffff" --hb "#${primeCol}" --hp 8 --ignorecase -p "Run:"'';
+
+	# Define scripts specific to Sway
+        pinWindow = pkgs.writeScript "pin-window" ''
+          # Get the current border style of the focused window
+          current_style=$(swaymsg -t get_tree | jq -r '.. | select(.focused?).border')
+          
+          # Toggle between "normal" (default) and "pixel ${borderWeight}" border styles
+          if [ "$current_style" == "none" ]; then
+            swaymsg "sticky disable, border pixel ${borderWeight}"
+          else
+            swaymsg "sticky enable, border none"
+          fi
+        '';
+
+        # Kill a window or probe it for info
+        swayTools = pkgs.writeScript "swaytools" ''
+          # List the app name and whether or not it uses wayland
+          swayprop() {
+            selected_window=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | "\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)"' | slurp -r -c ${primeCol} -B 00000066 -b 00000000)
+            if [ -n "$selected_window" ]; then
+              app_id=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | select("\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)" == "'"$selected_window"'") | .app_id')
+              system=$(sed 's/xdg_shell/Wayland/g; s/xwayland/Xorg/g' < <(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | select("\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)" == "'"$selected_window"'") | .shell'))
+              notify-send "$(echo -e "Window's app_id: $app_id\nWindow System: $system")"
+            fi
+          }
+          
+          # Kill a selected window
+          swaykill() {
+            selected_window=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | "\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)"' | slurp -r -c ${primeCol} -B 00000066 -b 00000000)
+            if [ -n "$selected_window" ]; then
+              pid=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | select("\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)" == "'"$selected_window"'") | .pid')
+              kill -9 "$pid"
+            fi
+          }
+          
+          # Handle which tool we use
+          if [ "$1" == "--prop" ]; then
+            swayprop
+          elif [ "$1" == "--kill" ]; then
+            swaykill
+          fi
+        '';
+      in {
+        enable = true;
+	package = pkgs.unstable.swayfx;
+        wrapperFeatures.gtk = true;
+	config = {
+	  modifier = "${primeMod}";
+	  terminal = "${terminal}";
+	  startup = [
+	    # Restart services to make screensharing work
+	    { command = "${swayPipewireConf}/bin/sway-pipewire"; }
+
+	    # Lock the screen on start, to allow an autostarted session
+	    { command = "swaylock"; }
+
+	    # Scratchpads
+	    { command = "${terminalClass}=gotop gotop"; }
+	    { command = "${terminalClass}=music ranger"; }
+	    { command = "pavucontrol"; }
+	    { command = "easyeffects"; }
+
+	    # Daemons and tray apps
+	    { command = "alarms --alarms"; }
+	    { command = "wl-paste -t text --watch clipman store"; }
+	    { command = "wl-copy"; }
+	    { command = "mako"; }
+	    { command = "blueman-applet"; }
+	    { command = "sunshine"; }
+	    { command = "${pkgs.rot8}/bin/rot8"; }
+
+	    # Polkit agent
+	    { command = "${pkgs.mate.mate-polkit}/libexec/polkit-mate-authentication-agent-1"; }
+
+	    # Foreground apps
+	    { command = "librewolf -P Variety --name=Variety"; }
+	    { command = "discord"; }
+	    { command = "serverdash"; }
+	  ];
+
+	  # Define which bar is used
+	  bars = [{ command = "waybar"; }];
+
+	  # Define hardware
+	  output = {
+            ${display1} = {
+              pos = "1920 405";
+	      mode = "1920x1080@143.980Hz";
+              max_render_time = "3";
+              bg = "${wallpaper1} fill";
+              adaptive_sync = "on";
+	      scale = "1";
+            };
+            ${display2} = {
+              pos = "0 405";
+	      mode = "1920x1080@75.001Hz";
+              max_render_time = "3";
+	      bg = "${wallpaper2} fill";
+            };
+            ${display3} = {
+              pos = "3840 0";
+	      mode = "1680x1050@59.883Hz";
+	      transform = "270";
+              max_render_time = "3";
+	      bg = "${wallpaper3} fill";
+            };
+	    ${displayLap} = {
+	      bg = "${wallpaper1} fill";
+	      #scale = "1.4";
+	    };
+	  };
+
+	  # Mouse sensitivity, disable acceleration, allow touch while typing
+	  input = {
+            "9610:4103:SINOWEALTH_Game_Mouse" = {
+              pointer_accel = "-0.9";
+            };
+            "9639:64097:Compx_2.4G_Receiver_Mouse" = {
+              pointer_accel = "-0.82";
+            };
+            "1452:627:bcm5974" = {
+	      scroll_factor = "0.3";
+            };
+            "*" = {
+              accel_profile = "flat";
+	      dwt = "disabled";
+	      natural_scroll = "disabled";
+            };
+
+	    # Map touchscreen to output
+	    "1386:806:Wacom_ISDv5_326_Finger" = {
+	      map_to_output = "${displayLap}";
+	    };
+	  };
+
+	  # Assign workspaces to outputs
+	  workspaceOutputAssign = let
+            workspaces1 = [ "${w0}" "${w1}" "${w2}" "${w3}" "${w1a}" "${w2a}" "${w3a}" ];
+            workspaces2 = [ "${w4}" "${w5}" "${w6}" "${w4a}" "${w5a}" "${w6a}" ];
+            workspaces3 = [ "${w7}" "${w8}" "${w9}" "${w7a}" "${w8a}" "${w9a}" ];
+            assign = output: workspaces: map (workspace: { inherit workspace; inherit output; }) workspaces;
+          in
+            (assign "${display1}" workspaces1) ++ (assign "${display2}" workspaces2) ++ (assign "${display3}" workspaces3);
+	
+	  # Theming settings
+	  fonts = {
+	    names = [ "${mainFont}" ];
+	    size = 10.5;
+	  };
+	  gaps = {
+	    inner = 5;
+	    smartGaps = true;
+	  };
+	  focus = {
+            newWindow = "focus";
+	  };
+	  colors = {
+	    focused = { border = "#${primeCol}"; background = "#${primeCol}"; text = "#FFFFFF"; indicator = "#${actSplitCol}"; childBorder = "#${primeCol}"; };
+	    focusedInactive = { border = "#${accentCol}"; background = "#${accentCol}"; text = "#${textCol}"; indicator = "#${splitCol}"; childBorder = "#${accentCol}"; };
+	    unfocused = { border = "#${darkCol}"; background = "#${darkCol}"; text = "#${textCol}"; indicator = "#${splitCol}"; childBorder = "#${splitCol}"; };
+	    urgent = { border = "#${urgentCol}"; background = "#${urgentCol}"; text = "#${textCol}"; indicator = "#${urgentCol}"; childBorder = "#${urgentCol}"; };
+	  };
+
+	  # Hotkeys
+	  keybindings = {
+	    ## Launcher keys
+
+	    # Librewolf profiles
+	    "${primeMod}+F1" = ''exec librewolf -P Jimbo --name=JimBrowser | notify-send "Librewolf Main" --expire-time=1500'';
+	    "${primeMod}+F2" = ''exec librewolf -P School --name=SchoolBrowser | notify-send "Librewolf School" --expire-time=1500'';
+	    "${primeMod}+F3" = ''exec librewolf -P Variety --name=Variety | notify-send "Librewolf Variety" --expire-time=1500'';
+
+	    # Looking glass for VMs
+	    "${primeMod}+F4" = ''exec looking-glass-client -p 5950 input:rawMouse=yes | notify-send "Looking Glass" --expire-time=1500'';
+
+	    # Games
+	    "${primeMod}+F5" = ''exec steam | notify-send "Steam" --expire-time=1500'';
+	    "${primeMod}+F6" = ''exec ${terminalClass}=HeroicTerminal heroic | notify-send "Heroic Games" --expire-time=1500'';
+
+	    # Virtual Machines
+	    "${primeMod}+F10" = ''exec virt-manager | notify-send "Virtual Machines" --expire-time=1500'';
+
+	    # BeMenu scripts
+	    "${primeMod}+F11" = ''exec bescripts --scratchpads | notify-send "Scratchpads" --expire-time=1500'';
+	    "${primeMod}+${altMod}+Ctrl+r" = ''exec bescripts --resolutions'';
+
+	    # Open NixOS configuration files
+	    "${primeMod}+F12" = ''exec bash -c "${terminal} nvim /etc/nixos/{configuration.nix,jimbo.nix}" | notify-send "Nix Config" --expire-time=1500'';
+
+	    # Kitty, bemenu, clipmenu, media script, power menu, show/hide waybar
+	    "${primeMod}+Return" = ''exec ${terminal}'';
+	    "${primeMod}+s" = ''exec ${menuCommand}'';
+	    "${primeMod}+c" = ''exec clipman pick -t rofi -T'-font "${mainFont} 13"' '';
+	    "${primeMod}+y" = ''exec bescripts --media'';
+	    "${primeMod}+x" = ''exec bescripts --power'';
+	    "${primeMod}+b" = ''exec pkill -USR1 waybar'';
+	    "${primeMod}+Escape" = ''exec ${swayTools} --kill'';
+
+	    # PCManFM, Emoji Picker, Ranger, Rofi Launcher
+	    "${primeMod}+Shift+t" = ''exec pcmanfm-qt'';
+	    "${primeMod}+Shift+e" = ''exec BEMOJI_PICKER_CMD="eval rofi -font '${mainFont} 13' -dmenu -p Emoji" ${pkgs.bemoji}/bin/bemoji -n -P 0'';
+	    "${primeMod}+Shift+s" = ''exec rofi -show drun -drun-display-format {name} -show-icons -modi drun -font "${mainFont} 14"'';
+	    "${primeMod}+Shift+Return" = ''exec ${terminal} ranger'';
+
+	    # Wprop, colorpicker
+	    "${primeMod}+Ctrl+x" = ''exec ${swayTools} --prop'';
+	    "${primeMod}+Ctrl+c" = ''exec ${pkgs.hyprpicker}/bin/hyprpicker -an && notify-send "Color copied to clipboard" --expire-time=1500'';
+
+	    ## Media keys
+
+	    # Volume control
+	    "XF86AudioRaiseVolume" = ''exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+'';
+	    "XF86AudioLowerVolume" = ''exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-'';
+
+	    # MPV volume control
+	    "${altMod}+XF86AudioRaiseVolume" = ''exec playerctl --player=mpv volume 0.05+'';
+	    "${altMod}+XF86AudioLowerVolume" = ''exec playerctl --player=mpv volume 0.05-'';
+
+	    # Mute, Stop
+	    "XF86AudioMute" = ''exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle'';
+	    "XF86AudioStop" = ''exec playerctl --player=mpv stop'';
+
+	    # Play MPV or Firefox
+	    "XF86AudioPlay" = ''exec playerctl --player=firefox play-pause'';
+	    "${altMod}+XF86AudioPlay" = ''exec playerctl --player=mpv play-pause'';
+
+	    # Next/Previous
+	    "XF86AudioNext" = ''exec playerctl --player=firefox next'';
+	    "XF86AudioPrev" = ''exec playerctl --player=firefox previous'';
+	    "${altMod}+XF86AudioNext" = ''exec playerctl --player=mpv next'';
+	    "${altMod}+XF86AudioPrev" = ''exec playerctl --player=mpv previous'';
+
+	    ## Notification keys
+
+	    # Toggle mako
+	    "${primeMod}+n" = ''exec makotoggle'';
+	    "${primeMod}+Shift+n" = ''exec makoctl restore'';
+	    "${primeMod}+Ctrl+n" = ''exec makoctl dismiss -a'';
+
+	    ## Miscellaneous keys
+
+	    # Screenshots
+	    "Print" = ''exec screenshot --swappy'';
+	    "${primeMod}+Shift+f" = ''exec screenshot --swappy'';
+	    "Alt+Print" = ''exec screenshot --copy'';
+	    "Shift+Print" = ''exec screenshot --current'';
+	    "Ctrl+Print" = ''exec screenshot --all'';
+
+	    # Server SSH
+	    "${primeMod}+Ctrl+Return" = ''exec ${terminal} ${ssh} server'';
+
+	    # Open copied video link in mpv
+	    "${primeMod}+Ctrl+y" = ''exec mpv --loop-playlist=no --keep-open=yes $(echo $(wl-paste)) | notify-send "Playing in MPV" --expire-time=1500'';
+
+	    # Display Brightness and Keyboard Brightness
+	    "XF86MonBrightnessUp" = ''exec light -A 5'';
+	    "XF86MonBrightnessDown" = ''exec light -U 5'';
+	    "Shift+XF86MonBrightnessUp" = ''exec light -A 1'';
+	    "Shift+XF86MonBrightnessDown" = ''exec light -U 1'';
+	    "XF86KbdBrightnessUp" = ''exec light -s sysfs/leds/smc::kbd_backlight -A 5'';
+	    "XF86KbdBrightnessDown" = ''exec light -s sysfs/leds/smc::kbd_backlight -U 5'';
+
+	    ## Window manager keys
+	    "${primeMod}+q" = ''kill'';
+	    "${primeMod}+Shift+r" = ''reload'';
+
+	    # Switch to workspaces
+	    "${primeMod}+grave" = ''workspace ${w0}'';
+	    "${primeMod}+1" = ''workspace ${w1}'';
+	    "${primeMod}+2" = ''workspace ${w2}'';
+	    "${primeMod}+3" = ''workspace ${w3}'';
+	    "${primeMod}+4" = ''workspace ${w4}'';
+	    "${primeMod}+5" = ''workspace ${w5}'';
+	    "${primeMod}+6" = ''workspace ${w6}'';
+	    "${primeMod}+7" = ''workspace ${w7}'';
+	    "${primeMod}+8" = ''workspace ${w8}'';
+	    "${primeMod}+9" = ''workspace ${w9}'';
+
+	    # Switch to alternate workspaces
+	    "${altMod}+F1" = ''workspace ${w1a}'';
+	    "${altMod}+F2" = ''workspace ${w2a}'';
+	    "${altMod}+F3" = ''workspace ${w3a}'';
+	    "${altMod}+F4" = ''workspace ${w4a}'';
+	    "${altMod}+F5" = ''workspace ${w5a}'';
+	    "${altMod}+F6" = ''workspace ${w6a}'';
+	    "${altMod}+F7" = ''workspace ${w7a}'';
+	    "${altMod}+F8" = ''workspace ${w8a}'';
+	    "${altMod}+F9" = ''workspace ${w9a}'';
+
+	    # Move window to and focus new workspace
+	    "${primeMod}+Shift+grave" = ''move container to workspace ${w0}; workspace ${w0}'';
+	    "${primeMod}+Shift+1" = ''move container to workspace ${w1}; workspace ${w1}'';
+	    "${primeMod}+Shift+2" = ''move container to workspace ${w2}; workspace ${w2}'';
+	    "${primeMod}+Shift+3" = ''move container to workspace ${w3}; workspace ${w3}'';
+	    "${primeMod}+Shift+4" = ''move container to workspace ${w4}; workspace ${w4}'';
+	    "${primeMod}+Shift+5" = ''move container to workspace ${w5}; workspace ${w5}'';
+	    "${primeMod}+Shift+6" = ''move container to workspace ${w6}; workspace ${w6}'';
+	    "${primeMod}+Shift+7" = ''move container to workspace ${w7}; workspace ${w7}'';
+	    "${primeMod}+Shift+8" = ''move container to workspace ${w8}; workspace ${w8}'';
+	    "${primeMod}+Shift+9" = ''move container to workspace ${w9}; workspace ${w9}'';
+
+	    # Move window to and focus new alternate workspace
+	    "${altMod}+Shift+F1" = ''move container to workspace ${w1a}; workspace ${w1a}'';
+	    "${altMod}+Shift+F2" = ''move container to workspace ${w2a}; workspace ${w2a}'';
+	    "${altMod}+Shift+F3" = ''move container to workspace ${w3a}; workspace ${w3a}'';
+	    "${altMod}+Shift+F4" = ''move container to workspace ${w4a}; workspace ${w4a}'';
+	    "${altMod}+Shift+F5" = ''move container to workspace ${w5a}; workspace ${w5a}'';
+	    "${altMod}+Shift+F6" = ''move container to workspace ${w6a}; workspace ${w6a}'';
+	    "${altMod}+Shift+F7" = ''move container to workspace ${w7a}; workspace ${w7a}'';
+	    "${altMod}+Shift+F8" = ''move container to workspace ${w8a}; workspace ${w8a}'';
+	    "${altMod}+Shift+F9" = ''move container to workspace ${w9a}; workspace ${w9a}'';
+
+	    # Change focus across windows
+	    "${primeMod}+Up" = ''focus up'';
+	    "${primeMod}+Down" = ''focus down'';
+	    "${primeMod}+Left" = ''focus left'';
+	    "${primeMod}+Right" = ''focus right'';
+
+	    # Switch focus across outputs
+	    "${primeMod}+j" = ''focus output ${display2}'';
+	    "${primeMod}+k" = ''focus output ${display1}'';
+	    "${primeMod}+l" = ''focus output ${display3}'';
+
+	    # Move focused window
+	    "${primeMod}+Shift+Up" = ''move up'';
+	    "${primeMod}+Shift+Down" = ''move down'';
+	    "${primeMod}+Shift+Left" = ''move left'';
+	    "${primeMod}+Shift+Right" = ''move right'';
+
+	    # Move window across outputs
+	    "${primeMod}+Shift+j" = ''move output ${display2}; focus output ${display2}'';
+	    "${primeMod}+Shift+k" = ''move output ${display1}; focus output ${display1}'';
+	    "${primeMod}+Shift+l" = ''move output ${display3}; focus output ${display3}'';
+
+	    # Change focus between floating/tiled, toggle floating
+	    "${primeMod}+space" = ''focus mode_toggle'';
+	    "${primeMod}+Shift+space" = ''floating toggle'';
+
+	    # Allow a window to be visible on all workspaces, toggle border
+	    "${primeMod}+0" = ''exec ${pinWindow}'';
+
+	    # Toggle fullscreen
+	    "${primeMod}+f" = ''fullscreen toggle'';
+	    "${primeMod}+${altMod}+Ctrl+f" = ''fullscreen toggle global'';
+
+	    # Change container layout
+	    "${primeMod}+w" = ''layout toggle split'';
+	    "${primeMod}+e" = ''layout tabbed'';
+
+	    # Change split direction
+	    "${primeMod}+h" = ''split h'';
+	    "${primeMod}+v" = ''split v'';
+
+	    # Focus parent / child
+	    "${primeMod}+a" = ''focus parent'';
+	    "${primeMod}+d" = ''focus child'';
+
+	    # Resize windows
+	    "${primeMod}+${altMod}+Up" = ''resize grow height 5 px or 5 ppt'';
+	    "${primeMod}+${altMod}+Down" = ''resize shrink height 5 px or 5 ppt'';
+	    "${primeMod}+${altMod}+Left" = ''resize shrink width 5 px or 5 ppt'';
+	    "${primeMod}+${altMod}+Right" = ''resize grow width 5 px or 5 ppt'';
+
+	    # Adjust gap size
+	    "${primeMod}+Shift+equal" = ''gaps inner current set 5'';
+	    "${primeMod}+equal" = ''gaps inner current plus 5'';
+	    "${primeMod}+minus" = ''gaps inner current minus 5'';
+
+	    # Scratchpads
+	    "Ctrl+Shift+Escape" = ''[app_id="gotop"] scratchpad show, move position center'';
+	    "${primeMod}+Shift+m" = ''[app_id="music"] scratchpad show, move position center'';
+	    "${primeMod}+Shift+v" = ''[app_id="pavucontrol"] scratchpad show, move position center'';
+	    "${primeMod}+Shift+Backslash" = ''[app_id="com.github.wwmm.easyeffects"] scratchpad show, move position center'';
+	  };
+	  window = {
+            border = borderWeightInt;
+	    titlebar = false;
+	    commands = [
+	      # Scratchpads
+	      { command = ''floating enable, sticky enable, move scratchpad, mark borderless'';
+	      criteria = { con_mark = "scratchpad"; }; }
+	      { command = ''mark scratchpad, resize set 1200 900'';
+	      criteria = { app_id = "gotop"; }; }
+	      { command = ''mark scratchpad, resize set 1000 650'';
+	      criteria = { app_id = "music"; }; }
+	      { command = ''mark scratchpad, resize set 1000 800, opacity 0.9'';
+	      criteria = { app_id = "pavucontrol"; }; }
+	      { command = ''mark scratchpad, resize set 1000 800, opacity 0.9'';
+	      criteria = { app_id = "com.github.wwmm.easyeffects"; }; }
+
+	      # Create a "Scratchpad" for apps I don't want to be seen when launched
+	      { command = ''move scratchpad''; criteria = { con_mark = "hiddenaway"; }; }
+	      { command = ''mark hiddenaway''; criteria = { app_id = "HeroicTerminal"; }; }
+
+	      # Give apps that don't have them borders
+	      { command = ''border pixel ${borderWeight}''; criteria = { con_mark = "borderless"; }; }
+	      { command = ''mark borderless''; criteria = { app_id = "com.github.wwmm.easyeffects"; }; }
+	      { command = ''mark borderless''; criteria = { class = "steam"; }; }
+	      { command = ''mark borderless''; criteria = { app_id = "swappy"; }; }
+	      { command = ''mark borderless''; criteria = { app_id = "virt-manager"; }; }
+	      { command = ''mark borderless''; criteria = { window_role = "pop-up"; }; }
+
+	      # Floating or fullscreen rules
+	      { command = ''floating enable''; criteria = { app_id = "smb"; }; }
+	      { command = ''floating enable''; criteria = { app_id = "float"; }; }
+	      { command = ''floating enable, fullscreen enable global''; criteria = { title = "^GlobalShot"; }; }
+	    ];
+          };
+	  assigns = {
+	    # Browsers
+	    "${w1}" = [{ app_id = "JimBrowser"; }];
+	    "${w1a}" = [{ app_id = "SchoolBrowser"; }];
+	    "${w7}" = [{ app_id = "Variety"; }];
+	    
+	    # Communication
+	    "${w6a}" = [{ class = "zoom"; }];
+	    "${w8}" = [{ app_id = "VencordDesktop"; }];
+
+	    # Else
+	    "${w2}" = [{ class = "steam"; } { class = "heroic"; }];
+	    "${w2a}" = [{ app_id = "looking-glass-client"; }];
+	    "${w4}" = [{ app_id = "serverdash"; }];
+	    "${w4a}" = [{ app_id = "com.obsproject.Studio"; }];
+	  };
+	};
+	extraConfig = ''
+          # Options I can't find in Nix yet
+          default_floating_border pixel ${borderWeight}
+          hide_edge_borders --i3 smart
+          titlebar_padding 10 1
+          
+          # SwayFX specific options
+          blur enable
+          blur_passes 3
+          blur_radius 5
+          
+          # Set transparency rules
+          layer_effects 'rofi' blur enable
+          layer_effects 'notifications' blur enable; blur_ignore_transparent enable
+          
+          # Include extra window icons
+          include ${pkgs.fetchurl {
+	    url = "https://raw.githubusercontent.com/iguanajuice/sway-font-awesome/6b7a9d08974eea1b9cddb8d444e1c89d6837083a/icons";
+	    sha256 = "09ki5qw1h91kd33k3fwzq7cb6ck8sq4haswgizrsy387sfr2a75x";
+	  }}
+          
+          # Switch to workspace 1
+          workspace ${w7}
+          workspace ${w1}
+	'';
+      };
+
+      # Define Waybar
+      programs.waybar = let
+        # Sway workspaces
+        swayWorkspacesModule = {
+	  format = "{name}";
+          enable-bar-scroll = true;
+          warp-on-scroll = false;
+          disable-scroll-wraparound = true;
+        };
+
+	# Sway windows
+	swayWindowsModule = {
+	  icon = true;
+	  icon-size = 15;
+	  all-outputs = true;
+	  tooltip = false;
+	  rewrite = {
+	    "(.*) — LibreWolf" = "   $1";
+	    "LibreWolf" = "   LibreWolf";
+	    "(.*) - YouTube — LibreWolf" = "󰗃   $1";
+	  };
+	};
+
+	# Pipewire/Pulseaudio
+	pulseModule = {
+	  format = "{icon}   {volume}%";
+	  format-bluetooth = "{icon}  {volume}%";
+	  format-muted = " muted";
+	  format-icons = {
+	    default = [ "" "" ];
+	    headphone = "";
+	  };
+	  on-click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+	  on-click-middle = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 100%";
+	  on-click-right = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 60%";
+	  ignored-sinks = [ "Easy Effects Sink" "USB FS AUDIO Analog Stereo" ];
+	};
+
+	# CPU, Ram and Vram
+	cpuModule = {
+	  format = "  {usage}%";
+	  interval = 3;
+	};
+	ramModule = {
+	  format = "  {used}G";
+	  tooltip = false;
+	};
+	vramModule = {
+	  exec = pkgs.writeScript "vramScript" ''
+            # Don't run the script if running on integrated graphics
+            if lspci -k | grep "Kernel driver in use: nvidia" &> /dev/null || lspci -k | grep "Kernel driver in use: amdgpu" &> /dev/null; then
+            
+              # Run the nvidia-smi command and capture the VRAM usage and GPU utilization output
+              if lspci -k | grep "Kernel driver in use: nvidia" &> /dev/null; then
+                vram_usage_mb=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits)
+                temperature=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits)
+              elif lspci -k | grep "Kernel driver in use: amdgpu" &> /dev/null; then
+                vram_usage_mb=$(echo "$(cat /sys/class/drm/card0/device/mem_info_vram_used || cat /sys/class/drm/card1/device/mem_info_vram_used) / 1024 / 1024" | bc)
+                temperature=$(sensors | grep 'edge' | awk '{print $2}' | sed 's/[^0-9.-]//g')
+              fi
+              
+              # Check if VRAM usage is under 1GB
+              if [ $vram_usage_mb -lt 1024 ]; then
+                vram_usage_display="$(echo $vram_usage_mb)M"
+              else
+                # Convert MB to GiB
+                vram_usage_gib=$(bc <<< "scale=2; $vram_usage_mb / 1024")
+                vram_usage_display="$(echo $vram_usage_gib)G"
+              fi
+              
+              # Print the VRAM usage in MB or GiB, and include GPU utilization and temperature
+              echo "{\"text\":\"󰢮  $(echo $vram_usage_display)\",\"tooltip\":\"$(echo $temperature)°C\"}"
+            
+            else
+              :
+            fi
+	  '';
+	  format = "{}";
+	  return-type = "json";
+	  interval = 3;
+	};
+
+	# Clocks
+	longClockModule = {
+	  exec = pkgs.writeScript "longClock" ''
+            # Long clock format, with a numeric date and military time tooltip
+            time=$(date +'%a %b %d %l:%M:%S%p' | tr -s ' ')
+            date=$(date "+%Y-%m-%d")
+            echo "{\"text\":\"  $time\",\"tooltip\":\"$date\"}"
+	  '';
+	  on-click = "wl-copy $(date \"+%Y-%m-%d-%H%M%S\"); notify-send \"Date copied.\"";
+	  format = "{}";
+	  return-type = "json";
+	  interval = 1;
+	  tooltip = true;
+	};
+	shortClockModule = {
+	  exec = "echo '  '$(date +'%l:%M%p' | sed 's/^ //')";
+	  on-click = "wl-copy $(date \"+%Y-%m-%d-%H%M%S\"); notify-send \"Date copied.\"";
+	  interval = 60;
+	  tooltip = false;
+	};
+
+	# Tray, gamemode and network tray modules
+	trayModule = {
+	  spacing = 5;
+	};
+	networkModule = {
+	  format-ethernet = "󰈀";
+	  format-wifi = "";
+	  format-disconnected = "󰖪";
+	  format-linked = "";
+	  tooltip-format-ethernet = "{ipaddr}\n{ifname} ";
+	  tooltip-format-wifi = "{ipaddr}\n{essid} ({signalStrength}%)";
+	  tooltip-format-disconnected = "Disconnected";
+	};
+	scratchpadModule = {
+	  format = "   {count}";
+	  show-empty = false;
+	  tooltip = true;
+	  tooltip-format = "{title}";
+	};
+	gamemodeModule = {
+	  format = "{glyph}";
+	  glyph = "󰖺";
+	  hide-not-running = true;
+	  use-icon = true;
+	  icon-spacing = 3;
+	  icon-size = 19;
+	  tooltip = true;
+	  tooltip-format = "Gamemode On";
+	};
+
+	# Special per-bar modules
+	mediaModule = {
+	  exec-if = "playerctl --player=mpv status";
+	  exec = pkgs.writeScript "mpvMetadata" ''
+            get_metadata() {
+              playerctl --player=mpv metadata 2>/dev/null |
+                awk '/title/{gsub(/\.(mp3|mp4|m4a|mov|flac|opus|oga)$/,""); for (i=3; i<NF; i++) printf $i " "; printf $NF "\n"}'
+            }
+            
+            truncate_string() {
+              local str="$1"
+              local max_length=30
+              if [ $(expr length "$str") -gt $max_length ]; then
+                str=$(expr substr "$str" 1 $max_length)...
+              fi
+              echo "$str"
+            }
+            
+            if playerctl --player=mpv status 2>/dev/null | grep -q Playing; then
+              song_name=$(get_metadata | awk -F ' - ' '{print $2}')
+              if [ -z "$song_name" ]; then
+                song_name=$(get_metadata)
+              fi
+              echo "{\"text\":\"$(truncate_string "  $song_name")\",\"tooltip\":\"$(get_metadata)\"}"
+            elif playerctl --player=mpv status 2>/dev/null | grep -q Paused; then
+              artist_name=$(get_metadata | awk -F ' - ' '{print $1}')
+              if [ -z "$artist_name" ]; then
+                artist_name=$(get_metadata)
+              fi
+              echo "{\"text\":\"$(truncate_string "  $artist_name")\",\"tooltip\":\"$(get_metadata)\",\"class\":\"paused\"}"
+            fi
+          '';
+	  format = "{}";
+	  return-type = "json";
+	  interval = 2;
+	  max-length = 30;
+	  on-click = "playerctl --player=mpv play-pause";
+	  on-click-middle = "pkill -9 mpv";
+	};
+	notificationModule = {
+	  exec = pkgs.writeScript "notificationScript" ''
+            # Run makoctl mode and store the output in a variable
+            mode_output=$(makoctl mode)
+            
+            # Extract the second line after "default"
+            mode_line=$(echo "$mode_output" | sed -n '/default/{n;p}')
+            
+            # Print the notification status with the tooltip
+            if [[ "$mode_line" == "do-not-disturb" ]]; then
+              printf '{"text":"󱆥  Off","class":"disabled","tooltip":"Notifications Disabled."}'
+            else
+              printf '{"text":"  On","tooltip":"Notifications Enabled."}';
+            fi
+	  '';
+	  format = "{}";
+	  return-type = "json";
+	  interval = 2;
+	  on-click = "makotoggle";
+	};
+	weatherModule = {
+	  exec = pkgs.writeScript "weatherScript" ''
+            # Define variables
+            CITY="Maple"
+            API_KEY="18be8db3528f08c33ed9f95698335ea7"
+            
+            # Fetch weather data
+            weather_data=$(curl -s "http://api.openweathermap.org/data/2.5/weather?q=$CITY&appid=$API_KEY")
+            weather_condition=$(echo $weather_data | jq -r '.weather[0].main')
+            
+            # Map weather conditions to emojis
+            case "$weather_condition" in
+              "Clear") emoji="☀️";;
+              "Clouds") emoji="☁️";;
+              "Rain") emoji="🌧️";;
+              "Drizzle") emoji="🌦️";;
+              "Thunderstorm") emoji="⛈️";;
+              "Snow") emoji="❄️";;
+              "Mist"|"Fog"|"Haze") emoji="🌫️";;
+              *) emoji="🌍";; # Default emoji for unknown conditions
+            esac
+            
+            # Extract and format temperature in Celsius
+            temperature_kelvin=$(echo $weather_data | jq -r '.main.temp')
+            temperature_celsius=$(echo "$temperature_kelvin - 273.15" | bc)
+            formatted_temperature=$(printf "%.0f" $temperature_celsius)
+            
+            # Display weather emoji and temperature
+            echo {\"text\":\"$emoji $formatted_temperature°C\",\"tooltip\":\"Weather in Maple: $weather_condition\"}
+	  '';
+	  format = "<span font_size='11pt'>{}</span>";
+	  return-type = "json";
+	  on-click = "librewolf --new-tab https://openweathermap.org/city/6173577";
+	  interval = 150;
+	};
+
+	# Laptop modules
+	backlightModule = {
+	  format = "{icon}  {percent}%";
+	  format-icons = ["" "󰖨"];
+	  tooltip = true;
+	};
+	batteryModule = {
+	  interval = 60;
+	  states = {
+	    warning = 30;
+	    critical = 15;
+	  };
+	  format = "{icon}   {capacity}%";
+	  format-icons = ["" "" "" "" ""];
+	};
+      in {
+        enable = true;
+	settings = {
+	  display1 = {
+	    name = "bar1";
+	    position = "top";
+	    layer = "bottom";
+	    output = [ display1 ];
+	    modules-left = [ "sway/workspaces" "sway/window" ];
+	    modules-right = 
+	      [ "pulseaudio" "cpu" "memory" "custom/vram" "custom/clock-long" "gamemode" "sway/scratchpad" "tray" "network" ];
+	    "sway/workspaces" = swayWorkspacesModule;
+	    "sway/window" = swayWindowsModule;
+	    "pulseaudio" = pulseModule;
+	    "cpu" = cpuModule;
+	    "memory" = ramModule;
+	    "custom/vram" = vramModule;
+	    "custom/clock-long" = longClockModule;
+	    "gamemode" = gamemodeModule;
+	    "sway/scratchpad" = scratchpadModule;
+	    "tray" = trayModule;
+	    "network" = networkModule // { interface = "enp42s0"; };
+	  };
+	  display2 = {
+	    name = "bar2";
+	    position = "top";
+	    layer = "bottom";
+	    output = [ display2 ];
+	    modules-left = [ "sway/workspaces" "sway/window" ];
+	    modules-right =
+	      [ "pulseaudio" "custom/media" "custom/notifs" "cpu" "memory" "custom/vram" "custom/clock-long" ];
+	    "sway/workspaces" = swayWorkspacesModule;
+	    "sway/window" = swayWindowsModule;
+	    "pulseaudio" = pulseModule;
+	    "custom/media" = mediaModule;
+	    "custom/notifs" = notificationModule;
+	    "cpu" = cpuModule;
+	    "memory" = ramModule;
+	    "custom/vram" = vramModule;
+	    "custom/clock-long" = longClockModule;
+	  };
+	  display3 = {
+	    name = "bar3";
+	    position = "top";
+	    layer = "bottom";
+	    output = [ display3 ];
+	    modules-left = [ "sway/workspaces" "sway/window" ];
+	    modules-right =
+	      [ "pulseaudio" "custom/weather" "cpu" "memory" "custom/vram" "custom/clock-short" ];
+	    "sway/workspaces" = swayWorkspacesModule;
+	    "sway/window" = swayWindowsModule;
+	    "pulseaudio" = pulseModule;
+	    "custom/weather" = weatherModule;
+	    "cpu" = cpuModule;
+	    "memory" = ramModule;
+	    "custom/vram" = vramModule;
+	    "custom/clock-short" = shortClockModule;
+	  };
+	  displayLap = {
+	    name = "laptop";
+	    position = "top";
+	    layer = "bottom";
+	    output = [ "eDP-1" "LVDS-1" "DSI-1" ];
+	    modules-left = [ "sway/workspaces" "sway/window" ];
+	    modules-right = [ "pulseaudio" "custom/media" "custom/notifs" "cpu" "memory" "custom/vram" "backlight" "battery" "custom/clock-long" "gamemode" "sway/scratchpad" "tray" "network" ];
+	    "sway/workspaces" = swayWorkspacesModule;
+	    "sway/window" = swayWindowsModule;
+	    "pulseaudio" = pulseModule;
+	    "custom/media" = mediaModule;
+	    "custom/notifs" = notificationModule;
+	    "cpu" = cpuModule;
+	    "memory" = ramModule;
+	    "custom/vram" = vramModule;
+	    "backlight" = backlightModule;
+	    "battery" = batteryModule;
+	    "custom/clock-long" = longClockModule;
+	    "sway/scratchpad" = scratchpadModule;
+	    "tray" = trayModule;
+	    "network" = networkModule // { interface = "wlan0"; };
+	  };
+	};
+	style = ''
+          * {
+            border: 0;
+            border-radius: 0;
+            min-height: 0;
+            font-family: ${mainFont}, ${nerdFont};
+            color: #${textCol};
+          }
+          .bar1,.bar2,.bar3,.laptop {
+            font-size: 15.5px;
+          }
+          #waybar {
+            background: #${darkCol};
+          }
+          #workspaces {
+            padding: 0 6px 0 0;
+          }
+          #tray {
+            padding: 0 4px 0 5px;
+          }
+          #network {
+            padding: 0 10px 0 2.1px;
+          }
+          #network.disconnected {
+            color: #424242;
+          }
+          #workspaces button {
+            padding: 0 3px;
+            color: white;
+            border-bottom: 3px solid transparent;
+            min-width: 20px;
+          }
+          #workspaces button.visible {
+            border-bottom: 3px solid #${primeCol};
+            background: #${midCol};
+          }
+          #workspaces button.urgent {
+            border-bottom: 3px solid #900000;
+          }
+          #workspaces button:hover {
+            box-shadow: none;
+            background: #${lightCol};
+          }
+          #scratchpad {
+            margin-left: 2px;
+          }
+          #cpu {
+            border-bottom: 3px solid #f90000;
+            margin-left: 2px;
+            margin-right: 5px;
+          }
+          #memory {
+            border-bottom: 3px solid #4bffdc;
+            margin-left: 2px;
+            margin-right: 5px;
+          }
+          #custom-vram {
+            border-bottom: 3px solid #33FF00;
+            margin-left: 2px;
+            margin-right: 5px;
+          }
+          #custom-media {
+            border-bottom: 3px solid #ffb066;
+            margin-left: 2px;
+            margin-right: 5px;
+          }
+          #custom-clock-long {
+            border-bottom: 3px solid #0a6cf5;
+            margin-left: 2px;
+            margin-right: 5px;
+          }
+          #custom-clock-short {
+            border-bottom: 3px solid #0a6cf5;
+            margin-left: 2px;
+            margin-right: 3px;
+          }
+          #backlight {
+            border-bottom: 3px solid #5ffca3;
+            margin-left: 2px;
+            margin-right: 5px;
+          }
+          #battery {
+            border-bottom: 3px solid #fcfc16;
+            margin-left: 2px;
+            margin-right: 5px;
+          }
+          #custom-media.paused {
+            color: #888;
+          }
+          #custom-weather {
+            border-bottom: 3px solid #${primeCol};
+            margin-left: 2px;
+            margin-right: 5px;
+          }
+          #custom-notifs {
+            border-bottom: 3px solid #${primeCol};
+            margin-left: 2px;
+            margin-right: 5px;
+          }
+          #custom-notifs.disabled {
+            color: #888;
+          }
+          #pulseaudio {
+            margin-right: 5px;
+          }
+          #pulseaudio.muted {
+            color: #424242;
+          }
+	'';
+      };
+
+      # Define GTK theme settings
       gtk = {
         enable = true;
 	font = {
-          name = "Ubuntu";
+          name = "${mainFont}";
           size = 11;
 	};
-        theme = {
-	  package = pkgs.colloid-gtk-theme.override {
-	    themeVariants = [ "purple" ];
-	    colorVariants = [ "dark" ];
-	    sizeVariants = [ "standard" ];
-	    tweaks = [ "${themetweak}" "rimless" "normal" ];
-	  };
-	  name = "${theme}";
-        };
+        theme = themeSettings;
         iconTheme = {
-	  package = pkgs.papirus-icon-theme.override {
-	    color = "${foldercol}";
-          };
+	  package = pkgs.papirus-icon-theme.override { color = "${folderCol}"; };
 	  name = "Papirus-Dark";
 	};
         cursorTheme = {
@@ -3628,19 +2808,27 @@ in
 
 	# GTK app bookmarks
 	gtk3.bookmarks = [
-	  "file:///home/jimbo/JimboSMB/JimboOS"
+	  # Local
 	  "file:///home/jimbo/Downloads"
-          "file:///home/jimbo/JimboSMB/Downloads"
-          "file:///home/jimbo/JimboSMB/Documents"
-          "file:///home/jimbo/JimboSMB/Music"
-          "file:///home/jimbo/JimboSMB/Photos"
-          "file:///home/jimbo/JimboSMB/Videos"
-          "file:///home/jimbo/JimboSMB/Minecraft%20Servers"
+	  "file:///home/jimbo/Documents"
+	  "file:///home/jimbo/Pictures/Screenshots"
+
+	  # Remote
+          "file:///home/jimbo/JimboNFS/Downloads"
+          "file:///home/jimbo/JimboNFS/Documents"
+          "file:///home/jimbo/JimboNFS/Music"
+          "file:///home/jimbo/JimboNFS/Photos"
+          "file:///home/jimbo/JimboNFS/Videos"
+          "file:///home/jimbo/JimboNFS/MineServers"
+
+	  # Links and mounts
           "file:///home/jimbo/VMs"
           "file:///home/jimbo/Mounts"
           "file:///home/jimbo/Games"
-          "file:///home/jimbo/JimboSMB/School"
-          "file:///home/jimbo/JimboSMB/JimboOS/RootBase"
+
+	  # More important stuff
+	  "file:///home/jimbo/JimboNFS/JimboOS"
+          "file:///home/jimbo/JimboNFS/School"
 	];
 
 	# Stop gtk4 from being rounded
@@ -3654,9 +2842,29 @@ in
         '';
       };
 
+      # Select default apps
+      xdg.mimeApps.defaultApplications = {
+        "inode/directory" = "pcmanfm-qt.desktop";
+        "text/plain" = "nvim.desktop";
+        "image/png" = "imv.desktop";
+        "image/jpeg" = "imv.desktop";
+      };
+
+      # Set dconf settings
+      dconf.settings = {
+	"org/gnome/desktop/interface/color-scheme" = {
+	  color-scheme = "prefer-dark";
+	};
+       "org/virt-manager/virt-manager/connections" = {
+          autoconnect = ["qemu:///system"];
+          uris = ["qemu:///system"];
+        };
+      };
+
       # Install LibreWolf with settings
       programs.librewolf = {
         enable = true;
+	package = pkgs.unstable.librewolf;
 	settings = {
           "privacy.clearOnShutdown.history" = false;
           "privacy.clearOnShutdown.cookies" = false;
@@ -3666,6 +2874,9 @@ in
 	  "browser.toolbars.bookmarks.visibility" = "newtab";
 	  "gnomeTheme.hideSingleTab" = true;
 	  "svg.context-properties.content.enabled" = true;
+	  "media.hardware-video-decoding.force-enabled" = true;
+	  "toolkit.tabbox.switchByScrolling" = true;
+	  "device.sensors.motion.enabled" = false;
         };
       };
 
@@ -3675,20 +2886,23 @@ in
         defaultEditor = true;
         vimAlias = true;
         plugins = with pkgs.vimPlugins; [
-          vim-airline
-          vim-airline-themes
-          vim-vsnip
-          cmp-vsnip
-          nvim-lspconfig
-          cmp-nvim-lsp
-          cmp-buffer
-          cmp-path
-          cmp-cmdline
-          nvim-cmp
-          nerdtree
+	  # Vim theme
+          vim-airline vim-airline-themes
+
+	  # Internal clipboard
+          vim-vsnip cmp-vsnip
+
+	  # Autocomplete manager
           lspkind-nvim
-          nvim-colorizer-lua
-	  vim-monokai-pro
+
+	  # Autocomplete plugins
+          cmp-nvim-lsp cmp-buffer cmp-path cmp-cmdline nvim-cmp
+
+	  # Directory tree viewer
+          nerdtree
+
+	  # Hex color visualizer and color theme
+          nvim-colorizer-lua vim-monokai-pro
         ];
         extraConfig = ''
           lua <<EOF
@@ -3717,15 +2931,6 @@ in
             })
           })
           
-          -- Set configuration for specific filetype.
-          cmp.setup.filetype('gitcommit', {
-            sources = cmp.config.sources({
-              { name = 'git' }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
-            }, {
-              { name = 'buffer' },
-            })
-          })
-          
           -- Use buffer source for `/` and `?`.
           cmp.setup.cmdline({ '/', '?' }, {
             mapping = cmp.mapping.preset.cmdline(),
@@ -3745,15 +2950,13 @@ in
           })
           EOF
           
-          nmap <C-a> :NERDTreeToggle<CR>
-          
           colorscheme monokai_pro
           let g:airline_theme='onedark'
           let g:airline#extensions#tabline#enabled = 1
-          highlight Normal guibg=#${darkcol} ctermbg=235
+          highlight Normal guibg=#${darkCol} ctermbg=235
           highlight Visual guibg=#151515 ctermbg=238
           highlight Pmenu guibg=#151515 ctermbg=238
-          highlight EndOfBuffer guibg=#${darkcol} ctermbg=235
+          highlight EndOfBuffer guibg=#${darkCol} ctermbg=235
           highlight LineNr guibg=NONE ctermbg=NONE
           lua require'colorizer'.setup()
           
@@ -3761,165 +2964,129 @@ in
           set termguicolors
           set runtimepath+=/usr/share/vim/vimfiles
           set mouse=a
+
+          nmap <C-a> :NERDTreeToggle<CR>
+          nmap <C-x> :bnext<CR>
+          nmap <C-z> :bprev<CR>
         '';
       };
 
-      # MPV and plugins
+      # MPV settings
       programs.mpv = {
         enable = true;
-	scripts = [ pkgs.mpvScripts.mpris ];
 	config = {
 	  volume = 70;
 	  loop-playlist = "inf";
-	  ytdl-format = "bestvideo+bestaudio";
+	  osc = "no";
 	};
       };
 
-      # Install OBS with plugins
+      # OBS with plugins
       programs.obs-studio = {
         enable = true;
         plugins = with pkgs.obs-studio-plugins; [
-          wlrobs
+	  obs-vkcapture
+	  obs-pipewire-audio-capture
 	  looking-glass-obs
         ];
       };
 
-      # Mako as a service
+      # Notification daemon
       services.mako = {
         enable = true;
-	borderColor = "#${accentcol}";
-	backgroundColor = "#${darkcol}CC";
-	output = "${monitor1}";
+	borderColor = "#${accentCol}";
+	backgroundColor = "#${darkCol}CC";
+	output = "${display1}";
 	sort = "+time";
 	layer = "overlay";
 	padding = "8";
 	margin = "0";
-	height = 110;
-	borderSize = 3;
+	borderSize = borderWeightInt;
 	maxIconSize = 40;
 	defaultTimeout = 6000;
-	font = "Ubuntu 12";
+	font = "${mainFont} 12";
 	anchor = "bottom-right";
-	extraConfig = "on-button-right=dismiss-all\nouter-margin=10\n[mode=do-not-disturb]\ninvisible=1";
+        extraConfig = "on-button-right=dismiss-all\nouter-margin=10\n[mode=do-not-disturb]\ninvisible=1";
       };
 
       # Start defining arbitrary files
       home.file = {
-        # Base home directory
-        ".icons/default".source = "${pkgs.simp1e-cursors}/share/icons/Simp1e-Dark";
-
-	# Sway config folder
-	".config/sway/config".text = swayconfig;
-	".config/sway/programs" = { text = swayprograms; executable = true; };
-	".config/sway/hardware".text = swayhardware;
-	".config/sway/workspaces".text = swayworkspaces;
-	".config/sway/theme".text = swaytheme;
-	".config/sway/hotkeys".text = swayhotkeys;
-	".config/sway/rules".text = swayrules;
-	".config/sway/start.sh" = { text = swaystart; executable = true; };
-
 	# Sway scripts
-	".config/sway/scripts/bescripts.sh" = { text = bescripts; executable = true; };
-	".config/sway/scripts/lock.sh" = { text = lockscript; executable = true; };
-	".config/sway/scripts/notif-toggle.sh" = { text = notif-toggle; executable = true; };
-	".config/sway/scripts/pin-window.sh" = { text = pin-window; executable = true; };
-	".config/sway/scripts/screenshots.sh" = { text = screenshots; executable = true; };
-	".config/sway/scripts/wtools.sh" = { text = wtools; executable = true; };
-	".config/sway/scripts/tools/disk-cleanup.sh" = { text = disk-cleanup; executable = true; };
-	".config/sway/scripts/tools/kill-proton.sh" = { text = kill-proton; executable = true; };
-	".config/sway/scripts/tools/ytopus.sh" = { text = ytopus; executable = true; };
-	".config/sway/scripts/alarms.sh" = { text = alarms; executable = true; };
+	".config/sway/start.sh" = { text = swayStart; executable = true; };
 
-	# Desktop wallpaper, split in 3 for 3 monitors
-	"wallpaper1" = {
-	  target = "Pictures/Wallpapers/Split/Downloaded/1.png";
-	  source = (builtins.fetchurl {
-	    url = "${colorVals.wallpaper1}";
-	  });
-	};
-	"wallpaper2" = {
-	  target = "Pictures/Wallpapers/Split/Downloaded/2.png";
-	  source = (builtins.fetchurl {
-	    url = "${colorVals.wallpaper2}";
-	  });
-	};
-	"wallpaper3" = {
-	  target = "Pictures/Wallpapers/Split/Downloaded/3.png";
-	  source = (builtins.fetchurl {
-	    url = "${colorVals.wallpaper3}";
-	  });
-	};
+        # Cursor icon theme
+        ".icons/default".source = "${pkgs.simp1e-cursors}/share/icons/Simp1e-Dark";
 	
 	# Swappy's config
-	".config/swappy/config".text = swappyconfig;
-	
-	# Waybar config
-	".config/sway/waybar/config".text = waybarconfig;
-	".config/sway/waybar/style.css".text = waybarstyle;
-	".config/sway/waybar/start.sh" = { text = waybarstart; executable = true; };
-
-	# Waybar scripts
-	".config/sway/waybar/scripts/clock-long.sh" = { text = clocklong; executable = true; };
-	".config/sway/waybar/scripts/mpv-metadata.sh" = { text = mpvmeta; executable = true; };
-	".config/sway/waybar/scripts/notif-status.sh" = { text = notifstatus; executable = true; };
-	".config/sway/waybar/scripts/vram.sh" = { text = vram; executable = true; };
-	".config/sway/waybar/scripts/weather.sh" = { text = weather; executable = true;	};
+	".config/swappy/config".text = swappyConfig;
 
 	# Kitty config files
-	".config/kitty/kitty.conf".text = kittyconfig;
-	".config/kitty/search.py".text = kittysearch;
-	".config/kitty/scroll_mark.py".text = kittysearchkeys;
-
-	# Additional imv mode for screenshots
-	".config/imv/screenshot.ini".text = imvshot;
+	".config/kitty/kitty.conf".text = kittyConfig;
+	".config/kitty/search.py".source = "${pkgs.fetchurl {
+	  url = "https://raw.githubusercontent.com/trygveaa/kitty-kitten-search/0760138fad617c5e4159403cbfce8421ccdfe571/search.py";
+	  sha256 = "1w50fimqsbmqk9zhdmq8k2v1b36iwsglpbqaavpglw0acam3xid7";
+	}}";
+	".config/kitty/scroll_mark.py".source = "${pkgs.fetchurl {
+	  url = "https://raw.githubusercontent.com/trygveaa/kitty-kitten-search/9fbfc578bc27475003cdf3de1b3d1f8ef8b66658/scroll_mark.py";
+	  sha256 = "1a1l7sp2x247da8fr54wwq7ffm987wjal9nw2f38q956v3cfknzi";
+	}}";
 
 	# Easyeffects profile
-	".config/easyeffects/output/JimProfile.json".text = easyprofile;
+	".config/easyeffects/output/JimProfile.json".text = easyEffectsProfile;
 
 	# Mangohud config
-	".config/MangoHud/MangoHud.conf".text = mangoconfig;
+	".config/MangoHud/MangoHud.conf".text = mangoConf;
 
 	# Neofetch config
-	".config/neofetch/config.conf".text = neoconfig;
-	".config/neofetch/small.conf".text = smallconfig;
+	".config/neofetch/config.conf".text = neoConf;
+	".config/neofetch/small.conf".text = smallConf;
 
 	# PCManFM config
-	".config/pcmanfm-qt/default/settings.conf".text = pcmanconf;
+	".config/pcmanfm-qt/default/settings.conf".text = pcmanConf;
 
 	# Ranger config
-	".config/ranger/rc.conf".text = rangerconf;
-	".config/ranger/rifle.conf".text = rifleconf;
-	".config/ranger/scope.sh" = { text = scopesh; executable = true; };
-	".config/ranger/plugins/devicons/__init__.py".text = iconinit;
-	".config/ranger/plugins/devicons/devicons.py".text = rangericons;
+	".config/ranger/rc.conf".text = rangerConf;
+	".config/ranger/rifle.conf".text = rifleConf;
+	".config/ranger/scope.sh" = { text = rangerScope; executable = true; };
+	".config/ranger/plugins/devicons/devicons.py".source = "${pkgs.fetchurl {
+	  url = "https://raw.githubusercontent.com/alexanderjeurissen/ranger_devicons/main/devicons.py";
+	  sha256 = "16xg5wrbck4fvp3pjmwspzb1n5yd4giv1gajpb0v9xnmpyifb715";
+	}}";
+	".config/ranger/plugins/devicons/__init__.py".source = "${pkgs.fetchurl {
+	  url = "https://raw.githubusercontent.com/alexanderjeurissen/ranger_devicons/main/__init__.py";
+	  sha256 = "1r086apw20ryxylqgnbynx7mzz779v1w0m40wghmmhlzw4x15fmr";
+	}}";
 
 	# Rofi config
-	".config/rofi/config.rasi".text = roficonf;
-	".config/rofi/purple.rasi".text = rofitheme;
+	".config/rofi/config.rasi".text = rofiConf;
 
 	# Sunshine config
-	".config/sunshine/apps.json".text = sunshineapps;
+	".config/sunshine/apps.json".text = sunshineApps;
 
 	# YTFZF config
-	".config/ytfzf/conf.sh".text = ytfzfconf;
+	".config/ytfzf/conf.sh".text = ytfzfConf;
 
 	# Alsoft config
-	".alsoftrc".text = alsoftrc;
+	".alsoftrc".text = alsoftConf;
 
-	# LibreWolf theming
-	".librewolf/installs.ini".text = foxinstalls;
-	".librewolf/profiles.ini".text = foxprofiles;
-	".librewolf/Jimbo/chrome/userChrome.css".text = "${personalcolors}\n${simplefox}";
-	".librewolf/Jimbo/chrome/userContent.css".text = simplefoxcontent;
-	".librewolf/Jimbo/user.js".text = foxuserjs;
-	".librewolf/School/chrome/userChrome.css".text = "${workcolors}\n${simplefox}";
-	".librewolf/School/chrome/userContent.css".text = simplefoxcontent;
-	".librewolf/School/user.js".text = foxuserjs;
-	"firefox-gnome-theme" = {
-	  target = ".librewolf/Variety/chrome";
-	  source = (fetchTarball "https://github.com/rafaelmardojai/firefox-gnome-theme/archive/master.tar.gz");
-	};
-	".librewolf/Variety/user.js".text = foxuserjs;
+	# LibreWolf profiles and theming
+	".librewolf/installs.ini".text = foxInstalls;
+	".librewolf/profiles.ini".text = foxProfiles;
+	".librewolf/Jimbo/chrome/userChrome.css".text = "${foxJimCol}\n${quteFoxCSS}";
+	".librewolf/Jimbo/user.js".text = foxUserJS;
+	".librewolf/School/chrome/userChrome.css".text = "${foxWorkCol}\n${quteFoxCSS}";
+	".librewolf/School/user.js".text = foxUserJS;
+	".librewolf/Variety/chrome".source = "${fetchTarball {
+	  url = "https://codeload.github.com/rafaelmardojai/firefox-gnome-theme/tar.gz/ec9421f82d922b7293ffd45a47f7abdee80038c6";
+	  sha256 = "130xnb04a0ikrq414kn1yg1jwk9vjfd8fk89q17c4c37qhhlyax4";
+	}}";
+	".librewolf/Variety/user.js".text = foxUserJS;
+
+	# Qbittorrent
+	".config/qBittorrent/qbitMatterialUI".source = "${fetchTarball {
+	  url = "https://github.com/bill-ahmed/qbit-matUI/releases/download/v1.16.4/qbit-matUI_Unix_1.16.4.zip";
+	  sha256 = "1calmngqgzfska3qh082ini8z71c2pdnvkq763iz1k5wmfh5sa8v";
+	}}";
 
 	# Symlinks
 	"VMs".source = config.lib.file.mkOutOfStoreSymlink "/etc/libvirt/VMs";
@@ -3928,45 +3095,59 @@ in
 
       # Define session variables
       home.sessionVariables = {
-	DISTRO = "nixos";
-	SMB = "~/JimboSMB";
+	EDITOR = "nvim";
 	LIBVIRT_DEFAULT_URI = "qemu:///system";
+	HISTCONTROL = "ignoreboth";
       };
 
       # Shell aliases
       programs.zsh = {
         enable = true;
-	initExtra = "neofetch --config $(readlink -f ~/.config/neofetch/small.conf) --ascii_distro nixos_small";
+        enableAutosuggestions = true;
+        syntaxHighlighting.enable = true;
+	initExtra = "${pFetch}";
+        oh-my-zsh = {
+          enable = true;
+	  plugins = [ "git" ];
+          theme = "agnoster"; # Main PC
+          #theme = "risto"; # Secondary/VM
+          #theme = "half-life"; # Server
+        };
         shellAliases = {
+	  # NixOS aliases
+	  nixcfg = "nvim /etc/nixos/{configuration.nix,jimbo.nix}";
+          nixswitch = "${auth} nixos-rebuild switch";
+          nixdate = "${auth} nix-channel --update; ${auth} nixos-rebuild switch --upgrade";
+          nixclean = "${auth} nix-store --gc; nix-collect-garbage -d";
+
           # Shortcut aliases
-          neo = "clear && neofetch";
+          #neo = "clear && neofetch";
+	  neo = "clear && neofetch --ascii ~/.config/neofetch/xenia.ascii --ascii_colors 1 7 3 --colors 0 0 0 1 3 7";
+	  pfetch = "${pFetch}";
           ip = "ip -c";
           ls = "${pkgs.eza}/bin/eza -a --color=always --group-directories-first";
-          iommu = "${swayscripts}/tools/iommu-groups.sh";
-          killproton = "${swayscripts}/tools/kill-proton.sh";
-          sunshinehost = "WAYLAND_DISPLAY=wayland-1 DISPLAY=:1 sunshine";
-          controlserver = "ssh server -t 'tmux attach -t control'";
+	  cat = "${pkgs.bat}/bin/bat --paging never";
+	  lcat = "${pkgs.bat}/bin/bat";
+	  copycat = "wl-copy <";
+          sunshinehost = "WAYLAND_DISPLAY=wayland-1 DISPLAY=:1 sunshine -0";
           birth = "date -d @$(stat -c %W /) '+%a %b %d %r %Z %Y'";
-	  nixcfg = "nvim /etc/nixos/{configuration.nix,jimbo.nix,hardware-configuration.nix}";
-	  alarms = "cat ${swayscripts}/alarms.sh";
+	  alarmlist = "cat ${alarmScript}/bin/alarms";
+	  remind = "notify-send 'Terminal command finished.'";
 
           # SSH Commands
-          kssh="kitten ssh";
-          pc="kssh 192.168.1.18";
-          server="kssh 192.168.1.17";
-          virtual="kssh 192.168.2.2";
-          senecassh="kssh jhampton1@matrix.senecacollege.ca";
-          dataws="kssh -i ~/.ssh/dat330-first.pem";
-          opsrouter="kssh 44.216.132.129";
+          ssh="${ssh}";
+          senecassh="ssh jhampton1@matrix.senecacollege.ca";
+          dataws="ssh -i ~/.ssh/dat330-first.pem";
+          opsrouter="ssh 44.216.132.129";
           opswww="opsrouter -p 2211";
           opsslave1="opsrouter -p 2221";
           opsslave2="opsrouter -p 2222";
           opsslave3="opsrouter -p 2223";
 
           # Session commands
-          swaystart = "sudo systemctl start greetd";
-          swayrestart = "sudo systemctl restart greetd";
-          swaystop = "sudo systemctl stop greetd";
+          swaystart = "${auth} systemctl start greetd";
+          swayrestart = "${auth} systemctl restart greetd";
+          swaystop = "${auth} systemctl stop greetd";
 
           # Curl tools
           myip = "curl ifconfig.co";
@@ -3974,13 +3155,13 @@ in
 
           # Download from YouTube
           ytmp4 = "yt-dlp --recode-video mp4";
-          ytopus="${swayscripts}/tools/ytopus.sh";
 
           # Personal fixes
-          cleanup = "${swayscripts}/tools/cleanup.sh";
-          umountsmb = "sudo umount -Rl $SMB";
-          namedisk = "sudo e2label";
-          fixdisks = "${swayscripts}/tools/disk-cleanup.sh";
+          namedisk = "${auth} e2label";
+
+	  # Flakes
+	  buildiso = 
+	    "nix run github:nix-community/nixos-generators -- -f install-iso -c /etc/nixos/configuration.nix";
         };
       };
 
