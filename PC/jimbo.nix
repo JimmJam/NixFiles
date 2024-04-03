@@ -1,48 +1,5 @@
 { config, pkgs, options, ... }:
 let
-  ## Global color palette
-  #primeCol = ''8800FF''; #8800FF
-  #accentCol = ''3b2460''; #3b2460
-  #splitCol = ''69507f''; #69507f
-  #actSplitCol = ''cd97fc''; #CD97FC
-  #darkCol = ''202020''; #202020
-  #midCol = ''282828''; #282828
-  #lightCol = ''3F3F3F''; #3F3F3F
-  #urgentCol = ''9E3C3C''; #9E3C3C
-  #textCol = ''C7D3E3''; #C7D3E3
-
-  ## Papirus icon theme color
-  #folderCol = ''violet'';
-
-  ## Gtk theme
-  #themeSettings = {
-  #  name = "Colloid-Purple-Dark-Dracula";
-  #  package = pkgs.colloid-gtk-theme.override {
-  #    themeVariants = [ "purple" ];
-  #    colorVariants = [ "dark" ];
-  #    sizeVariants = [ "standard" ];
-  #    tweaks = [ "dracula" "rimless" "normal" ];
-  #  };
-  #};
-
-  ## Wallpapers
-  #wallpaper1 = builtins.fetchurl { 
-  #  url = "https://i.imgur.com/xu3a237.png";
-  #  sha256 = "1dkadvzrqbzgcwjbiflww1zwf0v6gwfb9x71ldv7g75z9nhlng7f";
-  #};
-  #wallpaper2 = builtins.fetchurl { 
-  #  url = "https://i.imgur.com/coAKg4r.png";
-  #  sha256 = "08n9kfwwg89mbhhhizk6nqm40wn4djyyfzjmalmyayyip293y02x";
-  #};
-  #wallpaper3 = builtins.fetchurl { 
-  #  url = "https://i.imgur.com/xu3a237.png";
-  #  sha256 = "1dkadvzrqbzgcwjbiflww1zwf0v6gwfb9x71ldv7g75z9nhlng7f";
-  #};
-  #lockpaper = builtins.fetchurl { 
-  #  url = "https://i.imgur.com/6Js6nNA.png";
-  #  sha256 = "1mqvp4bic46gc994fawkraqj76hxd11wdd43qakligchzd20xjd5";
-  #};
-
   # Global color palette
   primeCol = ''3823C4''; #3823C4
   accentCol = ''1B1F59''; #1B1F59
@@ -70,24 +27,21 @@ let
 
   # Wallpapers
   wallpaper1 = pkgs.fetchurl { 
-    url = "https://i.imgur.com/Wy3eIjS.png";
+    url = "https://git.JimbosFiles.duckdns.org/Jimbo/NixOS-Files/raw/branch/main/Extras/Wallpapers/wallpaper1.png";
     sha256 = "1zxb0p0fjsmccy4xv8yk3c4kc313k3lc3xhqmiv452f7sjqqbp25";
   };
   wallpaper2 = pkgs.fetchurl { 
-    url = "https://i.imgur.com/6MdUKCW.png";
+    url = "https://git.JimbosFiles.duckdns.org/Jimbo/NixOS-Files/raw/branch/main/Extras/Wallpapers/wallpaper2.png";
     sha256 = "13jcllrs05d26iz2isvh1f8fqf20m23sps32kw7qz5iav8nhvsx7";
   };
   wallpaper3 = pkgs.fetchurl { 
-    url = "https://i.imgur.com/6dCHfXP.png";
+    url = "https://git.JimbosFiles.duckdns.org/Jimbo/NixOS-Files/raw/branch/main/Extras/Wallpapers/wallpaper3.png";
     sha256 = "16r65qnr7f0md4bbjnzq6av4dgmqr3avkilw72qdmyrmh3xj03yw";
   };
   lockpaper = pkgs.fetchurl { 
-    url = "https://i.imgur.com/6Js6nNA.png";
+    url = "https://git.JimbosFiles.duckdns.org/Jimbo/NixOS-Files/raw/branch/main/Extras/Wallpapers/lockpaper.png";
     sha256 = "1mqvp4bic46gc994fawkraqj76hxd11wdd43qakligchzd20xjd5";
   };
-
-  # Define paths used by different programs
-  swayScripts = ''~/.config/sway/scripts'';
 
   # Define the workspace names
   w0 = ''0:0''; w1 = ''1:1''; w2 = ''2:2''; w3 = ''3:3''; w4 = ''4:4''; 
@@ -96,9 +50,9 @@ let
   w5a = ''55:V''; w6a = ''66:VI''; w7a = ''77:VII''; w8a = ''88:VIII''; w9a = ''99:IX'';
 
   # Define the primary monitor
-  display1 = ''DP-2'';
-  display2 = ''HDMI-A-1'';
-  display3 = ''DP-1'';
+  display1 = ''DP-3'';
+  display2 = ''DP-1'';
+  display3 = ''DP-2'';
   displayTouch = ''eDP-1'';
 
   # Define miscellaneous window manager properties
@@ -109,18 +63,13 @@ let
   mainFont = ''Ubuntu'';
   nerdFont = ''UbuntuMono Nerd Font'';
 
-  # Set the default terminal emulator
-  terminal = ''${pkgs.kitty}/bin/kitty'';
-  terminalClass = ''${terminal} --class'';
-  ssh = ''kitten ssh'';
-  termPreviewMethod = ''kitty'';
-  #terminal = ''${pkgs.foot}/bin/foot'';
-  #terminalClass = ''${terminal} -a'';
-  #ssh = ''ssh'';
-  #termPreviewMethod = ''sixel'';
-
-  # Terminal authenticator (just in case I want sudo again)
+  # Terminal authentication
   auth = ''doas'';
+
+  # Set the default terminal emulator
+  terminal = ''${pkgs.foot}/bin/foot'';
+  terminalClass = ''${terminal} -a'';
+  termPreviewMethod = ''sixel'';
 
   # Bemenu color options
   bemenuOpts = ''
@@ -170,10 +119,10 @@ let
     handle_scratchpads() {
       SCRATCHPADS=$(echo -e "Gotop\nMusic\nPavuControl\nEasyEffects" | bemenu ${bemenuOpts} -p "Scratchpads")
       case $SCRATCHPADS in
-        Gotop) ${terminalClass}=gotop gotop ;;
-        Music) ${terminalClass}=music ranger ;;
-        PavuControl) pavucontrol ;;
-        EasyEffects) easyeffects ;;
+        Gotop) ${terminalClass} gotop -T Gotop gotop;;
+        Music) ${terminalClass} music -T Music ranger;;
+        PavuControl) pavucontrol;;
+        EasyEffects) easyeffects;;
       esac
     }
     
@@ -181,11 +130,11 @@ let
     handle_power() {
       POWER=$(echo -e "Shutdown\nReboot\nSleep\nLock\nKill" | bemenu ${bemenuOpts} -p "Power")
       case $POWER in
-        Shutdown) poweroff ;;
-        Reboot) reboot ;;
-        Sleep) swaylock --sleep & ;;
-        Lock) swaylock & ;;
-        Kill) pkill -9 sway ;;
+        Shutdown) poweroff;;
+        Reboot) reboot;;
+        Sleep) swaylock --sleep &;;
+        Lock) swaylock &;;
+        Kill) pkill -9 sway;;
       esac
     }
     
@@ -193,10 +142,10 @@ let
     handle_media() {
       RET=$(echo -e "YouTube\nMusic\nHistory\nAnime" | bemenu ${bemenuOpts} -p "Media")
       case $RET in
-        YouTube) ytfzf -D ;;
-        Music) ytfzf -D -m ;;
-        History) ytfzf -D -H ;;
-        Anime) ${terminal} ani-cli -q 720 ;;
+        YouTube) ytfzf -D;;
+        Music) ytfzf -D -m;;
+        History) ytfzf -D -H;;
+        Anime) ${terminal} ani-cli -q 720;;
       esac
     }
     
@@ -209,11 +158,11 @@ let
 	  output ${display1} enable pos 1680 0 mode 1680x1050@59.954Hz
           output ${display2} enable pos 0 0 mode 1680x1050@59.954Hz
           output ${display3} enable pos 3360 0 transform 0
-	" ;;
+	";;
         GPU2) swaymsg "
 	  output ${display2} enable pos 1680 0 mode 1920x1080@60Hz
           output ${display3} enable pos 0 0 transform 0
-	" ;;
+	";;
       esac
     }
     
@@ -439,6 +388,7 @@ let
     echo "Disks cleaned."
   '';
 
+  # Create a Linux drive to install NixOS to
   makeLinuxDrive = pkgs.writeScriptBin "makelinuxdrive" ''
     # List available drives and their sizesusing lsblk
     lsblk -dno NAME,SIZE | awk '{print $1 " (" $2 ")"}'
@@ -452,10 +402,10 @@ let
       # Format the entire disk as GPT
       ${auth} parted /dev/$drive_name mklabel gpt
     
-      # Write a 1GB FAT32 boot, 4GB swap, and ext4 root partition for the rest of the drive
+      # Write a 1GB FAT32 boot, 4GB swap, and bcachefs root partition for the rest of the drive
       ${auth} parted -a optimal /dev/$drive_name mkpart primary fat32 1MiB 1GiB
       ${auth} parted -a optimal /dev/$drive_name mkpart primary linux-swap 1GiB 5GiB
-      ${auth} parted -a optimal /dev/$drive_name mkpart primary ext4 5GiB 100%
+      ${auth} parted -a optimal /dev/$drive_name mkpart primary 5GiB 100%
     
       # Get a partition name variable to work with not sata drives
       part_name=$(ls -l /dev/$(echo $drive_name)* | awk '{print $10}' | tail -1 | sed 's|/dev/||' | rev | cut -c 2- | rev)
@@ -463,7 +413,7 @@ let
       # Format the new partitions
       ${auth} mkfs.fat -F 32 /dev/$(echo $part_name)1
       ${auth} mkswap /dev/$(echo $part_name)2
-      ${auth} mkfs.ext4 /dev/$(echo $part_name)3
+      ${auth} mkfs.bcachefs /dev/$(echo $part_name)3
     
       # Mount the filesystem
       ${auth} mkdir -p /mnt/Mounted
@@ -479,52 +429,16 @@ let
     fi
   '';
 
-  # Download YouTube videos in Opus format (rather than mp3)
-  ytOpus = pkgs.writeScriptBin "ytopus" ''
-    # Check if an argument (URL) was provided
-    if [ $# -eq 0 ]; then
-      echo "No URL provided. Please provide a URL as an argument."
-      exit 1
-    fi
-    
-    # Use yt-dlp to download the URL
-    yt-dlp "$1" --recode-video webm
-    
-    # Take the downloaded video as a variable
-    video=$(ls --color=never *.webm)
-    
-    # Rewrite the name
-    name=$(echo "$video" | awk -F ' \\[.*\\]\\.' '{print $1"."$2}' | sed 's/\.webm$/.opus/')
-    
-    # Re-encode as opus and make sure it reflects the current date
-    ffmpeg -i "$video" -c:a libopus "$name"
-    touch "$name"
-    
-    # Remove the .webm
-    rm "$video"
-  '';
-
-  # Download YouTube videos in Opus format
-  discordWayland = pkgs.writeScriptBin "discord" ''
-    ${pkgs.vesktop}/bin/vencorddesktop --enable-features=UseOzonePlatform --ozone-platform=wayland
-  '';
-
-  # Download YouTube videos in Opus format
-  mpvCamera = pkgs.writeScriptBin "mpvcamera" ''
-    mpv --vf=hflip /dev/video0
-  '';
-
   # Handle all my alarms
   alarmScript = let
     alarmSound = pkgs.fetchurl {
-      name = "alarmSound.mp3";
       url = "https://archive.org/download/espionage_202105/Espionage.mp3";
       sha256 = "xWzbF73+VMCKWvwbN4r7Z+Rc2QuYxg01yipnaRRMq3g=";
     };
   in pkgs.writeScriptBin "alarms" ''
     # The alarm script itself
     alarm() {
-      mpv --volume=40 --force-media-title="Alarm.mp3" ${alarmSound} &
+      mpv --volume=40 --force-media-title="Alarm" ${alarmSound} &
       swaynag \
         --message "$name" \
         --button "Stop Alarm" alarms \
@@ -548,14 +462,14 @@ let
         
         # Monday alarms
         if [ "$current_day" == "Monday" ]; then
-          if [ "$current_time" == "06:15AM" ]; then
+          if [ "$current_time" == "6:15AM" ]; then
             name="OPS 445 Physical"; alarm
           fi
         fi
         
         # Tuesday alarms
         if [ "$current_day" == "Tuesday" ]; then
-          if [ "$current_time" == "06:15AM" ]; then
+          if [ "$current_time" == "6:15AM" ]; then
             name="SEC 320 Physical"; alarm
           fi
         fi
@@ -567,10 +481,10 @@ let
         
         # Thursday alarms
         if [ "$current_day" == "Thursday" ]; then
-          if [ "$current_time" == "09:30AM" ]; then
+          if [ "$current_time" == "9:30AM" ]; then
             name="SEC 320 Physical"; alarm
           fi
-          if [ "$current_time" == "02:25PM" ]; then
+          if [ "$current_time" == "2:25PM" ]; then
             name="CSN205 Online"; alarm
           fi
           if [ "$current_time" == "05:10PM" ]; then
@@ -583,7 +497,7 @@ let
           if [ "$current_time" == "12:35PM" ]; then
             name="MST 300 Online"; alarm
           fi
-          if [ "$current_time" == "05:10PM" ]; then
+          if [ "$current_time" == "5:10PM" ]; then
             name="DAT 330 Online"; alarm
           fi
         fi
@@ -595,7 +509,7 @@ let
     
     # Handle the killing of the alarm
     kill_alarm() {
-      pkill -f 'mpv.*alarm'
+      pkill -f 'mpv.*${alarmSound}'
       pkill swaynag
     }
     
@@ -605,6 +519,18 @@ let
     else
       kill_alarm
     fi
+  '';
+
+  # Check IOMMU Groups
+  iommuCheck = pkgs.writeScriptBin "lsiommu" ''
+    #!/usr/bin/env bash
+    shopt -s nullglob
+    for g in $(find /sys/kernel/iommu_groups/* -maxdepth 0 -type d | sort -V); do
+      echo "IOMMU Group ''${g##*/}:"
+      for d in $g/devices/*; do
+        echo -e "\t$(lspci -nns ''${d##*/})"
+      done;
+    done;
   '';
 
   # File manager config
@@ -661,80 +587,6 @@ let
     TabPaths=@Invalid()
   '';
 
-  # Kitty config
-  kittyConf = ''
-    # Scrolling
-    scrollback_lines 50000
-    
-    # Font
-    font_family ${nerdFont}
-    bold_font ${nerdFont}
-    italic_font ${nerdFont}
-    bold_italic_font ${nerdFont}
-    font_size 14.5
-    
-    # Colors
-    background #${darkCol}
-    foreground #F9F9F9
-    
-    color0   #3f3f3f
-    color1   #cc0000
-    color2   #4e9a06
-    color3   #c4a000
-    color4   #94bff3
-    color5   #85678f
-    color6   #06989a
-    color7   #dcdccc
-    
-    color8   #545454
-    color9   #fc5454
-    color10  #8ae234
-    color11  #fce94f
-    color12  #94bff3
-    color13  #b294bb
-    color14  #93e0e3
-    color15  #ffffff
-    
-    # Window opacity
-    background_opacity 0.71
-    
-    # Cursor
-    cursor_shape beam
-    
-    # No confirm close
-    confirm_os_window_close 0
-    
-    # Clear all default shortcuts
-    clear_all_shortcuts yes
-    clear_all_mouse_actions yes
-    
-    # Rebind copy-paste, text selection
-    map ctrl+shift+c copy_to_clipboard
-    map ctrl+shift+v paste_from_clipboard
-    
-    # Scroll up and down
-    map ctrl+page_up scroll_page_up
-    map ctrl+page_down scroll_page_down
-    
-    # Change font size
-    map ctrl+shift+equal change_font_size all +2.0
-    map ctrl+shift+minus change_font_size all -2.0
-    
-    # Manage click actions
-    mouse_map left press ungrabbed mouse_selection normal
-    mouse_map shift+left press ungrabbed,grabbed mouse_selection normal
-    mouse_map shift+left click grabbed,ungrabbed mouse_handle_click selection link prompt
-    
-    # Select words and lines with mouse actions
-    mouse_map left doublepress ungrabbed mouse_selection word
-    mouse_map shift+left doublepress ungrabbed,grabbed mouse_selection word
-    mouse_map left triplepress ungrabbed mouse_selection line
-    mouse_map shift+left triplepress ungrabbed,grabbed mouse_selection line
-    
-    # Search function
-    map ctrl+f launch --location=hsplit --allow-remote-control kitty +kitten search.py @active-kitty-window-id
-  '';
-
   # Foot config
   footConf = ''
     font=${nerdFont}:size=14.7
@@ -744,7 +596,7 @@ let
       style=beam
     
     [colors]
-      alpha=0.70
+      alpha=0.65
       background=${darkCol}
       regular0=3f3f3f
       regular1=cc0000
@@ -762,11 +614,14 @@ let
       bright5=b294bb
       bright6=93e0e3
       bright7=ffffff
+    
+    [key-bindings]
+      search-start=Control+f
   '';
 
   # Dashboard for my Debian server
   serverDash = pkgs.writeScriptBin "serverdash" ''
-    ${terminalClass}=serverdash ${ssh} jimbo@server -t \
+    ${terminalClass} serverdash ssh -p 2222 jimbo@server -t \
     "tmux new-session -d -s control; tmux attach -t control"
   '';
 
@@ -1095,14 +950,14 @@ let
     print_info() {
       prin ""
       info "󰌢 " model
-      info "󰍛 " cpu
-      info "󰘚 " gpu
+      info " " cpu
+      info "󰢮 " gpu
       info " " disk
-      info "󰟖 " memory
+      info "  " memory
       info "󰍹 " resolution
       prin ""
-      info " " distro
-      info " " kernel
+      info "󰍛 " distro
+      info " " kernel
       info " " wm
       info " " shell
       info " " term
@@ -1161,32 +1016,40 @@ let
     cyan="\033[1;36m"
     reset="\033[0m"
   '';
-  smallConf = ''
-    # Show different info types
-    print_info() {
-      info title
-      info "OS" distro
-      info "Host" model
-      info "Kernel" kernel
-      info "Uptime" uptime
-      info "Packages" packages
-      info "Memory" memory
-    }
-    
-    # Shorthand info
-    kernel_shorthand="on"
-    distro_shorthand="on"
-    uptime_shorthand="tiny"
-    package_managers="off"
-    memory_percent="off"
-    separator=":"
-    
-    # Values: 'kib', 'mib', 'gib'
-    memory_unit="gib"
-  '';
 
-  pFetch = pkgs.writeScriptBin "pfetch"
-    ''neofetch --config $(readlink -f ~/.config/neofetch/small.conf) --ascii_distro nixos_small'';
+  # Small Neofetch config
+  pFetch = let 
+    smallConf = pkgs.writeText "smallconf" ''
+      # Show different info types
+      print_info() {
+        info title
+        info "OS" distro
+        info "Host" model
+        info "Kernel" kernel
+        info "Uptime" uptime
+        info "Packages" packages
+        info "Memory" memory
+      }
+      
+      # Shorthand info
+      kernel_shorthand="on"
+      distro_shorthand="on"
+      uptime_shorthand="tiny"
+      package_managers="off"
+      memory_percent="off"
+      separator=":"
+      
+      # Values: 'kib', 'mib', 'gib'
+      memory_unit="gib"
+    '';
+  in pkgs.writeScriptBin "pfetch"
+    ''neofetch --config ${smallConf} --ascii_distro nixos_small'';
+  
+  # Custom Neofetch Ascii
+  xeniaAscii = pkgs.fetchurl { 
+    url = "https://git.JimbosFiles.duckdns.org/Jimbo/NixOS-Files/raw/branch/main/Extras/Neofetch/xenia.ascii";
+    sha256 = "16jz48mm60qj1fxga7s5b72pfnbkf10q1iqclrq0k1ml0w9zmxg5";
+  };
 
   # Rofi (terminal file browser) config
   rangerConf = ''
@@ -1375,7 +1238,6 @@ let
   # Ranger's bookmarks
   rangerBookmarks = ''
     # Local files
-    h:.
     k:/home/jimbo/Downloads
     c:/home/jimbo/.config
     L:/home/jimbo/.local
@@ -1383,11 +1245,14 @@ let
     n:/etc/nixos
     
     # Remote files
+    a:/home/jimbo/JimboNFS
     l:/home/jimbo/JimboNFS/Downloads
     p:/home/jimbo/JimboNFS/Photos
     v:/home/jimbo/JimboNFS/Videos/Random
     m:/home/jimbo/JimboNFS/Music
+    m:/home/jimbo/JimboNFS/MineServers
     j:/home/jimbo/JimboNFS/JimboOS
+    s:/home/jimbo/JimboNFS/School
   '';
 
   # Rofi launcher main config
@@ -1930,39 +1795,36 @@ in
       # Install user programs
       home.packages = (with pkgs; [
         # Useful programs
-        ffmpegthumbnailer imv rofi-wayland rofi-bluetooth
-	dua p7zip qbittorrent neofetch libreoffice-fresh
-	easyeffects pavucontrol gotop pciutils
+        ffmpegthumbnailer imv rofi-wayland rofi-bluetooth dua vimv
+	p7zip qbittorrent neofetch libreoffice-fresh easyeffects
+	pavucontrol gotop pciutils usbutils unstable.vesktop
 
         # Production tools
         krita kdenlive audacity
 
 	# Scripts as global programs
-	serverDash diskClean ytOpus makeLinuxDrive discordWayland
-	beScripts makoToggle swayLock screenShot alarmScript 
-	mpvCamera pFetch
+	serverDash diskClean makeLinuxDrive
+	beScripts makoToggle swayLock screenShot 
+	alarmScript iommuCheck pFetch
 
         # File manager
-        lxqt.pcmanfm-qt gnome.file-roller ranger poppler_utils
+        lxqt.pcmanfm-qt gnome.file-roller ranger imagemagick poppler_utils
 
         # Emulators
-        dolphin-emu cemu citra yuzu
-	duckstation pcsx2 rpcs3
+        dolphin-emu cemu citra yuzu duckstation pcsx2 rpcs3
 
         # School tools
-        remmina freerdp libvncserver 
-	globalprotect-openconnect python3 zoom-us
+        remmina freerdp globalprotect-openconnect python3 zoom-us
 
         # Audio/Video tools
         yt-dlp ytfzf ani-cli playerctl ffmpeg
 
         # Unlimited games
-        steam steam-run heroic mangohud gamescope
-	openarena xonotic prismlauncher
-	wineWowPackages.wayland
+        steam steam-run heroic mangohud
+	prismlauncher appimage-run wineWowPackages.wayland
 
 	# Remote desktop
-	sunshine #moonlight-qt
+	sunshine chiaki #moonlight-qt
       ]) ++ (with pkgs.unstable; [
         # Window manager apps
         swaybg wdisplays wl-clipboard wlroots_0_16 clipman 
@@ -2028,8 +1890,8 @@ in
 	    { command = "swaylock"; }
 
 	    # Scratchpads
-	    { command = "${terminalClass}=gotop gotop"; }
-	    { command = "${terminalClass}=music ranger"; }
+	    { command = "${terminalClass} gotop -T Gotop gotop"; }
+	    { command = "${terminalClass} music -T Music ranger"; }
 	    { command = "pavucontrol"; }
 	    { command = "easyeffects"; }
 
@@ -2046,7 +1908,7 @@ in
 
 	    # Foreground apps
 	    { command = "librewolf -P Variety --name=Variety"; }
-	    { command = "discord"; }
+	    { command = "vesktop"; }
 	    { command = "serverdash"; }
 	  ];
 
@@ -2064,7 +1926,7 @@ in
             };
             ${display2} = {
               pos = "0 405";
-	      mode = "1920x1080@75.402Hz";
+	      mode = "1920x1080@60Hz";
               max_render_time = "3";
 	      bg = "${wallpaper2} fill";
             };
@@ -2146,14 +2008,14 @@ in
 	    "${primeMod}+F3" = ''exec librewolf -P Variety --name=Variety | notify-send "Librewolf Variety" --expire-time=1500'';
 
 	    # Discord
-	    "${primeMod}+F4" = ''exec discord | notify-send "Discord" --expire-time=1500'';
+	    "${primeMod}+F4" = ''exec vesktop | notify-send "Discord" --expire-time=1500'';
 
 	    # Games
 	    "${primeMod}+F5" = ''exec steam | notify-send "Steam" --expire-time=1500'';
-	    "${primeMod}+F6" = ''exec ${terminalClass}=HeroicTerminal heroic --enable-features=UseOzonePlatform --ozone-platform=wayland | notify-send "Heroic Games" --expire-time=1500'';
+	    "${primeMod}+F6" = ''exec heroic | notify-send "Heroic Games" --expire-time=1500'';
 
 	    # Looking glass for VMs
-	    "${primeMod}+F7" = ''exec looking-glass-client -p 5950 input:rawMouse=yes | notify-send "Looking Glass" --expire-time=1500'';
+	    "${primeMod}+F7" = ''exec looking-glass-client input:rawMouse=yes | notify-send "Looking Glass" --expire-time=1500'';
 
 	    # Virtual Machines
 	    "${primeMod}+F10" = ''exec virt-manager | notify-send "Virtual Machines" --expire-time=1500'';
@@ -2163,12 +2025,12 @@ in
 	    "${primeMod}+${altMod}+Ctrl+r" = ''exec bescripts --resolutions'';
 
 	    # Open NixOS configuration files
-	    "${primeMod}+F12" = ''exec bash -c "${terminal} nvim /etc/nixos/{configuration.nix,jimbo.nix}" | notify-send "Nix Config" --expire-time=1500'';
+	    "${primeMod}+F12" = ''exec bash -c "${terminal} nvim /etc/nixos/{configuration,jimbo,hardware-configuration}.nix" | notify-send "Nix Config" --expire-time=1500'';
 
 	    # Kitty, bemenu, clipmenu, media script, power menu, show/hide waybar
 	    "${primeMod}+Return" = ''exec ${terminal}'';
 	    "${primeMod}+s" = ''exec bemenu-run ${bemenuOpts} -p Command'';
-	    "${primeMod}+c" = ''exec clipman pick -t rofi '';
+	    "${primeMod}+c" = ''exec clipman pick -t rofi'';
 	    "${primeMod}+y" = ''exec bescripts --media'';
 	    "${primeMod}+x" = ''exec bescripts --power'';
 	    "${primeMod}+b" = ''exec pkill -USR1 waybar'';
@@ -2177,7 +2039,7 @@ in
 	    # PCManFM, Emoji Picker, Rofi Launcher, Bluetooth, Ranger
 	    "${primeMod}+Shift+t" = ''exec pcmanfm-qt'';
 	    "${primeMod}+Shift+e" = ''exec BEMOJI_PICKER_CMD="rofi -dmenu -p Emoji" ${pkgs.bemoji}/bin/bemoji -n -P 0'';
-	    "${primeMod}+Shift+s" = ''exec rofi -show drun -modi drun -drun-display-format {name} -show-icons'';
+	    "${primeMod}+Shift+s" = ''exec rofi -show drun -modi drun -drun-display-format {name} -show-icons -disable-history -terminal ${terminal}'';
 	    "${primeMod}+Shift+b" = ''exec rofi-bluetooth'';
 	    "${primeMod}+Shift+Return" = ''exec ${terminal} ranger'';
 
@@ -2226,7 +2088,7 @@ in
 	    "Ctrl+Print" = ''exec screenshot --all'';
 
 	    # Server SSH
-	    "${primeMod}+Ctrl+Return" = ''exec ${terminal} ${ssh} server'';
+	    "${primeMod}+Ctrl+Return" = ''exec ${terminal} ssh server -p 2222'';
 
 	    # Open copied video link in mpv
 	    "${primeMod}+Ctrl+y" = ''exec mpv --loop-playlist=no --keep-open=yes $(echo $(wl-paste)) | notify-send "Playing in MPV" --expire-time=1500'';
@@ -2369,7 +2231,6 @@ in
 
 	      # Create a "Scratchpad" for apps I don't want to be seen when launched
 	      { command = ''move scratchpad''; criteria = { con_mark = "hiddenaway"; }; }
-	      { command = ''mark hiddenaway''; criteria = { app_id = "HeroicTerminal"; }; }
 
 	      # Give apps that don't have them borders
 	      { command = ''border pixel ${borderWeight}''; criteria = { con_mark = "borderless"; }; }
@@ -2393,10 +2254,10 @@ in
 	    
 	    # Communication
 	    "${w6a}" = [{ class = "zoom"; }];
-	    "${w8}" = [{ app_id = "VencordDesktop"; }];
+	    "${w8}" = [{ class = "vesktop"; }];
 
 	    # Else
-	    "${w2}" = [{ class = "steam"; } { class = "heroic"; } { app_id = "heroic"; }];
+	    "${w2}" = [{ class = "steam"; } { class = "heroic"; } { app_id = "lutris"; }];
 	    "${w2a}" = [{ app_id = "looking-glass-client"; }];
 	    "${w4}" = [{ app_id = "serverdash"; }];
 	    "${w4a}" = [{ app_id = "com.obsproject.Studio"; }];
@@ -2654,7 +2515,7 @@ in
               "Thunderstorm") emoji="⛈️";;
               "Snow") emoji="❄️";;
               "Mist"|"Fog"|"Haze") emoji="🌫️";;
-              *) emoji="🌍";; # Default emoji for unknown conditions
+              *) emoji="🌍";; # Default emoji for unknown
             esac
             
             # Extract and format temperature in Celsius
@@ -2663,11 +2524,11 @@ in
             formatted_temperature=$(printf "%.0f" $temperature_celsius)
             
             # Display weather emoji and temperature
-            echo {\"text\":\"$emoji $formatted_temperature°C\",\"tooltip\":\"Weather in Maple: $weather_condition\"}
+            echo {\"text\":\"$emoji $formatted_temperature°C\",\"tooltip\":\"Weather in $CITY: $weather_condition\"}
 	  '';
 	  format = "<span font_size='11pt'>{}</span>";
 	  return-type = "json";
-	  on-click = "librewolf --new-tab https://openweathermap.org/city/6173577";
+	  on-click = "xdg-open https://openweathermap.org/city/6173577";
 	  interval = 150;
 	};
 
@@ -2675,7 +2536,7 @@ in
 	backlightModule = {
 	  format = "{icon}  {percent}%";
 	  format-icons = ["" "󰖨"];
-	  tooltip = true;
+	  tooltip = false;
 	};
 	batteryModule = {
 	  interval = 60;
@@ -2754,10 +2615,10 @@ in
 	    name = "laptop";
 	    position = "top";
 	    layer = "bottom";
-	    output = [ "eDP-1" "LVDS-1" "DSI-1" ];
+	    output = [ "eDP-1" "LVDS-1" "DSI-1" "HDMI-A-1" ];
 	    modules-left = [ "sway/workspaces" "sway/window" ];
 	    modules-right = [ 
-	      "pulseaudio" "custom/media" "custom/notifs" "cpu" "memory" "custom/vram" "backlight" 
+	      "pulseaudio" "custom/media" "custom/notifs" "custom/weather2" "cpu" "memory" "custom/vram" "backlight" 
 	      "battery" "custom/clock-long" "gamemode" "sway/scratchpad" "tray" "bluetooth" "network" 
 	    ];
 	    "sway/workspaces" = swayWorkspacesModule;
@@ -2765,6 +2626,7 @@ in
 	    "pulseaudio" = pulseModule;
 	    "custom/media" = mediaModule;
 	    "custom/notifs" = notificationModule;
+	    "custom/weather2" = weatherModule;
 	    "cpu" = cpuModule;
 	    "memory" = ramModule;
 	    "custom/vram" = vramModule;
@@ -2864,6 +2726,10 @@ in
             border-bottom: 3px solid #${primeCol};
 	    margin: 0 5px 0 2px;
           }
+          #custom-weather2 {
+            border-bottom: 3px solid #c75bd3;
+	    margin: 0 5px 0 2px;
+          }
           #custom-notifs {
             border-bottom: 3px solid #${primeCol};
 	    margin: 0 5px 0 2px;
@@ -2940,6 +2806,11 @@ in
         "image/jpeg" = "imv.desktop";
       };
 
+      # Hide some .desktop entries
+      xdg.desktopEntries = {
+        rofi = { name = "Rofi"; settings."Hidden" = "true"; };
+      };
+
       # Set dconf settings
       dconf.settings = {
 	"org/gnome/desktop/interface/color-scheme" = {
@@ -2954,14 +2825,14 @@ in
       # Install LibreWolf with settings
       programs.librewolf = {
         enable = true;
-	package = pkgs.unstable.librewolf;
+	package = pkgs.librewolf;
 	settings = {
 	  "general.autoScroll" = true;
+	  "browser.compactmode.show" = true;
           "privacy.clearOnShutdown.history" = false;
           "privacy.clearOnShutdown.cookies" = false;
           "network.cookie.lifetimePolicy" = 0;
 	  "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-	  "browser.compactmode.show" = true;
 	  "browser.toolbars.bookmarks.visibility" = "newtab";
 	  "gnomeTheme.hideSingleTab" = true;
 	  "svg.context-properties.content.enabled" = true;
@@ -2988,9 +2859,6 @@ in
 
 	  # Autocomplete plugins
           cmp-nvim-lsp cmp-buffer cmp-path cmp-cmdline nvim-cmp
-
-	  # Directory tree viewer
-          nerdtree
 
 	  # Hex color visualizer and color theme
           nvim-colorizer-lua vim-monokai-pro
@@ -3044,11 +2912,11 @@ in
           colorscheme monokai_pro
           let g:airline_theme='onedark'
           let g:airline#extensions#tabline#enabled = 1
-          highlight Normal guibg=#${darkCol} ctermbg=235
-          highlight Visual guibg=#151515 ctermbg=238
-          highlight Pmenu guibg=#151515 ctermbg=238
-          highlight EndOfBuffer guibg=#${darkCol} ctermbg=235
-          highlight LineNr guibg=NONE ctermbg=NONE
+          hi Normal guibg=none ctermbg=235
+          hi Visual guibg=#151515 ctermbg=238
+          hi Pmenu guibg=#151515 ctermbg=238
+          hi EndOfBuffer guibg=none ctermbg=235
+          hi LineNr guibg=none ctermbg=none
           lua require'colorizer'.setup()
           
           set nu rnu
@@ -3061,7 +2929,6 @@ in
           set undolevels=100
           set undoreload=10000
 
-          nmap <C-a> :NERDTreeToggle<CR>
           nmap <C-x> :bnext<CR>
           nmap <C-z> :bprev<CR>
           nmap <C-w> :bd<CR>
@@ -3106,6 +2973,9 @@ in
         extraConfig = "on-button-right=dismiss-all\nouter-margin=10\n[mode=do-not-disturb]\ninvisible=1";
       };
 
+      # Automount with udisk2
+      services.udiskie.enable = true;
+
       # Start defining arbitrary files
       home.file = {
 	# Sway scripts
@@ -3116,17 +2986,6 @@ in
 	
 	# Swappy's config
 	".config/swappy/config".text = swappyConfig;
-
-	# Kitty config files
-	".config/kitty/kitty.conf".text = kittyConf;
-	".config/kitty/search.py".source = "${pkgs.fetchurl {
-	  url = "https://raw.githubusercontent.com/trygveaa/kitty-kitten-search/0760138fad617c5e4159403cbfce8421ccdfe571/search.py";
-	  sha256 = "1w50fimqsbmqk9zhdmq8k2v1b36iwsglpbqaavpglw0acam3xid7";
-	}}";
-	".config/kitty/scroll_mark.py".source = "${pkgs.fetchurl {
-	  url = "https://raw.githubusercontent.com/trygveaa/kitty-kitten-search/9fbfc578bc27475003cdf3de1b3d1f8ef8b66658/scroll_mark.py";
-	  sha256 = "1a1l7sp2x247da8fr54wwq7ffm987wjal9nw2f38q956v3cfknzi";
-	}}";
 
 	# Foot config file
 	".config/foot/foot.ini".text = footConf;
@@ -3139,7 +2998,6 @@ in
 
 	# Neofetch config
 	".config/neofetch/config.conf".text = neoConf;
-	".config/neofetch/small.conf".text = smallConf;
 
 	# PCManFM config
 	".config/pcmanfm-qt/default/settings.conf".text = pcmanConf;
@@ -3150,11 +3008,11 @@ in
 	".config/ranger/scope.sh" = { text = rangerScope; executable = true; };
 	".local/share/ranger/bookmarks".text = rangerBookmarks;
 	".config/ranger/plugins/devicons/devicons.py".source = "${pkgs.fetchurl {
-	  url = "https://raw.githubusercontent.com/alexanderjeurissen/ranger_devicons/main/devicons.py";
-	  sha256 = "16xg5wrbck4fvp3pjmwspzb1n5yd4giv1gajpb0v9xnmpyifb715";
+	  url = "https://raw.githubusercontent.com/alexanderjeurissen/ranger_devicons/2c3c19dffb4238d01c74515c9eed5088066db243/devicons.py";
+	  sha256 = "0girsranwhsgc6kcyh1mkwymx0bl14a2k5nzk3kyllb6ic48c33k";
 	}}";
 	".config/ranger/plugins/devicons/__init__.py".source = "${pkgs.fetchurl {
-	  url = "https://raw.githubusercontent.com/alexanderjeurissen/ranger_devicons/main/__init__.py";
+	  url = "https://raw.githubusercontent.com/alexanderjeurissen/ranger_devicons/2c3c19dffb4238d01c74515c9eed5088066db243/__init__.py";
 	  sha256 = "1r086apw20ryxylqgnbynx7mzz779v1w0m40wghmmhlzw4x15fmr";
 	}}";
 
@@ -3224,36 +3082,39 @@ in
         };
         shellAliases = {
 	  # NixOS aliases
-	  nixcfg = "nvim /etc/nixos/{configuration.nix,jimbo.nix}";
+	  nixcfg = "nvim /etc/nixos/{configuration,jimbo,hardware-configuration}.nix";
           nixswitch = "${auth} nixos-rebuild switch; notify-send 'NixOS switch finished.'";
-          nixdate = "${auth} nixos-rebuild switch --upgrade; notify-send 'NixOS update finished.'";
+          nixdate = "${auth} nixos-rebuild switch --upgrade-all; notify-send 'NixOS update finished.'";
           nixclean = "${auth} nix-store --gc; nix-collect-garbage -d; notify-send 'NixOS store clean finished.'";
 	  nixoptimize = "${auth} nix store optimise; notify-send 'NixOS store optimization finished.'";
 
           # Shortcut aliases
-	  neo = "clear && neofetch --ascii ~/.config/neofetch/xenia.ascii --ascii_colors 1 7 3 --colors 0 0 0 1 3 7";
+	  neo = "clear && neofetch --ascii ${xeniaAscii} --ascii_colors 1 7 3 --colors 0 0 0 1 3 7";
           ip = "ip -c";
-          ls = "${pkgs.eza}/bin/eza -a --color=always --group-directories-first";
+          ls = "${pkgs.eza}/bin/eza -a --color=always --group-directories-first --icons";
 	  cat = "${pkgs.bat}/bin/bat --paging never";
-	  lcat = "${pkgs.bat}/bin/bat --paging always";
 	  copycat = "wl-copy <";
-	  ssh = "${ssh}";
           sunshinehost = "WAYLAND_DISPLAY=wayland-1 DISPLAY=:1 sunshine -0";
 	  alarmlist = "cat ${alarmScript}/bin/alarms";
 
           # SSH Commands
-          seneca=''${ssh} jhampton1@matrix.senecapolytechnic.ca'';
+          seneca=''ssh jhampton1@matrix.senecapolytechnic.ca'';
 	  checkusers="ps aux | grep pts/ | grep sshd | grep -v grep | awk -F \"@\" '{print \$1}' | awk '{print \$12}' | sort";
+
+	  # VMs
+	  winprime = "virsh start Personal-Windows-GPU-Primary";
+	  winsec = "virsh start Personal-Windows-GPU-Secondary";
 
           # Curl tools
           myip = "curl ifconfig.co";
 
           # Download from YouTube
-          ytmp4 = "yt-dlp --recode-video mp4";
+          ytmp4 = "yt-dlp --recode-video mp4 --output \"%(title)s.%(ext)s\"";
+	  ytopus = "yt-dlp --format 251 --recode-video opus --output \"%(title)s.%(ext)s\"";
 
 	  # Flakes
 	  buildiso = 
-	    "nix run github:nix-community/nixos-generators -- -f install-iso -c /etc/nixos/configuration.nix";
+	    "nix run github:nix-community/nixos-generators -- -f install-iso";
         };
       };
 

@@ -1,7 +1,5 @@
-#### My Nix "dotfiles", organized in the worst way you will ever see.
+### My Nix "dotfiles", organized in the worst way you will ever see.
 
-Made with love <3
+Made with love ❤️
 
-![image](./Screenshots/Desktop-Neofetch.png)
-![image](./Screenshots/Ranger-Heroic.png)
-![image](./Screenshots/Alt-Theme.png)
+![image](./Extras/Screenshots/SecondUnix.png)

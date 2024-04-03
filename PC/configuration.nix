@@ -15,9 +15,6 @@ let
     "pci=noats"
     "allow_unsafe_interrupts=1"
     "ignore_msrs=1"
-
-    # VM gaming performance
-    "transparent_hugepage=never"
   ];
   nvidiaDriver = config.boot.kernelPackages.nvidiaPackages.vulkan_beta;
 in
@@ -28,15 +25,12 @@ in
     ./hardware-configuration.nix
     ./jimbo.nix
     "${homeManager}/nixos"
-    #"${builtins.fetchTarball 
-    #  { url = "https://github.com/NixOS/nixos-hardware/archive/master.tar.gz"; }}/pine64/pinebook-pro"
   ];
 
   # Allow unfree packages and accept packages from the Nix User Repos
   nixpkgs = {
     config = {
       allowUnfree = true;
-      #allowUnsupportedSystem = true;
       packageOverrides = pkgs: {
         unstable = import (builtins.fetchTarball 
           "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz") {
@@ -47,15 +41,11 @@ in
               wlroots_0_16 = prev.wlroots_0_16.overrideAttrs (o: {
                 patches = (o.patches or [ ]) ++ [ 
                   (final.fetchpatch {
-                    url = "https://git.jimbosfiles.duckdns.org/jimbo/NixOS-Files/raw/branch/main/Patches/nvidia.patch";
+                    url = "https://git.JimbosFiles.duckdns.org/Jimbo/NixOS-Files/raw/branch/main/Extras/Patches/Nvidia/lessflicker.patch";
                     sha256 = "cpOzc3Y1a5F6UscgijBZJ0CXkceaF9t7aWQVLF76/1A=";
                   })
                   (final.fetchpatch {
-                    url = "https://git.jimbosfiles.duckdns.org/jimbo/NixOS-Files/raw/branch/main/Patches/dmabuf-capture-example.patch";
-                    sha256 = "PIO9EiwJZQsVp07YkfRsLu978AX2sdlg2LbRvldIuzc=";
-                  })
-                  (final.fetchpatch {
-                    url = "https://git.jimbosfiles.duckdns.org/jimbo/NixOS-Files/raw/branch/main/Patches/screenshare.patch";
+                    url = "https://git.JimbosFiles.duckdns.org/Jimbo/NixOS-Files/raw/branch/main/Extras/Patches/Nvidia/screenshare.patch";
                     sha256 = "azvSsmGHR1uJe0k2hnaP6RCXfQnatpbGTMpDy9EPAr0=";
                   })
                 ];
@@ -76,13 +66,13 @@ in
         };
       })
 
-      # Ranger sixel support
+      # Ranger Sixel support
       (final: prev: {
         ranger = prev.ranger.overrideAttrs (o: {
           patches = (o.patches or [ ]) ++ [
-            (final.fetchpatch {
+            (prev.fetchpatch {
               url = "https://github.com/3ap/ranger/commit/ef9ec1f0e0786e2935c233e4321684514c2c6553.patch";
-              sha256 = "sha256-MJbIBuFeOvYnF6KntWJ2ODQ4KAcbnFEQ1axt1iQGkWY=";
+              sha256 = "MJbIBuFeOvYnF6KntWJ2ODQ4KAcbnFEQ1axt1iQGkWY=";
             })
           ];
         });
@@ -93,13 +83,22 @@ in
   # Allow flakes (I have no clue how they work yet)
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # Choose an optimized kernel and boot with extra modules
+  # Set all boot options
   boot = {
-    kernelPackages = pkgs.unstable.linuxPackages_zen;
+    # Set a kernel version and load/blacklist drivers
+    kernelPackages = pkgs.linuxPackages_xanmod_latest;
     extraModulePackages = [ nvidiaDriver ];
     blacklistedKernelModules = [ "pcspkr" ];
     kernelParams = commonKernelParams ++ [ "vfio-pci.ids=10de:13c2,10de:0fbb" ];
     initrd.kernelModules = [ "vfio_pci" "vfio" "vfio_iommu_type1" ];
+
+    # Modprobe settings
+    extraModprobeConfig = ''
+      options hid_apple fnmode=2
+    '';
+
+    # Enable the NTFS filesystem
+    supportedFilesystems = [ "ntfs" "apfs" ];
 
     # Change sysctl settings
     kernel.sysctl."vm.max_map_count" = 2147483642;
@@ -108,26 +107,20 @@ in
     loader = {
       efi.canTouchEfiVariables = true;
       grub = {
+        enable = true;
         efiSupport = true;
         device = "nodev";
-        theme = "${pkgs.sleek-grub-theme.override { withStyle = "dark"; }}";
+        #theme = "${pkgs.sleek-grub-theme.override { withStyle = "dark"; }}";
       };
     };
   };
 
-  # Add an extra kernel entry to boot from the secondary NVIDIA GPU
+  # Add a kernel entry to boot from the secondary GPU
   specialisation = {
     gputwo.configuration = {
       boot.kernelParams = commonKernelParams ++ [ "vfio-pci.ids=10de:2504,10de:228e" ];
     };
   };
-
-  ## Do this on ARM instead
-  #boot = { 
-  #  loader.grub.enable = false;
-  #  loader.generic-extlinux-compatible.enable = true;
-  #  kernelParams = [ "efifb=off" ];
-  #};
 
   # Allow binary firmware
   hardware.enableRedistributableFirmware = true;
@@ -136,57 +129,17 @@ in
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia = {
     modesetting.enable = true;
-    open = false;
     nvidiaSettings = false;
     package = nvidiaDriver;
   };
 
-  # Define all extra drives
-  fileSystems = {
-    "/etc/libvirt" = {
-      device = "/dev/disk/by-label/Qemu";
-      options = [ "nosuid" "nodev" "nofail" ] ;
-    };
-    "/var/lib/libvirt" = {
-      depends = [ "/etc/libvirt" ];
-      device = "/etc/libvirt/varlibvirt";
-      options = [ "bind" "rw" ];
-    };
-    "/mnt/Linux1" = {
-      device = "/dev/disk/by-label/Linux1";
-      options = [ "nosuid" "nodev" "nofail" "x-gvfs-show" ];
-    };
-    "/mnt/Linux2" = {
-      device = "/dev/disk/by-label/Linux2";
-      options = [ "nosuid" "nodev" "nofail" "x-gvfs-show" ];
-    };
-    "/mnt/Windows1" = {
-      device = "/dev/disk/by-label/Windows1";
-      options = [ "nosuid" "nodev" "noauto" ];
-    };
-    "/mnt/Windows2" = {
-      device = "/dev/disk/by-label/Windows2";
-      options = [ "nosuid" "nodev" "noauto" ];
-    };
-    "/home/jimbo/JimboNFS" = {
-      device = "server:/export/JimboNFS";
-      fsType = "nfs";
-      options = [ "nofail" ];
-    };
-    "/home/jimbo/SenecaMount" = {
-      device = "//mydrive.senecacollege.ca/courses/";
-      fsType = "cifs";
-      options = [ "noauto" "username=jhampton1" "workgroup=seneds.senecacollege.ca" "uid=1000" "gid=100" ];
-    };
-  };
-
-  # Create the sudoers file
+  # Enable a permissioning system
   security = {
     sudo.enable = false;
     doas = {
       enable = true;
       extraRules = [
-        # Give wheel root access, don't ask for password every time
+        # Give wheel root access, allow persistant session
         { groups = [ "wheel" ]; keepEnv = true; persist = true; }
       ];
     };
@@ -201,9 +154,12 @@ in
     description = "Jimbo";
     hashedPassword = 
       "$6$gYpE.pG/zPXgin06$2kydjDfd0K62Dhf9P0PFvJhRNz6xIC/bHYaf/XYqyKcLyZNzPQpy8uy9tCRcSYlj1wwBhzVtTRyItwajOHCEj0";
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDLe/HioxCOkszFQdm1vb3ZwuzLzsOThqHNvEI4IXeXZ JimPhone"
+    ];
     extraGroups = [ 
-      "wheel" "audio" "video"
-      "input" "disk" "networkmanager"
+      "wheel" "audio" "video" "input"
+      "disk" "networkmanager" "dialout"
       "kvm" "libvirtd" "qemu-libvirtd"
     ];
     uid = 1000;
@@ -257,9 +213,7 @@ in
     dhcpcd.enable = true;
     wireless.enable = false;
     #networkmanager.enable = true;
-
-    # Enable Wake on Lan
-    interfaces."enp42s0".wakeOnLan.enable = true;
+    #enableB43Firmware = true;
 
     # Enable firewall passthrough
     firewall = {
@@ -309,9 +263,10 @@ in
     "f /dev/shm/looking-glass 0660 jimbo libvirtd -"
   ];
 
-  # Create a custom udev rule to make my PDP controller work
+  # Make udev rules to make PDP controller and Oculus Rift CV1 work
   services.udev.extraRules = ''
     KERNEL=="hidraw*", ATTRS{idVendor}=="0e6f", ATTRS{idProduct}=="0184", MODE="0660", TAG+="uaccess"
+    SUBSYSTEM=="usb", ATTR{idVendor}=="2833", MODE="0666", GROUP="plugdev"
   '';
 
   # Enable audio
@@ -380,6 +335,7 @@ in
     printing = {
       enable = true;
       drivers = with pkgs; [ hplip ];
+      webInterface = false;
     };
     avahi = {
       enable = true;
@@ -393,34 +349,50 @@ in
     enable = true;
     onBoot = "ignore";
     onShutdown = "shutdown";
-    qemu.ovmf.enable = true;
-    qemu.swtpm.enable = true;
+    qemu = {
+      ovmf = {
+        enable = true;
+	packages = [ pkgs.unstable.OVMFFull.fd ];
+      };
+      swtpm.enable = true;
+    };
   };
-
-  # Used for Seneca VPN
-  services.globalprotect.enable = true;
 
   # Enable SSH
   services.openssh = {
     enable = true;
     settings = {
       LogLevel = "VERBOSE";
-      PermitRootLogin = lib.mkForce "no";
+      PermitRootLogin = "no";
+      PrintLastLog = "no";
     };
+    ports = [ 2211 ];
   };
   services.fail2ban = {
     enable = true;
-    maxretry = 5;
+    maxretry = 10;
   };
+
+  # Enable AppArmor
+  security.apparmor.enable = true;
+
+  # Increase battery life on laptops
+  services.tlp.enable = true;
 
   # Enable extra functionality in file managers
   services.gvfs.enable = true;
 
+  # Attempt to automount USB drives
+  services.udisks2.enable = true;
+
   # Enable Polkit for authentication
   security.polkit.enable = true;
 
-  # Enable AppArmor
-  security.apparmor.enable = true;
+  # Used for Seneca VPN
+  services.globalprotect.enable = true;
+
+  # Make sure things still build
+  services.logrotate.checkConfig = false;
 
   # Determine the release version and allow auto-upgrades
   system.stateVersion = "23.11";

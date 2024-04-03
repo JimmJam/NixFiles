@@ -1,7 +1,7 @@
 { config, pkgs, options, lib, ... }: 
 let
   # Import home manager
-  home-manager = fetchTarball 
+  homeManager = fetchTarball 
     "https://github.com/nix-community/home-manager/archive/release-23.11.tar.gz";
 
   # Define domains and ips
@@ -13,12 +13,15 @@ let
   server = ''${localspan}.17'';
   laptop = ''${localspan}.45'';
   vm = ''${localspan}.70'';
+  ps4 = ''${localspan}.183'';
 in
 
 {
   # Import other nix files and firmware
   imports = [ 
-    ./hardware-configuration.nix ./jimbo.nix (import "${home-manager}/nixos")
+    ./hardware-configuration.nix
+    ./jimbo.nix 
+    "${homeManager}/nixos"
   ];
 
   # Allow unfree packages
@@ -34,7 +37,6 @@ in
   boot = {
     kernelPackages = pkgs.linuxPackages_hardened;
     loader = {
-      efi.canTouchEfiVariables = true;
       grub = {
         efiSupport = true;
         device = "nodev";
@@ -42,13 +44,13 @@ in
     };
   };
 
-  # Create the sudoers file
+  # Enable a permissioning system
   security = {
     sudo.enable = false;
     doas = {
-    enable = true;
+      enable = true;
       extraRules = [
-	# Allow anyone in admin to execute as root, and allow a persistant session
+	# Give wheel root access, allow persistant session
         { groups = [ "wheel" ]; keepEnv = true; persist = true; }
       ];
     };
@@ -62,6 +64,9 @@ in
     isNormalUser = true;
     hashedPassword = 
       "$6$gYpE.pG/zPXgin06$2kydjDfd0K62Dhf9P0PFvJhRNz6xIC/bHYaf/XYqyKcLyZNzPQpy8uy9tCRcSYlj1wwBhzVtTRyItwajOHCEj0";
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDLe/HioxCOkszFQdm1vb3ZwuzLzsOThqHNvEI4IXeXZ JimPhone"
+    ];
     extraGroups = [ "wheel" ];
     uid = 1000;
     shell = pkgs.zsh;
@@ -70,24 +75,30 @@ in
   # Installed programs to the system profile.
   environment.systemPackages = with pkgs; [
     # Essential system tools
-    git parted certbot
+    git parted mdadm
   ];
 
   # Disable the HTML documentation link
-  documentation.nixos.enable = false;
+  documentation = {
+    nixos.enable = false;
+    info.enable = false;
+  };
 
   # Define timezone and networking settings
   time.timeZone = "America/New_York";
-  networking = let
-    localspan = ''192.168.1'';
-  in {
-    hostName = "JimDebianServer";
+  networking = {
+    # Set hostname
+    hostName = "JimNixServer";
+
+    # Choose networking method
     dhcpcd.enable = true;
     wireless.enable = false;
+    
+    # Enable firewall passthrough
     firewall = {
       allowedTCPPorts = [ 
 	# SSH
-	22
+	2222
 
 	# NFS
 	2049
@@ -105,30 +116,30 @@ in
 	3000
 
 	# Minecraft
-	25565
-
-	# Synapse
-	8448 8008
+	25565 30000 30005
 
 	# Gitea
-	3110 2222
+	3110 2299
       ];
       allowedUDPPorts = [
         # AdGuard
 	53
 
-	# Minecraft Voicechat
-	24454
+	# Minecraft Voicechat and Bedrock
+	24454 19132
       ];
+
       # Services forwarded to my PC or VM
       extraCommands = ''
-        iptables -t nat -A PREROUTING -p tcp -m tcp --dport 2211 -m comment --comment "SSH to PC" -j DNAT --to-destination ${pc}:22
-        iptables -t nat -A PREROUTING -p tcp -m tcp --dport 2215 -m comment --comment "SSH to VM" -j DNAT --to-destination ${vm}:22
+        iptables -t nat -A PREROUTING -p tcp -m tcp --dport 2211 -m comment --comment "SSH to PC" -j DNAT --to-destination ${pc}:2211
+        iptables -t nat -A PREROUTING -p tcp -m tcp --dport 2215 -m comment --comment "SSH to VM" -j DNAT --to-destination ${vm}:2215
         iptables -t nat -A PREROUTING -p tcp -m tcp --dport 9060 -m comment --comment "PC Cockpit" -j DNAT --to-destination ${pc}:9090
         iptables -t nat -A PREROUTING -p tcp -m tcp --dport 8182 -m comment --comment "Qbittorrent" -j DNAT --to-destination ${pc}:8182
         iptables -t nat -A PREROUTING -p udp -m udp --dport 27005 -m comment --comment "Half-Life" -j DNAT --to-destination ${pc}:27005
         iptables -t nat -A PREROUTING -p udp -m udp --dport 27015 -m comment --comment "Half-Life" -j DNAT --to-destination ${pc}:27015
+        iptables -t nat -A PREROUTING -p udp -m udp --dport 7777 -m comment --comment "Lethal Company" -j DNAT --to-destination ${pc}:7777
       '' +
+
       # Sunshine ports for PC and VM
       ''
         iptables -t nat -A PREROUTING -p tcp -m tcp --dport 48010 -m comment --comment "PC Sunshine RTSP" -j DNAT --to-destination ${pc}:48010
@@ -144,6 +155,13 @@ in
         iptables -t nat -A PREROUTING -p udp -m udp --dport 37999 -m comment --comment "VM Sunshine Control" -j DNAT --to-destination ${vm}:37999
         iptables -t nat -A PREROUTING -p udp -m udp --dport 38000 -m comment --comment "VM Sunshine Audio" -j DNAT --to-destination ${vm}:38000
 	iptables -t nat -A POSTROUTING -o eno1 -j MASQUERADE
+      '' +
+
+      # PlayStation Remote Play
+      ''
+        iptables -t nat -A PREROUTING -p tcp -m tcp --dport 9295 -m comment --comment "TCP Bit" -j DNAT --to-destination ${ps4}:9295
+        iptables -t nat -A PREROUTING -p udp -m udp --dport 9296 -m comment --comment "UDP Bit 1" -j DNAT --to-destination ${ps4}:9296
+        iptables -t nat -A PREROUTING -p udp -m udp --dport 9297 -m comment --comment "UDP Bit 2" -j DNAT --to-destination ${ps4}:9297
       '';
       allowPing = false;
     };
@@ -152,6 +170,7 @@ in
       ${server} server
       ${laptop} laptop
       ${vm} vm
+      ${ps4} ps4
     '';
     nameservers = [ 
       "1.1.1.1"
@@ -170,7 +189,11 @@ in
     # SSH
     openssh = {
       enable = true;
-      settings.LogLevel = "VERBOSE";
+      settings = {
+        LogLevel = "VERBOSE";
+	PermitRootLogin = "no";
+      };
+      ports = [ 2222 ];
     };
 
     # Login attempt lockout
@@ -193,7 +216,7 @@ in
     nfs.server = {
       enable = true;
       exports = ''
-        /export/JimboNFS ${pc}(rw,nohide,insecure,no_subtree_check) ${laptop}(rw,nohide,insecure,no_subtree_check)
+        /export/JimboNFS ${localspan}.0/24(rw,nohide,insecure,no_subtree_check)
       '';
     };
 
@@ -233,27 +256,13 @@ in
           reverse_proxy 127.0.0.1:5030
         '';
 
-        # Matrix
-        "matrix.${domain}".extraConfig = ''
-          reverse_proxy 127.0.0.1:8448
-        '';
-	"${domain}:8008".extraConfig = ''
-	  reverse_proxy 127.0.0.1:8448
-	'';
-
-	# Element
-	"element.${domain}".extraConfig = ''
-	  root * ${pkgs.element-web}
-	  file_server
-	'';
-
         # Bluemap
         "bluemap.${domain}".extraConfig = ''
           reverse_proxy http://127.0.0.1:30001
         '';
         
         # Gitea
-        "gitea.${domain}".extraConfig = ''
+        "git.${domain}".extraConfig = ''
           reverse_proxy http://127.0.0.1:3110
         '';
         
@@ -308,91 +317,25 @@ in
       port = 5030;
     };
 
-    # Snowflake proxy for helping Tor
-    snowflake-proxy.enable = true;
-
-    # Synapse for Matrix clients
-    matrix-synapse = {
-      enable = true;
-      settings = {
-        server_name = "matrix.${domain}";
-	public_baseurl = "https://${domain}:8008";
-	serve_server_wellknown = true;
-
-	# Set the network config
-	listeners = [{
-	  port = 8448;
-	  tls = false;
-	  type = "http";
-	  x_forwarded = true;
-	  bind_addresses = [ "127.0.0.1" "server" ];
-	  resources = [{
-	    names = [ "client" "federation" ];
-	    compress = true;
-	  }];
-	}];
-
-	# Set the type of database
-	database.name = "sqlite3";
-
-	# Allow account registration
-	#enable_registration = true;
-	#enable_registration_without_verification = true;
-	#macaroon_secret_key = "SillyBilly";
-
-	# Enable image previews
-	url_preview_enabled = true;
-
-	# Enable user presence
-	presence.enabled = true;
-
-	# Raise upload limit
-	max_upload_size = "200M";
-
-	# Disable telemetry
-	report_stats = false;
-      };
-    };
-
-    # Jisti
-    jitsi-meet = {
-      enable = true;
-      nginx.enable = false;
-      caddy.enable = true;
-      hostName = "jitsi.${domain}";
-    };
-
     # Gitea
     gitea = {
       enable = true;
       settings.server = {
-	DOMAIN = "gitea.jimbosfiles.duckdns.org";
-	ROOT_URL = "https://gitea.jimbosfiles.duckdns.org:443";
+	DOMAIN = "git.jimbosfiles.duckdns.org";
+	ROOT_URL = "https://git.jimbosfiles.duckdns.org:443";
         HTTP_PORT = 3110;
-	SSH_PORT = 2222;
+	SSH_PORT = 2299;
 	START_SSH_SERVER = true;
 	DISABLE_REGISTRATION = true;
       };
     };
-  };
 
-  # Configure the Element web server
-  nixpkgs.config.element-web.conf = {
-    default_server_config = {
-      "m.homeserver" = {
-        base_url = "https://${domain}:8008";
-        server_name = "matrix.${domain}";
-      };
-    };
-    jitsi = {
-      preferred_domain = "jitsi.${domain}";
-    };
-    disable_custom_urls = true;
-    disable_guests = true;
-    show_labs_settings = true;
-    default_theme = "dark";
-  };
+    # Snowflake proxy for helping Tor
+    snowflake-proxy.enable = true;
 
+    # Fix a stupid non building issue
+    logrotate.checkConfig = false;
+  };
 
   # Determine the release version and allow auto-upgrades
   system.stateVersion = "23.11";

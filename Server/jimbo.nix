@@ -24,6 +24,7 @@ let
       info " " term
       info "󰊠 " packages
       info "󰅐 " uptime
+      info "󰶡 " birth
       prin ""
     prin "$white󰮯 \n \n $red󰊠 \n \n $green󰊠  \n \n $yellow󰊠  \n \n $blue󰊠  \n \n $magenta󰊠  \n \n $cyan󰊠  \n \n $reset󰊠"
     }
@@ -59,6 +60,9 @@ let
     
     # Disk
     disk_show=('/')
+
+    # Add custom commands
+    birth="$(date -d @$(stat -c %W /) '+%a %b %d %r %Z %Y')"
     
     # Text Options
     separator="  "
@@ -73,45 +77,48 @@ let
     cyan="\033[1;36m"
     reset="\033[0m"
   '';
-  smallConf = ''
-    # Show different info types
-    print_info() {
-      info title
-      info "OS" distro
-      info "Host" model
-      info "Kernel" kernel
-      info "Uptime" uptime
-      info "Packages" packages
-      info "Memory" memory
-    }
-    
-    # Shorthand info
-    kernel_shorthand="on"
-    distro_shorthand="on"
-    uptime_shorthand="tiny"
-    package_managers="off"
-    memory_percent="off"
-    separator=":"
-    
-    # Values:  'kib', 'mib', 'gib'
-    memory_unit="gib"
-  '';
 
-  pFetch = ''neofetch --config $(readlink -f ~/.config/neofetch/small.conf) --ascii_distro debian_small'';
+  # Small Neofetch config
+  pFetch = let
+    smallConf = pkgs.writeText "smallconf" ''
+      # Show different info types
+      print_info() {
+        info title
+        info "OS" distro
+        info "Host" model
+        info "Kernel" kernel
+        info "Uptime" uptime
+        info "Packages" packages
+        info "Memory" memory
+      }
+      
+      # Shorthand info
+      kernel_shorthand="on"
+      distro_shorthand="on"
+      uptime_shorthand="tiny"
+      package_managers="off"
+      memory_percent="off"
+      separator=":"
+      
+      # Values:  'kib', 'mib', 'gib'
+      memory_unit="gib"
+    '';
+  in pkgs.writeScriptBin "pfetch"
+    ''neofetch --config ${smallConf} --ascii_distro debian_small'';
 
   # Rofi (terminal file browser) config
   rangerConf = ''
-    set colorscheme default
     set preview_script ~/.config/ranger/scope.sh
     set preview_images true
     set preview_images_method kitty
-    set unicode_ellipsis true
     set dirname_in_tabs true 
     set cd_tab_fuzzy true
+    set autosave_bookmarks false
     set show_hidden true
     set wrap_scroll true
     set column_ratios 2,2,4
     set hidden_filter ^\.|\.(?:pyc|pyo|bak|swp)$|^lost\+found$|^__(py)?cache__$
+    default_linemode devicons
   '';
 
   # Choose how ranger opens stuff
@@ -292,6 +299,26 @@ let
     handle_fallback
     exit 1
   '';
+
+  # Ranger's bookmarks
+  rangerBookmarks = ''
+    # Local files
+    k:/home/jimbo/Downloads
+    c:/home/jimbo/.config
+    L:/home/jimbo/.local
+    D:/mnt
+    n:/etc/nixos
+    
+    # Remote files
+    a:/home/jimbo/JimboNFS
+    l:/home/jimbo/JimboNFS/Downloads
+    p:/home/jimbo/JimboNFS/Photos
+    v:/home/jimbo/JimboNFS/Videos/Random
+    m:/home/jimbo/JimboNFS/Music
+    m:/home/jimbo/JimboNFS/MineServers
+    j:/home/jimbo/JimboNFS/JimboOS
+    s:/home/jimbo/JimboNFS/School
+  '';
 in
 
 {
@@ -302,7 +329,7 @@ in
     users.jimbo = { config, pkgs, ... }: {
       # Install user programs
       home.packages = (with pkgs; [
-	neofetch htop ranger
+	neofetch htop ranger pFetch
       ]);
 
       # Install Neovim and plugins
@@ -322,9 +349,6 @@ in
 
 	  # Autocomplete plugins
           cmp-nvim-lsp cmp-buffer cmp-path cmp-cmdline nvim-cmp
-
-	  # Directory tree viewer
-          nerdtree
 
 	  # Hex color visualizer and color theme
           nvim-colorizer-lua vim-monokai-pro
@@ -378,19 +402,23 @@ in
           colorscheme monokai_pro
           let g:airline_theme='onedark'
           let g:airline#extensions#tabline#enabled = 1
-          highlight Normal guibg=#101010 ctermbg=235
-          highlight Visual guibg=#303030 ctermbg=238
-          highlight Pmenu guibg=#303030 ctermbg=238
-          highlight EndOfBuffer guibg=#101010 ctermbg=235
-          highlight LineNr guibg=NONE ctermbg=NONE
+          highlight Normal guibg=none ctermbg=235
+          highlight Visual guibg=#151515 ctermbg=238
+          highlight Pmenu guibg=#151515 ctermbg=238
+          highlight EndOfBuffer guibg=none ctermbg=235
+          highlight LineNr guibg=none ctermbg=none
           lua require'colorizer'.setup()
           
           set nu rnu
           set termguicolors
           set runtimepath+=/usr/share/vim/vimfiles
           set mouse=a
+
+          set undofile
+          set undodir=$HOME/.local/share/nvim/undo
+          set undolevels=100
+          set undoreload=10000
           
-          nmap <C-a> :NERDTreeToggle<CR>
           nmap <C-x> :bnext<CR>
           nmap <C-z> :bprev<CR>
         '';
@@ -421,18 +449,18 @@ in
       home.file = {
 	# Neofetch config
 	".config/neofetch/config.conf".text = neoConf;
-	".config/neofetch/small.conf".text = smallConf;
 
 	# Ranger config
 	".config/ranger/rc.conf".text = rangerConf;
 	".config/ranger/rifle.conf".text = rifleConf;
 	".config/ranger/scope.sh" = { text = rangerScope; executable = true; };
+	".local/share/ranger/bookmarks".text = rangerBookmarks;
         ".config/ranger/plugins/devicons/devicons.py".source = "${pkgs.fetchurl {
-          url = "https://raw.githubusercontent.com/alexanderjeurissen/ranger_devicons/main/devicons.py";
-          sha256 = "16xg5wrbck4fvp3pjmwspzb1n5yd4giv1gajpb0v9xnmpyifb715";
+          url = "https://raw.githubusercontent.com/alexanderjeurissen/ranger_devicons/2c3c19dffb4238d01c74515c9eed5088066db243/devicons.py";
+          sha256 = "0girsranwhsgc6kcyh1mkwymx0bl14a2k5nzk3kyllb6ic48c33k";
         }}";
         ".config/ranger/plugins/devicons/__init__.py".source = "${pkgs.fetchurl {
-          url = "https://raw.githubusercontent.com/alexanderjeurissen/ranger_devicons/main/__init__.py";
+          url = "https://raw.githubusercontent.com/alexanderjeurissen/ranger_devicons/2c3c19dffb4238d01c74515c9eed5088066db243/__init__.py";
           sha256 = "1r086apw20ryxylqgnbynx7mzz779v1w0m40wghmmhlzw4x15fmr";
         }}";
       };
@@ -442,7 +470,7 @@ in
         enable = true;
         enableAutosuggestions = true;
         syntaxHighlighting.enable = true;
-	initExtra = "${pFetch}";
+	initExtra = "pfetch";
         oh-my-zsh = {
           enable = true;
 	  plugins = [ "git" ];
@@ -450,26 +478,20 @@ in
         };
         shellAliases = {
 	  # NixOS aliases
-	  nixcfg = "nvim /etc/nixos/{configuration.nix,jimbo.nix}";
+	  nixcfg = "nvim /etc/nixos/{configuration,jimbo,hardware-configuration}.nix";
           nixswitch = "${auth} nixos-rebuild switch";
-          nixdate = "${auth} nix-channel --update; ${auth} nixos-rebuild switch --upgrade";
+	  nixdate = "${auth} nixos-rebuild switch --upgrade-all";
           nixclean = "${auth} nix-store --gc; nix-collect-garbage -d";
 
           # Shortcut aliases
           neo = "clear && neofetch --ascii_distro debian";
-	  pfetch = "${pFetch}";
           ip = "ip -c";
-          ls = "${pkgs.eza}/bin/eza -a --color=always --group-directories-first";
+	  ls = "${pkgs.eza}/bin/eza -a --color=always --group-directories-first --icons";
 	  cat = "${pkgs.bat}/bin/bat --paging never";
-	  lcat = "${pkgs.bat}/bin/bat --paging always";
-          birth = "date -d @$(stat -c %W /) '+%a %b %d %r %Z %Y'";
 
           # Curl tools
           myip = "curl ifconfig.co";
           weather = "curl wttr.in/Vaughan";
-
-          # Personal fixes
-          namedisk = "${auth} e2label";
 
 	  # Start basic programs
 	  controlpanel = "tmux new-session -d -s control; tmux attach -t control";
@@ -478,7 +500,7 @@ in
 	  # Minecraft stuff
           mineservers = "cd /home/jimbo/JimboNFS/MineServers";
           mcstart21 = "${pkgs.temurin-jre-bin-21}/bin/java -Xms9G -Xmx9G -jar";
-          mcstart8 = "${pkgs.temurin-jre-bin-21}/bin/java -Xms5G -Xmx5G -jar";
+          mcstart8 = "${pkgs.temurin-jre-bin-8}/bin/java -Xms5G -Xmx5G -jar";
           johnstart = "mineservers; cd Johnside-SMP && mcstart21 paper* --nogui";
           betastart = "mineservers; cd BetaServer && mcstart8 Posiden*";
         };
