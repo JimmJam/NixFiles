@@ -27,19 +27,19 @@ let
 
   # Wallpapers
   wallpaper1 = pkgs.fetchurl { 
-    url = "https://git.JimbosFiles.duckdns.org/Jimbo/NixOS-Files/raw/branch/main/Extras/Wallpapers/wallpaper1.png";
+    url = "https://raw.githubusercontent.com/JimmJam/NixFiles/main/Extras/Wallpapers/wallpaper1.png";
     sha256 = "1zxb0p0fjsmccy4xv8yk3c4kc313k3lc3xhqmiv452f7sjqqbp25";
   };
   wallpaper2 = pkgs.fetchurl { 
-    url = "https://git.JimbosFiles.duckdns.org/Jimbo/NixOS-Files/raw/branch/main/Extras/Wallpapers/wallpaper2.png";
+    url = "https://raw.githubusercontent.com/JimmJam/NixFiles/main/Extras/Wallpapers/wallpaper2.png";
     sha256 = "13jcllrs05d26iz2isvh1f8fqf20m23sps32kw7qz5iav8nhvsx7";
   };
   wallpaper3 = pkgs.fetchurl { 
-    url = "https://git.JimbosFiles.duckdns.org/Jimbo/NixOS-Files/raw/branch/main/Extras/Wallpapers/wallpaper3.png";
+    url = "https://raw.githubusercontent.com/JimmJam/NixFiles/main/Extras/Wallpapers/wallpaper3.png";
     sha256 = "16r65qnr7f0md4bbjnzq6av4dgmqr3avkilw72qdmyrmh3xj03yw";
   };
   lockpaper = pkgs.fetchurl { 
-    url = "https://git.JimbosFiles.duckdns.org/Jimbo/NixOS-Files/raw/branch/main/Extras/Wallpapers/lockpaper.png";
+    url = "https://raw.githubusercontent.com/JimmJam/NixFiles/main/Extras/Wallpapers/lockpaper.png";
     sha256 = "1mqvp4bic46gc994fawkraqj76hxd11wdd43qakligchzd20xjd5";
   };
 
@@ -1047,7 +1047,7 @@ let
   
   # Custom Neofetch Ascii
   xeniaAscii = pkgs.fetchurl { 
-    url = "https://git.JimbosFiles.duckdns.org/Jimbo/NixOS-Files/raw/branch/main/Extras/Neofetch/xenia.ascii";
+    url = "https://raw.githubusercontent.com/JimmJam/NixFiles/main/Extras/Neofetch/xenia.ascii";
     sha256 = "16jz48mm60qj1fxga7s5b72pfnbkf10q1iqclrq0k1ml0w9zmxg5";
   };
 

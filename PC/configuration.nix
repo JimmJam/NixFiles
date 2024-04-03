@@ -41,11 +41,11 @@ in
               wlroots_0_16 = prev.wlroots_0_16.overrideAttrs (o: {
                 patches = (o.patches or [ ]) ++ [ 
                   (final.fetchpatch {
-                    url = "https://git.JimbosFiles.duckdns.org/Jimbo/NixOS-Files/raw/branch/main/Extras/Patches/Nvidia/lessflicker.patch";
+                    url = "https://raw.githubusercontent.com/JimmJam/NixFiles/main/Extras/Patches/Nvidia/lessflicker.patch";
                     sha256 = "cpOzc3Y1a5F6UscgijBZJ0CXkceaF9t7aWQVLF76/1A=";
                   })
                   (final.fetchpatch {
-                    url = "https://git.JimbosFiles.duckdns.org/Jimbo/NixOS-Files/raw/branch/main/Extras/Patches/Nvidia/screenshare.patch";
+                    url = "https://raw.githubusercontent.com/JimmJam/NixFiles/main/Extras/Patches/Nvidia/screenshare.patch";
                     sha256 = "azvSsmGHR1uJe0k2hnaP6RCXfQnatpbGTMpDy9EPAr0=";
                   })
                 ];
